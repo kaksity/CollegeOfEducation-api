@@ -13,15 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('dip_employment_data', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('username')->unique();
-            $table->string('password');
-            $table->boolean('is_enabled')->default(true);
-            $table->timestamp('last_login_at')->nullable();
-            $table->string('picture')->nullable();
-            $table->timestamps();
+            $table->uuid('user_id')->index();
+            $table->string('name_of_employer');
+            $table->string('type_of_employment')->nullable();
+            $table->integer('duration')->nullable();
+            $table->string('unit')->nullable();
+            $table->double('average_salary')->nullable();
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('dip_employment_data');
     }
 };

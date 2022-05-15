@@ -12,4 +12,9 @@ class MaritalStatus extends Model
     use UuidTrait,HasFactory, SoftDeletes;
     
     protected $guarded;
+
+    public function dipPersonalData()
+    {
+        return $this->hasMany(DipPersonalData::class, 'marital_status_id');
+    }
 }

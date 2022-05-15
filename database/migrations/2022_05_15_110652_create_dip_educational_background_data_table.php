@@ -13,15 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('dip_educational_background_data', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('username')->unique();
-            $table->string('password');
-            $table->boolean('is_enabled')->default(true);
-            $table->timestamp('last_login_at')->nullable();
-            $table->string('picture')->nullable();
-            $table->timestamps();
+            $table->uuid('user_id')->index();
+            $table->uuid('certificate_id')->index();
+            $table->string('name_of_institute');
+            $table->date('from_date');
+            $table->date('to_date');
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('dip_educational_background_data');
     }
 };

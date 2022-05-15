@@ -17,4 +17,9 @@ class State extends Model
     {
         return $this->hasMany(Lga::class,'state_id');
     }
+
+    public function dipPersonalData()
+    {
+        return $this->hasMany(DipPersonalData::class,'state_id');
+    }
 }

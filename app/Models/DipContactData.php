@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Certificate extends Model
+class DipContactData extends Model
 {
     use UuidTrait, HasFactory, SoftDeletes;
     protected $guarded;
 
-    public function dipEducationalBackground()
+    public function user()
     {
-        return $this->hasMany(DipEducationalBackgroundData::class, 'certificate_id');
+        return $this->belongsTo(User::class,'user_id');
     }
 }
