@@ -26,7 +26,7 @@ class EmploymentDataRequest extends BaseFormRequest
                 'name_of_employer' => ['required', 'string'],
                 'type_of_employment' => ['string'],
                 'duration' => ['integer'],
-                'unit' => ['in:months,years'],
+                'unit' => ['in:Months,Years'],
                 'average_salary' => ['numeric']
             ];
         }

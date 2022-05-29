@@ -3,6 +3,9 @@
 use App\Http\Controllers\V1\Admin\{
     AuthController,
     CertificateController,
+    CourseController,
+    ExaminationCategoryController,
+    ExaminationSubjectController,
     LgaController,
     MaritalStatusController,
     StateController
@@ -19,6 +22,9 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::apiResource('marital-statuses',MaritalStatusController::class);
     Route::apiResource('lgas',LgaController::class);
     Route::apiResource('states',StateController::class);
+    Route::apiResource('courses', CourseController::class);
+    Route::apiResource('examination-categories', ExaminationCategoryController::class);
+    Route::apiResource('examination-subjects', ExaminationSubjectController::class);
 });
 
 Route::get('/test', function () {

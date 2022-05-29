@@ -3,23 +3,25 @@
 namespace App\Http\Controllers\V1\Applicant\Diploma;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Applicant\EmploymentData\EmploymentDataRequest;
-use App\Http\Resources\V1\Applicant\EmploymentDataResource;
+use App\Http\Requests\V1\Applicant\HeldResponsibilityData\HeldResponsibilityDataRequest;
+use App\Http\Resources\V1\Applicant\HeldResponsibilityDataResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class EmploymentDataController extends Controller
+class HeldReponsibilityController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(EmploymentDataRequest $request)
+    public function index(HeldResponsibilityDataRequest $request)
     {
-        $employmentData = Auth::user()->dipEmploymentData()->latest()->paginate($request->per_page);
-        return EmploymentDataResource::collection($employmentData);
+        $perPage = $request->per_page ?? 10;
+        
+        $heldResponsibilities = Auth::user()->dipHeldResponsibilityData()->latest()->paginate($perPage);
+        return HeldResponsibilityDataResource::collection($heldResponsibilities);
     }
 
     /**
@@ -28,12 +30,12 @@ class EmploymentDataController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(EmploymentDataRequest $request)
+    public function store(HeldResponsibilityDataRequest $request)
     {
         try
         {
-            Auth::user()->dipEmploymentData()->create($request->all());
-            $data['message'] = 'Applicant employment data was created successfully';
+            Auth::user()->dipHeldResponsibilityData()->create($request->all());
+            $data['message'] = 'Applicant held responsiblity data was added successfully';
             return successParser($data,201);
         }
         catch(Exception $ex)
@@ -43,7 +45,7 @@ class EmploymentDataController extends Controller
             return errorParser($data,$code);
         }
     }
-
+    
     /**
      * Remove the specified resource from storage.
      *
@@ -54,17 +56,17 @@ class EmploymentDataController extends Controller
     {
         try
         {
-            $employmentData = Auth::user()->dipEmploymentData()->find($id);
+            $heldResponsibility = Auth::user()->dipHeldResponsibilityData()->find($id);
             
-            if($employmentData == null)
+            if($heldResponsibility == null)
             {
-                throw new Exception('Applicant employment data does not exist', 404);
+                throw new Exception('Applicant held Responsibility does not exist',404);
             }
 
-            $employmentData->delete();
+            $heldResponsibility->delete();
 
-            $data['message'] = 'Applicant employment data was deleted successfully';
-            return successParser($data);
+            $data['message'] = 'Applicant held responsiblity data was deleted successfully';
+            return successParser($data,201);
         }
         catch(Exception $ex)
         {

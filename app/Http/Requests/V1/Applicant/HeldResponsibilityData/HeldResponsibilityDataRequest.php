@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Requests\V1\Lga;
+namespace App\Http\Requests\V1\Applicant\HeldResponsibilityData;
 
 use App\Http\Requests\Base\BaseFormRequest;
-
-class LgaRequest extends BaseFormRequest
+class HeldResponsibilityDataRequest extends BaseFormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -17,20 +16,13 @@ class LgaRequest extends BaseFormRequest
         if($this->getMethod() == 'GET')
         {
             $rules += [
-                'state_id' => ['uuid']
+                'per_page' => ['string']
             ];
         }
         if($this->getMethod() == 'POST')
         {
             $rules += [
-                'state_id' => ['required','uuid'],
-                'name' => ['required']
-            ];
-        }
-        if($this->getMethod() == 'PUT')
-        {
-            $rules += [
-                'name' => ['required']
+                'responsibility' => ['required', 'string']
             ];
         }
         return $rules;

@@ -17,7 +17,7 @@ class ContactDataResource extends JsonResource
         return [
             'id' => $this->id,
             'name_of_guardian' => $this->name_of_guardian,
-            'addres_of_guardian' => $this->address_of_guardian,
+            'address_of_guardian' => $this->address_of_guardian,
             'name_of_employer' => $this->name_of_employer,
             'address_of_employer' => $this->address_of_employer,
             'contact_address' => $this->contact_address,

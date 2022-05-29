@@ -46,17 +46,17 @@ class ContactDataController extends Controller
             }
             $contactDataByEmail = $this->dipContactData->where('email_address',$request->email_address)->first();
 
-            if($contactDataByEmail != null)
-            {
-                throw new Exception('Email Address already exist in our database',400);
-            }
+            // if($contactDataByEmail != null)
+            // {
+            //     throw new Exception('Email Address already exist in our database',400);
+            // }
 
             $contactData->name_of_guardian = $request->name_of_guardian;
             $contactData->address_of_guardian = $request->address_of_guardian;
             $contactData->name_of_employer = $request->name_of_employer;
             $contactData->address_of_employer = $request->address_of_employer;
             $contactData->contact_address = $request->contact_address;
-            $contactData->email_address = $request->email_address;
+            // $contactData->email_address = $request->email_address;
             $contactData->phone_number = $request->phone_number;
 
             $contactData->save();

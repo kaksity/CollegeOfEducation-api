@@ -5,7 +5,7 @@ namespace App\Http\Controllers\V1\Applicant;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Applicant\Authentication\LoginRequest;
 use App\Http\Requests\V1\Applicant\Authentication\RegisterRequest;
-use App\Models\{DipContactData, User, DipPersonalData};
+use App\Models\{DipContactData, User, DipPersonalData, DipCourseData, DipApplicationStatus};
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -14,11 +14,13 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     
-    public function __construct(User $user, DipPersonalData $dipPersonalData, DipContactData $dipContactData)
+    public function __construct(User $user, DipPersonalData $dipPersonalData, DipApplicationStatus $dipApplicationStatus,DipContactData $dipContactData, DipCourseData $dipCourseData)
     {
         $this->user = $user;
         $this->dipPersonalData = $dipPersonalData;
         $this->dipContactData = $dipContactData;
+        $this->dipCourseData = $dipCourseData;
+        $this->dipApplicationStatus = $dipApplicationStatus;
     }
     public function login(LoginRequest $request)
     {
@@ -88,6 +90,15 @@ class AuthController extends Controller
                     'user_id' => $user->id,
                     'email_address' => $request->email_address
                 ]);
+                $this->dipCourseData->create([
+                    'user_id' => $user->id,
+                ]);
+
+                $this->dipApplicationStatus->create([
+                    'user_id' => $user->id,
+                    'status' => 'applying'
+                ]);
+                
                 DB::commit();
                 
                 $data['message'] = 'Applicant account was created successfully';

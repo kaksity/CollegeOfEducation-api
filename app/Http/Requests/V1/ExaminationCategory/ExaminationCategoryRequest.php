@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\V1\Lga;
+namespace App\Http\Requests\V1\ExaminationCategory;
 
 use App\Http\Requests\Base\BaseFormRequest;
 
-class LgaRequest extends BaseFormRequest
+class ExaminationCategoryRequest extends BaseFormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -17,20 +17,13 @@ class LgaRequest extends BaseFormRequest
         if($this->getMethod() == 'GET')
         {
             $rules += [
-                'state_id' => ['uuid']
+                'per_page' => ['required','integer']
             ];
         }
-        if($this->getMethod() == 'POST')
+        if($this->getMethod() == 'POST' || $this->getMethod() == 'PUT')
         {
             $rules += [
-                'state_id' => ['required','uuid'],
-                'name' => ['required']
-            ];
-        }
-        if($this->getMethod() == 'PUT')
-        {
-            $rules += [
-                'name' => ['required']
+                'category' => ['required', 'string']
             ];
         }
         return $rules;

@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Resources\V1\Lga;
+namespace App\Http\Resources\V1\Applicant;
 
-use App\Http\Resources\V1\State\StateResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class LgaResource extends JsonResource
+class HeldResponsibilityDataResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,8 +16,7 @@ class LgaResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'state' => new StateResource($this->state),
+            'responsibility' => $this->responsibility
         ];
     }
 }

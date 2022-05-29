@@ -24,7 +24,11 @@ class LgaController extends Controller
      */
     public function index(LgaRequest $request)
     {
-        $lgas = $this->lga->where('state_id',$request->state_id)->orderBy('name','ASC')->get();
+        $stateId = $request->state_id;
+        
+        $lgas = $this->lga->when($stateId, function($model, $stateId) {
+            $model->where('state_id',$stateId);
+        })->orderBy('name','ASC')->get();
         return LgaResource::collection($lgas);
     }
 

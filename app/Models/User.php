@@ -58,4 +58,31 @@ class User extends Authenticatable
     {
         return $this->hasMany(DipEmploymentData::class, 'user_id');
     }
+    public function dipCourseData()
+    {
+        return $this->hasOne(DipCourseData::class,'user_id');
+    }
+    public function dipExtraCurricularActivityData()
+    {
+        return $this->hasMany(DipExtraCurricularActivityData::class, 'user_id');
+    }
+    public function dipHeldResponsibilityData()
+    {
+        return $this->hasMany(DipHeldResponsibilityData::class, 'user_id');
+    }
+
+    public function dipPassport()
+    {
+        return $this->hasOne(DipPassport::class, 'user_id');
+    }
+
+    public function dipExaminationData()
+    {
+        return $this->hasMany(DipExaminationData::class, 'user_id');
+    }
+
+    public function dipApplicationStatus()
+    {
+        return $this->hasOne(DipApplicationStatus::class, 'user_id');
+    }
 }

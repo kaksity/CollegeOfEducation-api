@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\V1\Lga;
+namespace App\Http\Resources\V1\ExaminationSubject;
 
-use App\Http\Resources\V1\State\StateResource;
+use App\Http\Resources\V1\ExaminationCategory\ExaminationCategoryResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class LgaResource extends JsonResource
+class ExaminationSubjectResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,8 +17,8 @@ class LgaResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'state' => new StateResource($this->state),
+            'category' => new ExaminationCategoryResource($this->category),
+            'subject' => $this->subject
         ];
     }
 }
