@@ -85,4 +85,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(DipApplicationStatus::class, 'user_id');
     }
+
+    public function dipRegisteredCourseSubject()
+    {
+        return $this->hasMany(DipRegisteredCourseSubject::class, 'course_subject_id');
+    }
 }

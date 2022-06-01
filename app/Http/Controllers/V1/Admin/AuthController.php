@@ -40,7 +40,7 @@ class AuthController extends Controller
             
             if($user->admin()->exists() == false)
             {
-                throw new Exception('Sorry, Access Denied');
+                throw new Exception('Sorry, Access Denied',401);
             }
 
             // if ($user->last_login_at === null):

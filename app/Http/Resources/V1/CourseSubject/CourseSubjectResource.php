@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Resources\V1\Applicant;
+namespace App\Http\Resources\V1\CourseSubject;
 
+use App\Http\Resources\V1\Course\CourseResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ApplicationStatusResource extends JsonResource
+class CourseSubjectResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,12 +17,10 @@ class ApplicationStatusResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'status' => $this->status,
-            $this->mergeWhen($this->status == 'admitted', function() {
-                return [
-                    'course' => new CourseDataResource($this->user->dipCourseData),
-                ];
-            }),
+            'course' => new CourseResource($this->course), 
+            'course_title' => $this->course_title,
+            'course_code' => $this->course_code,
+            'semester' => $this->semester,
         ];
     }
 }

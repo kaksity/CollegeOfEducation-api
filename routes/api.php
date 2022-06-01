@@ -20,3 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('v1/admin')->group(__DIR__.'/api/v1/admin.php');
 Route::prefix('v1/applicant')->group(__DIR__.'/api/v1/applicant.php');
+Route::prefix('v1/student')->group(__DIR__.'/api/v1/student.php');

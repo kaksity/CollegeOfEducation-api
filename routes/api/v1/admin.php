@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\V1\Admin\{
+    ApplicantController,
     AuthController,
     CertificateController,
     CourseController,
+    CourseSubjectController,
     ExaminationCategoryController,
     ExaminationSubjectController,
     LgaController,
@@ -25,6 +27,10 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::apiResource('courses', CourseController::class);
     Route::apiResource('examination-categories', ExaminationCategoryController::class);
     Route::apiResource('examination-subjects', ExaminationSubjectController::class);
+    Route::apiResource('course-subjects', CourseSubjectController::class);
+    Route::group(['prefix' => 'diploma'], function() {
+        Route::apiResource('applicants', ApplicantController::class);
+    });
 });
 
 Route::get('/test', function () {

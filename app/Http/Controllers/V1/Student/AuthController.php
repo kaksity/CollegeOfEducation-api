@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\V1\Applicant;
+namespace App\Http\Controllers\V1\Student;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Applicant\Authentication\LoginRequest;
-use App\Http\Requests\V1\Applicant\Authentication\RegisterRequest;
+use App\Http\Requests\V1\Applicant\Authentication\LoginRequest as AuthenticationLoginRequest;
+use App\Http\Requests\V1\Student\Authentication\RegisterRequest;
 use App\Models\{DipContactData, User, DipPersonalData, DipCourseData, DipApplicationStatus, DipPassport};
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +23,7 @@ class AuthController extends Controller
         $this->dipApplicationStatus = $dipApplicationStatus;
         $this->dipPassport = $dipPassport;
     }
-    public function login(LoginRequest $request)
+    public function login(AuthenticationLoginRequest $request)
     {
         try
         {
@@ -38,12 +38,14 @@ class AuthController extends Controller
             {
                 throw new Exception("Account has been disabled",400);
             }
-            
+            if($user->dipApplicationStatus()->first()->status != 'admitted'){
+                throw new Exception("Username or Password is not correct",400);
+            }
             if($user->dipPersonalData()->exists() == false || $user->dipContactData()->exists() == false)
             {
                 throw new Exception('Sorry, Access Denied', 401);
             }
-
+            
             $accessToken = $user->createToken('Access Token')->plainTextToken;
 
             $user->update([
@@ -104,7 +106,7 @@ class AuthController extends Controller
                 ]);
                 DB::commit();
                 
-                $data['message'] = 'Applicant account was created successfully';
+                $data['message'] = 'Student account was created successfully';
                 return successParser($data,201);
 
             }

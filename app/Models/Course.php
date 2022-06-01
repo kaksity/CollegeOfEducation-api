@@ -19,4 +19,13 @@ class Course extends Model
     {
         return $this->hasMany(Course::class,'second_choice_course_id');
     }
+    public function dipCourseDataAdmittedCourse()
+    {
+        return $this->hasMany(Course::class,'admitted_course_id');
+    }
+
+    public function courseSubject()
+    {
+        return $this->hasMany(CourseSubject::class, 'course_id');
+    }
 }

@@ -24,4 +24,8 @@ class DipCourseData extends Model
     {
         return $this->belongsTo(Course::class,'second_choice_course_id');
     }
+    public function dipCourseDataAdmittedCourse()
+    {
+        return $this->belongsTo(Course::class,'admitted_course_id');
+    }
 }
