@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\V1\Applicant\AuthController;
+use App\Http\Controllers\V1\Applicant\Diploma\ApplicantController;
 use App\Http\Controllers\V1\Applicant\Diploma\ApplicationStatusController;
 use App\Http\Controllers\V1\Applicant\Diploma\CertificateController;
 use App\Http\Controllers\V1\Applicant\Diploma\ContactDataController;
@@ -35,6 +36,7 @@ use App\Http\Controllers\V1\Applicant\Diploma\ExaminationSubjectController;
         Route::apiResource('passport-data', PassportController::class);
         Route::apiResource('examination-data', ExaminationDataController::class);
         Route::apiResource('application-statuses', ApplicationStatusController::class);
+        Route::apiResource('applicant-profiles', ApplicantController::class);
 
         Route::get('marital-statuses', [MaritalStatusController::class, 'index']);
         Route::get('states', [StateController::class, 'index']);

@@ -16,6 +16,7 @@ class ApplicationStatusResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'application_number' => $this->admission_number,
             'status' => $this->status,
             $this->mergeWhen($this->status == 'admitted', function() {
                 return [

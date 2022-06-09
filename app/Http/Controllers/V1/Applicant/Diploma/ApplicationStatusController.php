@@ -28,6 +28,7 @@ class ApplicationStatusController extends Controller
             if($applicationStatus->status != 'applying'){
                 throw new Exception('Applicant has already been '.$applicationStatus->status, 400);
             }
+            $applicationStatus->admission_number = generateRandomString().generateRandomNumber();
             $applicationStatus->status = 'applied';
             $applicationStatus->save();
             $data['message'] = 'Application to the Institution was successfully done';

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\V1\Admin;
+namespace App\Http\Resources\V1\Applicant;
 
 use App\Http\Resources\V1\Applicant\ContactDataResource;
 use App\Http\Resources\V1\Applicant\EducationalBackgroundDataResource;
@@ -8,7 +8,6 @@ use App\Http\Resources\V1\Applicant\EmploymentDataResource;
 use App\Http\Resources\V1\Applicant\ExaminationDataResource;
 use App\Http\Resources\V1\Applicant\ExtraCurricularActivityDataResource;
 use App\Http\Resources\V1\Applicant\HeldResponsibilityDataResource;
-use App\Http\Resources\V1\Applicant\PassportResource;
 use App\Http\Resources\V1\Applicant\PersonalDataResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -24,8 +23,8 @@ class ApplicantDetailResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'personal_data' => new PersonalDataResource($this->dipPersonalData),
             'passport' => new PassportResource($this->dipPassport),
+            'personal_data' => new PersonalDataResource($this->dipPersonalData),
             'contact_data' => new ContactDataResource($this->dipContactData),
             'employment_data' => EmploymentDataResource::collection($this->dipEmploymentData),
             'examination_data' => ExaminationDataResource::collection($this->dipExaminationData),

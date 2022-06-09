@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('dip_application_statuses', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
+            $table->string('admission_number')->nullable();
             $table->string('status');
             $table->softDeletes();
             $table->timestamps();

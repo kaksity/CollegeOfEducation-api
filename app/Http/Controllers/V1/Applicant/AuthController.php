@@ -80,7 +80,7 @@ class AuthController extends Controller
             {
                 $user = $this->user->create([
                     'username' => $request->username,
-                    'password' => Hash::make($request->password)
+                    'password' => Hash::make($request->password),
                 ]);
                 $this->dipPersonalData->create([
                     'user_id' => $user->id,
