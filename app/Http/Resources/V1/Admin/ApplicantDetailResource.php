@@ -3,8 +3,10 @@
 namespace App\Http\Resources\V1\Admin;
 
 use App\Http\Resources\V1\Applicant\ContactDataResource;
+use App\Http\Resources\V1\Applicant\CourseDataResource;
 use App\Http\Resources\V1\Applicant\EducationalBackgroundDataResource;
 use App\Http\Resources\V1\Applicant\EmploymentDataResource;
+use App\Http\Resources\V1\Applicant\ExaminationCenterDataResource;
 use App\Http\Resources\V1\Applicant\ExaminationDataResource;
 use App\Http\Resources\V1\Applicant\ExtraCurricularActivityDataResource;
 use App\Http\Resources\V1\Applicant\HeldResponsibilityDataResource;
@@ -33,7 +35,8 @@ class ApplicantDetailResource extends JsonResource
             'extra_curricular_activity_data' => ExtraCurricularActivityDataResource::collection($this->dipExtraCurricularActivityData),
             'held_responsibility_data' => HeldResponsibilityDataResource::collection($this->dipHeldResponsibilityData),
             // 'application_status' => new ApplicationStatusResource($this->user->dipApplicationStatus),
-            // 'course_data' => new CourseDataResource($this->user->dipCourseData),
+            'course_data' => new CourseDataResource($this->dipCourseData),
+            'examination_center_data' => new ExaminationCenterDataResource($this->dipExaminationCenterData),
         ];
     }
 }

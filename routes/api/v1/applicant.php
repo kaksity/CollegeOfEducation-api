@@ -18,6 +18,7 @@ use App\Http\Controllers\V1\Applicant\Diploma\ExtraCurricularActivityDataControl
 use App\Http\Controllers\V1\Applicant\Diploma\HeldReponsibilityController;
 use App\Http\Controllers\V1\Applicant\Diploma\PassportController;
 use App\Http\Controllers\V1\Applicant\Diploma\ExaminationCategoryController;
+use App\Http\Controllers\V1\Applicant\Diploma\ExaminationCenterDataController;
 use App\Http\Controllers\V1\Applicant\Diploma\ExaminationSubjectController;
 
     Route::group(['prefix' => 'auth'],function(){
@@ -35,6 +36,7 @@ use App\Http\Controllers\V1\Applicant\Diploma\ExaminationSubjectController;
         Route::apiResource('held-responsibility-data', HeldReponsibilityController::class);
         Route::apiResource('passport-data', PassportController::class);
         Route::apiResource('examination-data', ExaminationDataController::class);
+        Route::apiResource('examination-center-data', ExaminationCenterDataController::class);
         Route::apiResource('application-statuses', ApplicationStatusController::class);
         Route::apiResource('applicant-profiles', ApplicantController::class);
 

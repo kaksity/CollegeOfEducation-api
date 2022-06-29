@@ -5,7 +5,7 @@ namespace App\Http\Controllers\V1\Applicant;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Applicant\Authentication\LoginRequest;
 use App\Http\Requests\V1\Applicant\Authentication\RegisterRequest;
-use App\Models\{DipContactData, User, DipPersonalData, DipCourseData, DipApplicationStatus, DipPassport};
+use App\Models\{DipContactData, User, DipPersonalData, DipCourseData, DipApplicationStatus, DipPassport, DipExaminationCenterData};
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     
-    public function __construct(User $user, DipPersonalData $dipPersonalData, DipPassport $dipPassport,DipApplicationStatus $dipApplicationStatus,DipContactData $dipContactData, DipCourseData $dipCourseData)
+    public function __construct(User $user, DipPersonalData $dipPersonalData, DipPassport $dipPassport,DipApplicationStatus $dipApplicationStatus,DipContactData $dipContactData, DipCourseData $dipCourseData, DipExaminationCenterData $dipExaminationCenterData)
     {
         $this->user = $user;
         $this->dipPersonalData = $dipPersonalData;
@@ -22,6 +22,7 @@ class AuthController extends Controller
         $this->dipCourseData = $dipCourseData;
         $this->dipApplicationStatus = $dipApplicationStatus;
         $this->dipPassport = $dipPassport;
+        $this->dipExaminationCenterData = $dipExaminationCenterData;
     }
     public function login(LoginRequest $request)
     {
@@ -100,6 +101,9 @@ class AuthController extends Controller
                     'status' => 'applying'
                 ]);
                 $this->dipPassport->create([
+                    'user_id' => $user->id
+                ]);
+                $this->dipExaminationCenterData->create([
                     'user_id' => $user->id
                 ]);
                 DB::commit();

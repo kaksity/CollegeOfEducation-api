@@ -15,7 +15,8 @@ class CourseDataRequest extends BaseFormRequest
     {
         return [
             'first_choice_course_id' => ['required', 'uuid'],
-            'second_choice_course_id' => ['required', 'uuid']
+            'second_choice_course_id' => ['required', 'uuid'],
+            'third_choice_course_id' => ['required', 'uuid']
         ];
     }
 }

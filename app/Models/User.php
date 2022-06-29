@@ -90,4 +90,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(DipRegisteredCourseSubject::class, 'course_subject_id');
     }
+    public function dipExaminationCenterData()
+    {
+        return $this->hasOne(DipExaminationCenterData::class, 'user_id');
+    }
 }

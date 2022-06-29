@@ -60,6 +60,7 @@ class CourseDataController extends Controller
             
             $courseData->first_choice_course_id = $request->first_choice_course_id;
             $courseData->second_choice_course_id = $request->second_choice_course_id;
+            $courseData->third_choice_course_id = $request->third_choice_course_id;
 
             $courseData->save();
 

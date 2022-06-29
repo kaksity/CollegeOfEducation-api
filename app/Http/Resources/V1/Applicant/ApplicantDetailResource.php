@@ -32,7 +32,9 @@ class ApplicantDetailResource extends JsonResource
             'extra_curricular_activity_data' => ExtraCurricularActivityDataResource::collection($this->dipExtraCurricularActivityData),
             'held_responsibility_data' => HeldResponsibilityDataResource::collection($this->dipHeldResponsibilityData),
             // 'application_status' => new ApplicationStatusResource($this->user->dipApplicationStatus),
-            // 'course_data' => new CourseDataResource($this->user->dipCourseData),
+            'course_data' =>  new CourseDataResource($this->dipCourseData),
+            'examination_center_data' => new ExaminationCenterDataResource($this->dipExaminationCenterData),
+            
         ];
     }
 }
