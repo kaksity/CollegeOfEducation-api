@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\V1\Nce\MaritalStatus;
+namespace App\Http\Resources\V1\MaritalStatus;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 

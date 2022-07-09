@@ -21,12 +21,13 @@ use App\Http\Controllers\V1\Applicant\Nce\ExaminationCategoryController;
 use App\Http\Controllers\V1\Applicant\Nce\ExaminationCenterDataController;
 use App\Http\Controllers\V1\Applicant\Nce\ExaminationSubjectController;
 
-    Route::group(['prefix' => 'auth'],function(){
+    Route::group(['prefix' => 'nce/auth'],function(){
         Route::post('login',[AuthController::class,'login']);
         Route::post('register', [AuthController::class,'register']);
         Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
     });
-    Route::group(['prefix'=>'nce','middleware' => ['auth:sanctum', 'verify.application.payment']], function(){
+    //, 'verify.application.payment'
+    Route::group(['prefix'=>'nce','middleware' => ['auth:sanctum']], function(){
         Route::apiResource('personal-data',PersonalDataController::class);
         Route::apiResource('contact-data', ContactDataController::class);
         Route::apiResource('educational-background-data', EducationalBackgroundDataController::class);

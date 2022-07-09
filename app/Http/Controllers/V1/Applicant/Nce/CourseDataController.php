@@ -4,7 +4,7 @@ namespace App\Http\Controllers\V1\Applicant\Nce;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Applicant\CourseData\CourseDataRequest;
-use App\Http\Resources\V1\Applicant\CourseDataResource;
+use App\Http\Resources\V1\Applicant\Nce\CourseDataResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\V1\Applicant\Nce;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Applicant\PersonalData\PersonalDataRequest;
-use App\Http\Resources\V1\Applicant\PersonalDataResource;
+use App\Http\Resources\V1\Applicant\Nce\PersonalDataResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

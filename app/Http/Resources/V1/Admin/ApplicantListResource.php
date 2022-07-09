@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Resources\V1\Nce\Admin;
+namespace App\Http\Resources\V1\Admin;
 
-use App\Http\Resources\V1\Applicant\PersonalDataResource;
+use App\Http\Resources\V1\Applicant\Nce\PersonalDataResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ApplicantListResource extends JsonResource

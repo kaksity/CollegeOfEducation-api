@@ -4,7 +4,7 @@ namespace App\Http\Controllers\V1\Applicant\Nce;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Applicant\ExaminationData\ExaminationDataRequest;
-use App\Http\Resources\V1\Applicant\ExaminationDataResource;
+use App\Http\Resources\V1\Applicant\Nce\ExaminationDataResource;
 use Illuminate\Http\Request;
 use App\Models\{ DipExaminationData };
 use Exception;

@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Resources\V1\Nce\Applicant;
+namespace App\Http\Resources\V1\Applicant\Nce;
 
-use App\Http\Resources\V1\Applicant\ContactDataResource;
-use App\Http\Resources\V1\Applicant\EducationalBackgroundDataResource;
-use App\Http\Resources\V1\Applicant\EmploymentDataResource;
-use App\Http\Resources\V1\Applicant\ExaminationDataResource;
-use App\Http\Resources\V1\Applicant\ExtraCurricularActivityDataResource;
-use App\Http\Resources\V1\Applicant\HeldResponsibilityDataResource;
-use App\Http\Resources\V1\Applicant\PersonalDataResource;
+use App\Http\Resources\V1\Applicant\Nce\ContactDataResource;
+use App\Http\Resources\V1\Applicant\Nce\EducationalBackgroundDataResource;
+use App\Http\Resources\V1\Applicant\Nce\EmploymentDataResource;
+use App\Http\Resources\V1\Applicant\Nce\ExaminationDataResource;
+use App\Http\Resources\V1\Applicant\Nce\ExtraCurricularActivityDataResource;
+use App\Http\Resources\V1\Applicant\Nce\HeldResponsibilityDataResource;
+use App\Http\Resources\V1\Applicant\Nce\PersonalDataResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ApplicantDetailResource extends JsonResource
