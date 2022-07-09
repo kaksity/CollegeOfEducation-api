@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Middleware\VerifyApplicationPayment;
 use App\Http\Traits\UuidTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -41,6 +42,10 @@ class User extends Authenticatable
     public function admin()
     {
         return $this->hasOne(Admin::class,'user_id');
+    }
+    public function verifyApplicationPayment()
+    {
+        return $this->hasOne(ApplicationPayment::class, 'user_id');
     }
     public function dipPersonalData()
     {

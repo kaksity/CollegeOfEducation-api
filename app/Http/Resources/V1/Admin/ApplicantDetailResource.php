@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\V1\Admin;
+namespace App\Http\Resources\V1\Nce\Admin;
 
 use App\Http\Resources\V1\Applicant\ContactDataResource;
 use App\Http\Resources\V1\Applicant\CourseDataResource;

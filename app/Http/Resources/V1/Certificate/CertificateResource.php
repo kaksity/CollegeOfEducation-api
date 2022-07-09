@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\V1\Certificate;
+namespace App\Http\Resources\V1\Nce\Certificate;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
