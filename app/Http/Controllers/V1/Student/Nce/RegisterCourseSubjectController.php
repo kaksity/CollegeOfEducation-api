@@ -4,7 +4,7 @@ namespace App\Http\Controllers\V1\Student\Nce;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Student\RegisterSubjectCourse\RegisterSubjectCourseRequest;
-use App\Http\Resources\V1\Student\RegisteredCourseSubjectResource;
+use App\Http\Resources\V1\Student\Nce\RegisteredCourseSubjectResource;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models\{DipRegisteredCourseSubject, CourseSubject, DipCourseData};

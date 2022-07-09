@@ -4,7 +4,7 @@ namespace App\Http\Controllers\V1\Student\Nce;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Student\EducationalBackgroundData\EducationalBackgroundDataRequest;
-use App\Http\Resources\V1\Student\EducationalBackgroundDataResource;
+use App\Http\Resources\V1\Student\Nce\EducationalBackgroundDataResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

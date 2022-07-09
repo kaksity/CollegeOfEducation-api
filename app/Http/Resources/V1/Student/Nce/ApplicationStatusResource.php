@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\V1\Nce\Student;
+namespace App\Http\Resources\V1\Student\Nce;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ExtraCurricularActivityDataResource extends JsonResource
+class ApplicationStatusResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,7 +16,12 @@ class ExtraCurricularActivityDataResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'activity' => $this->activity
+            'status' => $this->status,
+            $this->mergeWhen($this->status == 'admitted', function() {
+                return [
+                    'course' => new CourseDataResource($this->user->dipCourseData),
+                ];
+            }),
         ];
     }
 }

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Resources\V1\Nce\Student;
+namespace App\Http\Resources\V1\Student\Nce;
 
+use App\Http\Resources\V1\CourseSubject\CourseSubjectResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PassportResource extends JsonResource
+class RegisteredCourseSubjectResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,7 +17,7 @@ class PassportResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'path' => $this->file_path == null ? null : '/storage/passports/'.$this->file_path,
+            'course_subject' => new CourseSubjectResource($this->courseSubject)
         ];
     }
 }

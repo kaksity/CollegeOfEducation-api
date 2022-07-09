@@ -4,7 +4,7 @@ namespace App\Http\Controllers\V1\Student\Nce;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Student\ExtraCurricularActivityData\ExtraCurricularActivityDataRequest;
-use App\Http\Resources\V1\Student\ExtraCurricularActivityDataResource;
+use App\Http\Resources\V1\Student\Nce\ExtraCurricularActivityDataResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

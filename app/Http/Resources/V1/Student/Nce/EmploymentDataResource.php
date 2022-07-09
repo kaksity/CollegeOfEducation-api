@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\V1\Nce\Student;
+namespace App\Http\Resources\V1\Student\Nce;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class HeldResponsibilityDataResource extends JsonResource
+class EmploymentDataResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,7 +16,11 @@ class HeldResponsibilityDataResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'responsibility' => $this->responsibility
+            'name_of_employer' => $this->name_of_employer,
+            'type_of_employment' => $this->type_of_employment,
+            'duration' => $this->duration,
+            'unit' => $this->unit,
+            'average_salary' => $this->average_salary
         ];
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\V1\Student\Nce;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Student\ContactData\ContactDataRequest;
-use App\Http\Resources\V1\Student\ContactDataResource;
+use App\Http\Resources\V1\Student\Nce\ContactDataResource;
 use Exception;
 use App\Models\{DipContactData};
 use Illuminate\Http\Request;

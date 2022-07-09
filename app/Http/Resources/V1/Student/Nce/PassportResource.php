@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\V1\Nce\Student;
+namespace App\Http\Resources\V1\Student\Nce;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class EmploymentDataResource extends JsonResource
+class PassportResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,11 +16,7 @@ class EmploymentDataResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name_of_employer' => $this->name_of_employer,
-            'type_of_employment' => $this->type_of_employment,
-            'duration' => $this->duration,
-            'unit' => $this->unit,
-            'average_salary' => $this->average_salary
+            'path' => $this->file_path == null ? null : '/storage/passports/'.$this->file_path,
         ];
     }
 }

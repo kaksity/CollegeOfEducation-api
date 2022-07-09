@@ -4,7 +4,7 @@ namespace App\Http\Controllers\V1\Student\Nce;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Student\HeldResponsibilityData\HeldResponsibilityDataRequest;
-use App\Http\Resources\V1\Student\HeldResponsibilityDataResource;
+use App\Http\Resources\V1\Student\Nce\HeldResponsibilityDataResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

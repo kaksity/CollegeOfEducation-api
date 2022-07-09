@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Resources\V1\Nce\Student;
+namespace App\Http\Resources\V1\Student\Nce;
 
-use App\Http\Resources\V1\CourseSubject\CourseSubjectResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RegisteredCourseSubjectResource extends JsonResource
+class StudentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,9 +14,6 @@ class RegisteredCourseSubjectResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'id' => $this->id,
-            'course_subject' => new CourseSubjectResource($this->courseSubject)
-        ];
+        return [];
     }
 }

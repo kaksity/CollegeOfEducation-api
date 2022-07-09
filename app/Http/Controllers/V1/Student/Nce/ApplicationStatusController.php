@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\V1\Student\Nce;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V1\Student\ApplicationStatusResource;
+use App\Http\Resources\V1\Student\Nce\ApplicationStatusResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

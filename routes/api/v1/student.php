@@ -1,32 +1,32 @@
 <?php
 
 use App\Http\Controllers\V1\Student\AuthController;
-use App\Http\Controllers\V1\Student\Diploma\ApplicationStatusController;
-use App\Http\Controllers\V1\Student\Diploma\CertificateController;
-use App\Http\Controllers\V1\Student\Diploma\ContactDataController;
-use App\Http\Controllers\V1\Student\Diploma\CourseController;
-use App\Http\Controllers\V1\Student\Diploma\CourseDataController;
-use App\Http\Controllers\V1\Student\Diploma\CourseSubjectController;
-use App\Http\Controllers\V1\Student\Diploma\EducationalBackgroundDataController;
-use App\Http\Controllers\V1\Student\Diploma\EmploymentDataController;
-use App\Http\Controllers\V1\Student\Diploma\ExaminationDataController;
-use App\Http\Controllers\V1\Student\Diploma\LgaController;
-use App\Http\Controllers\V1\Student\Diploma\MaritalStatusController;
-use App\Http\Controllers\V1\Student\Diploma\PersonalDataController;
-use App\Http\Controllers\V1\Student\Diploma\StateController;
-use App\Http\Controllers\V1\Student\Diploma\ExtraCurricularActivityDataController;
-use App\Http\Controllers\V1\Student\Diploma\HeldReponsibilityController;
-use App\Http\Controllers\V1\Student\Diploma\PassportController;
-use App\Http\Controllers\V1\Student\Diploma\ExaminationCategoryController;
-use App\Http\Controllers\V1\Student\Diploma\ExaminationSubjectController;
-use App\Http\Controllers\V1\Student\Diploma\RegisterCourseSubjectController;
+use App\Http\Controllers\V1\Student\Nce\ApplicationStatusController;
+use App\Http\Controllers\V1\Student\Nce\CertificateController;
+use App\Http\Controllers\V1\Student\Nce\ContactDataController;
+use App\Http\Controllers\V1\Student\Nce\CourseController;
+use App\Http\Controllers\V1\Student\Nce\CourseDataController;
+use App\Http\Controllers\V1\Student\Nce\CourseSubjectController;
+use App\Http\Controllers\V1\Student\Nce\EducationalBackgroundDataController;
+use App\Http\Controllers\V1\Student\Nce\EmploymentDataController;
+use App\Http\Controllers\V1\Student\Nce\ExaminationDataController;
+use App\Http\Controllers\V1\Student\Nce\LgaController;
+use App\Http\Controllers\V1\Student\Nce\MaritalStatusController;
+use App\Http\Controllers\V1\Student\Nce\PersonalDataController;
+use App\Http\Controllers\V1\Student\Nce\StateController;
+use App\Http\Controllers\V1\Student\Nce\ExtraCurricularActivityDataController;
+use App\Http\Controllers\V1\Student\Nce\HeldReponsibilityController;
+use App\Http\Controllers\V1\Student\Nce\PassportController;
+use App\Http\Controllers\V1\Student\Nce\ExaminationCategoryController;
+use App\Http\Controllers\V1\Student\Nce\ExaminationSubjectController;
+use App\Http\Controllers\V1\Student\Nce\RegisterCourseSubjectController;
 
-    Route::group(['prefix' => 'auth'],function(){
+    Route::group(['prefix' => 'nce/auth'],function(){
         Route::post('login',[AuthController::class,'login']);
         Route::post('register', [AuthController::class,'register']);
         Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
     });
-    Route::group(['prefix'=>'diploma','middleware' => ['auth:sanctum']], function(){
+    Route::group(['prefix'=>'nce','middleware' => ['auth:sanctum']], function(){
         Route::apiResource('personal-data',PersonalDataController::class);
         Route::apiResource('contact-data', ContactDataController::class);
         Route::apiResource('educational-background-data', EducationalBackgroundDataController::class);
