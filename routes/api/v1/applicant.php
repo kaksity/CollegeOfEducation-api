@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\V1\Applicant\AuthController;
 use App\Http\Controllers\V1\Applicant\Nce\ApplicantController;
+use App\Http\Controllers\V1\Applicant\Nce\ApplicationPaymentController;
 use App\Http\Controllers\V1\Applicant\Nce\ApplicationStatusController;
 use App\Http\Controllers\V1\Applicant\Nce\CertificateController;
 use App\Http\Controllers\V1\Applicant\Nce\ContactDataController;
@@ -26,8 +27,12 @@ use App\Http\Controllers\V1\Applicant\Nce\ExaminationSubjectController;
         Route::post('register', [AuthController::class,'register']);
         Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
     });
-    //, 'verify.application.payment'
-    Route::group(['prefix'=>'nce','middleware' => ['auth:sanctum']], function(){
+    
+    Route::group(['prefix' => 'nce', 'middleware' => ['auth:sanctum']], function() {
+        Route::post('/application-payments/initialize', [ApplicationPaymentController::class, 'initiatePayment']);
+    });
+
+    Route::group(['prefix'=>'nce','middleware' => ['auth:sanctum', 'verify.application.payment']], function(){
         Route::apiResource('personal-data',PersonalDataController::class);
         Route::apiResource('contact-data', ContactDataController::class);
         Route::apiResource('educational-background-data', EducationalBackgroundDataController::class);
@@ -40,6 +45,9 @@ use App\Http\Controllers\V1\Applicant\Nce\ExaminationSubjectController;
         Route::apiResource('examination-center-data', ExaminationCenterDataController::class);
         Route::apiResource('application-statuses', ApplicationStatusController::class);
         Route::apiResource('applicant-profiles', ApplicantController::class);
+
+        
+
 
         Route::get('marital-statuses', [MaritalStatusController::class, 'index']);
         Route::get('states', [StateController::class, 'index']);
