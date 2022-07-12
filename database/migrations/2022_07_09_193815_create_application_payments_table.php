@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('application_payments', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
-            $table->string('reference_code');
-            $table->string('order_id')->nullable();
+            $table->string('reference_code')->nullable();
+            $table->decimal('amount');
             $table->string('status')->default('pending');
             $table->softDeletes();
             $table->timestamps();

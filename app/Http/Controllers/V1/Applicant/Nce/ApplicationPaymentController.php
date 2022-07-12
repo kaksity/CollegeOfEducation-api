@@ -20,73 +20,39 @@ class ApplicationPaymentController extends Controller
     {
         try
         {
-            if($request->payment_gateway == 'remita')
+            if ($request->payment_gateway == 'interswitch')
             {
 
-                $merchantId = env('REMITA_MERCHANT_ID');
-                $remitaSecretKey = env('REMITA_SECRET_KEY');
-                $amount = 1000;
-                    
-                $serviceTypeId =  env('REMITA_APPLICATION_FORM_SERVICE_TYPE');
+                $personalData = Auth::user()->dipPersonalData()->first();
+                $contactData = Auth::user()->dipContactData()->first();                
 
-                $orderId = generateRandomString(8)."".round(microtime(true) * 1000)."".generateRandomNumber(8);
-                
-                $apiHash = hash('sha512',"{$merchantId}{$serviceTypeId}{$orderId}{$amount}{$remitaSecretKey}");
-
-                $remitaPayment = $this->applicationPayment->where([
+                $interswitchPayment = $this->applicationPayment->where([
                     'user_id' => Auth::id()
                 ])->first();
-                
-                if($remitaPayment == null)
+
+                if($interswitchPayment == null)
                 {
-                    $personalData = Auth::user()->dipPersonalData()->first();
-                    $contactData = Auth::user()->dipContactData()->first();                
+                    $referenceCode = generateRandomString(8)."".round(microtime(true) * 1000)."".generateRandomNumber(8);
 
-                    
-                    $requestBody = [
-                        "serviceTypeId" => $serviceTypeId,
-                        "amount" => $amount,
-                        "orderId" => $orderId,
-                        "payerName" => "{$personalData->surname} {$personalData->other_names}",
-                        "payerEmail" => $contactData->email_address,
-                        "payerPhone" => "09062067384",
-                        "description" => "Payment of College of Education Waka-Biu Application Fees"
-                    ];
-                    
-                    $response = Http::withHeaders([
-                        'Accept' => 'application/json',
-                        'Content-Type' => 'application/json',
-                        'Authorization' => "remitaConsumerKey={$merchantId},remitaConsumerToken={$apiHash}"
-                    ])->post('https://remitademo.net/remita/exapp/api/v1/send/api/echannelsvc/merchant/api/paymentinit', $requestBody);
-
-                    $responseData = json_decode($response->body());
-                    // Save the data to the database
-                    $this->applicationPayment->create([
+                    $interswitchPayment = $this->applicationPayment->create([
                         'user_id' => Auth::id(),
-                        'reference_code' => $responseData->RRR,
-                        'order_id' => $orderId
+                        'reference_code' => $referenceCode,
+                        'amount' => 1000
                     ]);
-
-                    $data['message'] = $responseData->status;
-                    $data['rrr'] = $responseData->RRR;
-                    $data['url'] = 'https://remitademo.net/remita/ecomm/finalize.reg';
-                    $data['merchant_id'] = $merchantId;
-                    $data['hash'] = $apiHash;
-
                 }
-                else {
-                    $data['message'] = 'Remita payment generated';
-                    $data['rrr'] = $remitaPayment->reference_code;
-                    $data['url'] = 'https://remitademo.net/remita/ecomm/finalize.reg';
-                    $data['merchant_id'] = $merchantId;
-                    $data['hash'] = $apiHash;
-                }
+                
+                $merchantCode = env('INTERSWITCH_MERCHANT_CODE');
+                $payItemId = env('INTERSWITCH_PAY_ITEM_ID');
+
+                $data['reference_code'] = $interswitchPayment->reference_code;
+                $data['email_address'] = $contactData->email_address;
+                $data['full_name'] = "{$personalData->surname} {$personalData->other_names}";
+                $data['merchant_code'] = $merchantCode;
+                $data['pay_item_id'] = $payItemId;
+                $data['amount'] = ($interswitchPayment->amount * 100);
+                $data['url'] = 'https://qa.interswitchng.com/collections/w/pay';
 
                 return successParser($data, 201);
-            }
-            else if ($request->payment_gateway == 'interswitch')
-            {
-                
             }
         }
         catch(Exception $ex)

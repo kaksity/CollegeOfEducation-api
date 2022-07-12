@@ -5,9 +5,14 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Http;
+use App\Models\ApplicationPayment;
 class VerifyApplicationPayment
 {
+    public function __construct(ApplicationPayment $applicationPayment)
+    {
+        $this->applicationPayment = $applicationPayment;
+    }
     /**
      * Handle an incoming request.
      *
@@ -17,12 +22,33 @@ class VerifyApplicationPayment
      */
     public function handle(Request $request, Closure $next)
     {
-        $payment = Auth::user()->verifyApplicationPayment;
-
+        $payment = $this->applicationPayment->where([
+            'user_id' => Auth::id(),
+        ])->first();
+        
         if($payment == null)
         {
             $data['message'] = 'Applicant is yet to pay application fee';
             return errorParser($data, 403);
+        }
+        else if ($payment->status != 'paid')
+        {
+            $merchantCode = env('INTERSWITCH_MERCHANT_CODE');
+
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+            ])->get("https://qa.interswitchng.com/collections/api/v1/gettransaction.json?merchantCode={$merchantCode}&transactionReference={$payment->reference_code}&amount={$payment->amount}");
+            
+            $responseData = json_decode($response->body());
+            if($responseData->ResponseCode != '00')
+            {
+                $data['message'] = 'Applicant is yet to pay application fee';
+                return errorParser($data, 403);
+            }
+
+            $payment->update([
+                'status' => 'paid'
+            ]);
         }
         
         return $next($request);
