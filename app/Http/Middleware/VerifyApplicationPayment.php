@@ -35,7 +35,7 @@ class VerifyApplicationPayment
         {
             $merchantCode = env('INTERSWITCH_MERCHANT_CODE');
             $referenceCode = $payment->reference_code;
-            $amount = $payment->amount;
+            $amount = $payment->amount * 100;
             $url = "https://qa.interswitchng.com/collections/api/v1/gettransaction.json?merchantcode=$merchantCode&transactionreference=$referenceCode&amount=$amount";
             // $url = "https://qa.interswitchng.com/collections/api/v1/gettransaction.json?merchantCode=$merchantCode&transactionReference=$referenceCode&amount=$amount";
             $response = Http::withHeaders([
@@ -47,6 +47,7 @@ class VerifyApplicationPayment
             {
                 $data['message'] = 'Applicant is yet to pay application fee';
                 $data['response'] = $responseData;
+                $data['amount'] = $amount;
                 return errorParser($data, 403);
             }
 
