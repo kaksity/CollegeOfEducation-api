@@ -28,7 +28,7 @@ class VerifyApplicationPayment
         
         if($payment == null)
         {
-            $data['message'] = 'Applicant is yet to pay application fee';
+            $data['message'] = 'Applicant is yet to pay application fee(null)';
             return errorParser($data, 403);
         }
         else if ($payment->status != 'paid')
@@ -43,6 +43,7 @@ class VerifyApplicationPayment
             if($responseData->ResponseCode != '00')
             {
                 $data['message'] = 'Applicant is yet to pay application fee';
+                $data['response'] = $responseData;
                 return errorParser($data, 403);
             }
 
