@@ -34,10 +34,11 @@ class VerifyApplicationPayment
         else if ($payment->status != 'paid')
         {
             $merchantCode = env('INTERSWITCH_MERCHANT_CODE');
-
+            $referenceCode = $payment->reference_code;
+            $amount = $payment->amount;
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
-            ])->get("https://qa.interswitchng.com/collections/api/v1/gettransaction.json?merchantCode={$merchantCode}&transactionReference={$payment->reference_code}&amount={$payment->amount}");
+            ])->get("https://qa.interswitchng.com/collections/api/v1/gettransaction.json?merchantCode={$merchantCode}&transactionReference={$referenceCode}&amount={$amount}");
             
             $responseData = json_decode($response->body());
             if($responseData->ResponseCode != '00')
