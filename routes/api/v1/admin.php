@@ -28,7 +28,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::apiResource('examination-categories', ExaminationCategoryController::class);
     Route::apiResource('examination-subjects', ExaminationSubjectController::class);
     Route::apiResource('course-subjects', CourseSubjectController::class);
-    Route::group(['prefix' => 'diploma'], function() {
+    Route::group(['prefix' => 'nce'], function() {
         Route::apiResource('applicants', ApplicantController::class);
     });
 });
