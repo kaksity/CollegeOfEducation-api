@@ -52,7 +52,7 @@ class CourseDataController extends Controller
             }
 
             $courseData = Auth::user()->nceCourseData()->first();
-            
+            dd($courseData);
             if($courseData->id != $id)
             {
                 throw new Exception('You can only update your data',400);
