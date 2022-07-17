@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('application_payments');
+        Schema::dropIfExists('nce_application_payments');
     }
 };
