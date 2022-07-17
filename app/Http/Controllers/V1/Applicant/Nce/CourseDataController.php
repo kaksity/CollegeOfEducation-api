@@ -23,8 +23,8 @@ class CourseDataController extends Controller
      */
     public function index()
     {
-        // $courseData = Auth::user()->nceCourseData()->with(['NceCourseDataFirstChoice, NceCourseDataSecondChoice'])->first();
         $courseData = Auth::user()->NceCourseData->first();
+        dd($courseData);        
         return new CourseDataResource($courseData);
     }
 
