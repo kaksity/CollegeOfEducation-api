@@ -23,8 +23,7 @@ class CourseDataController extends Controller
      */
     public function index()
     {
-        $courseData = Auth::user()->NceCourseData()->first();
-        dd($courseData);        
+        $courseData = Auth::user()->nceCourseData()->first();
         return new CourseDataResource($courseData);
     }
 
@@ -52,7 +51,6 @@ class CourseDataController extends Controller
             }
 
             $courseData = Auth::user()->nceCourseData()->first();
-            dd($courseData);
             if($courseData->id != $id)
             {
                 throw new Exception('You can only update your data',400);
