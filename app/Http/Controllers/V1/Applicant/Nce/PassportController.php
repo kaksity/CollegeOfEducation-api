@@ -18,7 +18,7 @@ class PassportController extends Controller
      */
     public function index()
     {
-        $passport = Auth::user()->dipPassport()->first();
+        $passport = Auth::user()->ncePassport()->first();
         return new PassportResource($passport);
     }
 
@@ -38,10 +38,10 @@ class PassportController extends Controller
             
             $path = $request->file->storeAs('public/passports', $fileNameToStore);
 
-            $passport = Auth::user()->dipPassport()->first();
+            $passport = Auth::user()->ncePassport()->first();
             
             if($passport == null){
-                Auth::user()->dipPassport()->create([
+                Auth::user()->ncePassport()->create([
                     'file_path' => $fileNameToStore
                 ]);
             }

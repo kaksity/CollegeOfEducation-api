@@ -12,8 +12,8 @@ class Certificate extends Model
     use UuidTrait, HasFactory, SoftDeletes;
     protected $guarded;
 
-    public function dipEducationalBackground()
+    public function nceEducationalBackground()
     {
-        return $this->hasMany(DipEducationalBackgroundData::class, 'certificate_id');
+        return $this->hasMany(NceEducationalBackgroundData::class, 'certificate_id');
     }
 }

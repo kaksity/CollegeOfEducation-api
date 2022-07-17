@@ -17,10 +17,10 @@ class CourseDataResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'first_choice_course' => $this->dipCourseDataFirstChoice == null ? null : new CourseResource($this->dipCourseDataFirstChoice),
-            'second_choice_course' => $this->dipCourseDataSecondChoice == null ? null : new CourseResource($this->dipCourseDataSecondChoice),
-            'third_choice_course' => $this->dipCourseDataThirdChoice == null ? null : new CourseResource($this->dipCourseDataThirdChoice),
-            'admitted_course' => $this->dipCourseDataAdmittedCourse == null ? null : new CourseResource($this->dipCourseDataAdmittedCourse)
+            'first_choice_course' => $this->NceCourseDataFirstChoice == null ? null : new CourseResource($this->NceCourseDataFirstChoice),
+            'second_choice_course' => $this->NceCourseDataSecondChoice == null ? null : new CourseResource($this->NceCourseDataSecondChoice),
+            'third_choice_course' => $this->NceCourseDataThirdChoice == null ? null : new CourseResource($this->NceCourseDataThirdChoice),
+            'admitted_course' => $this->NceCourseDataAdmittedCourse == null ? null : new CourseResource($this->NceCourseDataAdmittedCourse)
         ];
     }
 }

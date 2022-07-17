@@ -18,8 +18,8 @@ class State extends Model
         return $this->hasMany(Lga::class,'state_id');
     }
 
-    public function dipPersonalData()
+    public function ncePersonalData()
     {
-        return $this->hasMany(DipPersonalData::class,'state_id');
+        return $this->hasMany(NcePersonalData::class,'state_id');
     }
 }

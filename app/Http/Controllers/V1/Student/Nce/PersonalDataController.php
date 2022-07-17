@@ -24,7 +24,7 @@ class PersonalDataController extends Controller
      */
     public function index()
     {
-        $personalData = Auth::user()->dipPersonalData()->with(['maritalStatus','lga','state'])->first();
+        $personalData = Auth::user()->ncePersonalData()->with(['maritalStatus','lga','state'])->first();
         // dd($personalData);
         return new PersonalDataResource($personalData);
     }
@@ -46,7 +46,7 @@ class PersonalDataController extends Controller
                 throw new Exception('Marital Status record does not exist');
             }
 
-            $personalData = Auth::user()->dipPersonalData()->first();
+            $personalData = Auth::user()->ncePersonalData()->first();
 
             if($personalData->id != $id)
             {

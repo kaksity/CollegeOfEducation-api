@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\V1\Applicant\ApplicationPayment;
+namespace App\Http\Requests\V1\Applicant\NceApplicationPayment;
 
 use App\Http\Requests\Base\BaseFormRequest;
 
-class ApplicationPaymentRequest extends BaseFormRequest
+class NceApplicationPaymentRequest extends BaseFormRequest
 {
 
     /**

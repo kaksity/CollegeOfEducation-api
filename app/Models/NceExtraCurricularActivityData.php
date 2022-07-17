@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ApplicationPayment extends Model
+class NceExtraCurricularActivityData extends Model
 {
     use UuidTrait, HasFactory, SoftDeletes;
     protected $guarded;

@@ -23,8 +23,8 @@ class CourseDataController extends Controller
      */
     public function index()
     {
-        // $courseData = Auth::user()->dipCourseData()->with(['dipCourseDataFirstChoice, dipCourseDataSecondChoice'])->first();
-        $courseData = Auth::user()->dipCourseData->first();
+        // $courseData = Auth::user()->nceCourseData()->with(['NceCourseDataFirstChoice, NceCourseDataSecondChoice'])->first();
+        $courseData = Auth::user()->NceCourseData->first();
         return new CourseDataResource($courseData);
     }
 
@@ -51,7 +51,7 @@ class CourseDataController extends Controller
                 throw new Exception('Second choice course does not exist');
             }
 
-            $courseData = Auth::user()->dipCourseData()->first();
+            $courseData = Auth::user()->nceCourseData()->first();
             
             if($courseData->id != $id)
             {

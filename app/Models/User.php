@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Http\Middleware\VerifyApplicationPayment;
+use App\Http\Middleware\VerifyNceApplicationPayment;
 use App\Http\Traits\UuidTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -43,60 +43,60 @@ class User extends Authenticatable
     {
         return $this->hasOne(Admin::class,'user_id');
     }
-    public function verifyApplicationPayment()
+    public function verifyNceApplicationPayment()
     {
-        return $this->hasOne(ApplicationPayment::class, 'user_id');
+        return $this->hasOne(NceApplicationPayment::class, 'user_id');
     }
-    public function dipPersonalData()
+    public function ncePersonalData()
     {
-        return $this->hasOne(DipPersonalData::class, 'user_id');
+        return $this->hasOne(NcePersonalData::class, 'user_id');
     }
-    public function dipContactData()
+    public function nceContactData()
     {
-        return $this->hasOne(DipContactData::class, 'user_id');
+        return $this->hasOne(NceContactData::class, 'user_id');
     }
-    public function dipEducationalBackground()
+    public function nceEducationalBackground()
     {
-        return $this->hasMany(DipEducationalBackgroundData::class, 'user_id');
+        return $this->hasMany(NceEducationalBackgroundData::class, 'user_id');
     }
-    public function dipEmploymentData()
+    public function nceEmploymentData()
     {
-        return $this->hasMany(DipEmploymentData::class, 'user_id');
+        return $this->hasMany(NceEmploymentData::class, 'user_id');
     }
-    public function dipCourseData()
+    public function nceCourseData()
     {
-        return $this->hasOne(DipCourseData::class,'user_id');
+        return $this->hasOne(NceCourseData::class,'user_id');
     }
-    public function dipExtraCurricularActivityData()
+    public function nceExtraCurricularActivityData()
     {
-        return $this->hasMany(DipExtraCurricularActivityData::class, 'user_id');
+        return $this->hasMany(NceExtraCurricularActivityData::class, 'user_id');
     }
-    public function dipHeldResponsibilityData()
+    public function nceHeldResponsibilityData()
     {
-        return $this->hasMany(DipHeldResponsibilityData::class, 'user_id');
-    }
-
-    public function dipPassport()
-    {
-        return $this->hasOne(DipPassport::class, 'user_id');
+        return $this->hasMany(NceHeldResponsibilityData::class, 'user_id');
     }
 
-    public function dipExaminationData()
+    public function ncePassport()
     {
-        return $this->hasMany(DipExaminationData::class, 'user_id');
+        return $this->hasOne(NcePassport::class, 'user_id');
     }
 
-    public function dipApplicationStatus()
+    public function nceExaminationData()
     {
-        return $this->hasOne(DipApplicationStatus::class, 'user_id');
+        return $this->hasMany(NceExaminationData::class, 'user_id');
     }
 
-    public function dipRegisteredCourseSubject()
+    public function nceApplicationStatus()
     {
-        return $this->hasMany(DipRegisteredCourseSubject::class, 'course_subject_id');
+        return $this->hasOne(NceApplicationStatus::class, 'user_id');
     }
-    public function dipExaminationCenterData()
+
+    public function nceRegisteredCourseSubject()
     {
-        return $this->hasOne(DipExaminationCenterData::class, 'user_id');
+        return $this->hasMany(NceRegisteredCourseSubject::class, 'course_subject_id');
+    }
+    public function nceExaminationCenterData()
+    {
+        return $this->hasOne(NceExaminationCenterData::class, 'user_id');
     }
 }

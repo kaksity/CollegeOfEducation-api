@@ -17,14 +17,14 @@ class ApplicationStatusController extends Controller
      */
     public function index()
     {
-        $applicationStatus = Auth::user()->dipApplicationStatus()->first();
+        $applicationStatus = Auth::user()->nceApplicationStatus()->first();
         return new ApplicationStatusResource($applicationStatus);
     }
     public function store()
     {
         try
         {
-            $applicationStatus = Auth::user()->dipApplicationStatus()->first();
+            $applicationStatus = Auth::user()->nceApplicationStatus()->first();
             if($applicationStatus->status != 'applying'){
                 throw new Exception('Applicant has already been '.$applicationStatus->status, 400);
             }

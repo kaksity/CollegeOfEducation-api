@@ -7,17 +7,17 @@ use App\Http\Requests\V1\Student\RegisterSubjectCourse\RegisterSubjectCourseRequ
 use App\Http\Resources\V1\Student\Nce\RegisteredCourseSubjectResource;
 use Exception;
 use Illuminate\Http\Request;
-use App\Models\{DipRegisteredCourseSubject, CourseSubject, DipCourseData};
+use App\Models\{NceRegisteredCourseSubject, CourseSubject, NceCourseData};
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class RegisterCourseSubjectController extends Controller
 {
-    public function __construct(DipRegisteredCourseSubject $dipRegisteredCourseSubject, CourseSubject $courseSubject, DipCourseData $dipCourseData)
+    public function __construct(NceRegisteredCourseSubject $NceRegisteredCourseSubject, CourseSubject $courseSubject, NceCourseData $NceCourseData)
     {
-        $this->dipRegisteredCourseSubject = $dipRegisteredCourseSubject;
+        $this->NceRegisteredCourseSubject = $NceRegisteredCourseSubject;
         $this->courseSubject = $courseSubject;
-        $this->dipCourseData = $dipCourseData;
+        $this->NceCourseData = $NceCourseData;
     }
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class RegisterCourseSubjectController extends Controller
     public function index()
     {
         
-        $registeredCourseSubjects = $this->dipRegisteredCourseSubject->where('user_id', Auth::user()->id)->latest()->get();
+        $registeredCourseSubjects = $this->NceRegisteredCourseSubject->where('user_id', Auth::user()->id)->latest()->get();
         return RegisteredCourseSubjectResource::collection($registeredCourseSubjects);
     }
 
@@ -48,7 +48,7 @@ class RegisterCourseSubjectController extends Controller
                 throw new Exception('Course Subject does not exist', 404);
             }
 
-            $this->dipRegisteredCourseSubject->create([
+            $this->NceRegisteredCourseSubject->create([
                 'user_id' => Auth::user()->id,
                 'course_subject_id' => $request->course_subject_id
             ]);
@@ -75,7 +75,7 @@ class RegisterCourseSubjectController extends Controller
     {
         try
         {
-            $registeredCourseSubject = $this->dipRegisteredCourseSubject->find($id);
+            $registeredCourseSubject = $this->NceRegisteredCourseSubject->find($id);
             
             if($registeredCourseSubject == null)
             {
@@ -101,12 +101,12 @@ class RegisterCourseSubjectController extends Controller
         try
         {
             
-            $dipCourseData = $this->dipCourseData->where('user_id', Auth::user()->id)->first();
-            $courseSubjects = $this->courseSubject->where('course_id', $dipCourseData->admitted_course_id)->get();
+            $NceCourseData = $this->NceCourseData->where('user_id', Auth::user()->id)->first();
+            $courseSubjects = $this->courseSubject->where('course_id', $NceCourseData->admitted_course_id)->get();
             
             DB::beginTransaction();
             foreach ($courseSubjects as $courseSubject) {
-                $this->dipRegisteredCourseSubject->create([
+                $this->NceRegisteredCourseSubject->create([
                     'user_id' => Auth::user()->id,
                     'course_subject_id' => $courseSubject->id,
                 ]);                    

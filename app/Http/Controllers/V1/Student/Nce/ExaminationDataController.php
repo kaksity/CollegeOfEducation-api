@@ -6,15 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Student\ExaminationData\ExaminationDataRequest;
 use App\Http\Resources\V1\Student\Nce\ExaminationDataResource;
 use Illuminate\Http\Request;
-use App\Models\{ DipExaminationData };
+use App\Models\{ NceExaminationData };
 use Exception;
 use Illuminate\Support\Facades\Auth;
 
 class ExaminationDataController extends Controller
 {
-    public function __construct(DipExaminationData $dipExaminationData)
+    public function __construct(NceExaminationData $NceExaminationData)
     {
-        $this->dipExaminationData = $dipExaminationData;
+        $this->NceExaminationData = $NceExaminationData;
     }
     /**
      * Display a listing of the resource.
@@ -23,7 +23,7 @@ class ExaminationDataController extends Controller
      */
     public function index(ExaminationDataRequest $request)
     {
-        $examinationData = Auth::user()->dipExaminationData()->latest()->paginate($request->per_page);
+        $examinationData = Auth::user()->nceExaminationData()->latest()->paginate($request->per_page);
         return ExaminationDataResource::collection($examinationData);
     }
 
@@ -37,7 +37,7 @@ class ExaminationDataController extends Controller
     {
         try
         {
-            Auth::user()->dipExaminationData()->create($request->all());
+            Auth::user()->nceExaminationData()->create($request->all());
             $data['message'] = 'Student Examination data was added successfully';
             return successParser($data, 201);
         }
@@ -59,13 +59,13 @@ class ExaminationDataController extends Controller
     {
         try
         {
-            $dipExaminationData = $this->dipExaminationData->find($id);
+            $NceExaminationData = $this->NceExaminationData->find($id);
 
-            if($dipExaminationData == null)
+            if($NceExaminationData == null)
             {
                 throw new Exception('Student Examination data does not exist', 404);
             }
-            $dipExaminationData->delete();
+            $NceExaminationData->delete();
             $data['message'] = 'Student Examination data was created successfully';
             return successParser($data, 201);
         }

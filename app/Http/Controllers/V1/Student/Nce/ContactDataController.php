@@ -6,15 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Student\ContactData\ContactDataRequest;
 use App\Http\Resources\V1\Student\Nce\ContactDataResource;
 use Exception;
-use App\Models\{DipContactData};
+use App\Models\{NceContactData};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ContactDataController extends Controller
 {
-    public function __construct(DipContactData $dipContactData)
+    public function __construct(NceContactData $NceContactData)
     {
-        $this->dipContactData = $dipContactData;
+        $this->NceContactData = $NceContactData;
     }
     /**
      * Display a listing of the resource.
@@ -23,7 +23,7 @@ class ContactDataController extends Controller
      */
     public function index()
     {
-        $contact = Auth::user()->dipContactData()->first();
+        $contact = Auth::user()->nceContactData()->first();
         return new ContactDataResource($contact);
     }
 
@@ -38,13 +38,13 @@ class ContactDataController extends Controller
     {
         try
         {
-            $contactData = Auth::user()->dipContactData()->first();
+            $contactData = Auth::user()->nceContactData()->first();
             
             if($contactData->id != $id)
             {
                 throw new Exception('You can only update your data', 400);
             }
-            $contactDataByEmail = $this->dipContactData->where('email_address',$request->email_address)->first();
+            $contactDataByEmail = $this->NceContactData->where('email_address',$request->email_address)->first();
 
             // if($contactDataByEmail != null)
             // {

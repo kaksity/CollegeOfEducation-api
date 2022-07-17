@@ -17,8 +17,8 @@ class CourseSubject extends Model
         return $this->belongsTo(Course::class, 'course_id');
     }
 
-    public function dipRegisteredCourseSubject()
+    public function nceRegisteredCourseSubject()
     {
-        return $this->hasMany(DipRegisteredCourseSubject::class, 'course_subject_id');
+        return $this->hasMany(NceRegisteredCourseSubject::class, 'course_subject_id');
     }
 }

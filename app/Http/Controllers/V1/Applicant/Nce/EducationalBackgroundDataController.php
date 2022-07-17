@@ -22,7 +22,7 @@ class EducationalBackgroundDataController extends Controller
      */
     public function index(EducationalBackgroundDataRequest $request)
     {
-        $applicantEducationalBackground = Auth::user()->dipEducationalBackground()->latest()->paginate($request->per_page);
+        $applicantEducationalBackground = Auth::user()->nceEducationalBackground()->latest()->paginate($request->per_page);
         return EducationalBackgroundDataResource::collection($applicantEducationalBackground);
     }
 
@@ -41,7 +41,7 @@ class EducationalBackgroundDataController extends Controller
             {
                 throw new Exception('Certificate record does not exist', 404);
             }
-            $applicantEducationalBackground = Auth::user()->dipEducationalBackground();
+            $applicantEducationalBackground = Auth::user()->nceEducationalBackground();
             $applicantEducationalBackground->create($request->all());
             $data['message'] = 'Applicant educational background data was created successfully';
             return successParser($data, 201);
@@ -64,7 +64,7 @@ class EducationalBackgroundDataController extends Controller
     {
         try
         {
-            $applicantEducationalBackground = Auth::user()->dipEducationalBackground()->find($id);
+            $applicantEducationalBackground = Auth::user()->nceEducationalBackground()->find($id);
 
             if($applicantEducationalBackground == null)
             {

@@ -15,10 +15,10 @@ class ApplicantListResource extends JsonResource
      */
     public function toArray($request)
     {
-        $dipPersonalData = $this->user->dipPersonalData;
+        $NcePersonalData = $this->user->NcePersonalData;
         return [
             'id' => $this->user_id,
-            'personal_data' => new PersonalDataResource($dipPersonalData),
+            'personal_data' => new PersonalDataResource($NcePersonalData),
         ];
     }
 }

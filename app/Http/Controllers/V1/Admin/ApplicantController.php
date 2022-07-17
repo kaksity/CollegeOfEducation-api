@@ -7,17 +7,17 @@ use App\Http\Requests\V1\Admin\Applicant\ApplicantRequest;
 use App\Http\Resources\V1\Admin\ApplicantDetailResource;
 use App\Http\Resources\V1\Admin\ApplicantListResource;
 use Illuminate\Http\Request;
-use App\Models\{User, DipPersonalData, DipApplicationStatus, DipCourseData};
+use App\Models\{User, NcePersonalData, NceApplicationStatus, NceCourseData};
 use Exception;
 
 class ApplicantController extends Controller
 {
-    public function __construct(User $user, DipPersonalData $dipPersonalData, DipApplicationStatus $dipApplicationStatus, DipCourseData $dipCourseData)
+    public function __construct(User $user, NcePersonalData $NcePersonalData, NceApplicationStatus $NceApplicationStatus, NceCourseData $NceCourseData)
     {
         $this->user = $user;
-        $this->dipPersonalData = $dipPersonalData;
-        $this->dipApplicationStatus = $dipApplicationStatus;
-        $this->dipCourseData = $dipCourseData;
+        $this->NcePersonalData = $NcePersonalData;
+        $this->NceApplicationStatus = $NceApplicationStatus;
+        $this->NceCourseData = $NceCourseData;
     }
     /**
      * Display a listing of the resource.
@@ -28,7 +28,7 @@ class ApplicantController extends Controller
     {
         $perPage = $request->per_page;
         $status = $request->status;
-        $applicants = $this->dipApplicationStatus->where('status', $status)->latest()->paginate($perPage);
+        $applicants = $this->NceApplicationStatus->where('status', $status)->latest()->paginate($perPage);
         return ApplicantListResource::collection($applicants);
     }
 
@@ -74,14 +74,14 @@ class ApplicantController extends Controller
                 throw new Exception('Admitted Course is required if admitted', 400);
             }
 
-            $applicant = $this->dipApplicationStatus->where('user_id', $id)->first();
+            $applicant = $this->NceApplicationStatus->where('user_id', $id)->first();
             
             if($applicant == null){
                 throw new Exception('Applicant record does not exist', 404);
             }
 
             if($request->status == 'admitted'){
-                $this->dipCourseData->where('user_id', $id)->update([
+                $this->NceCourseData->where('user_id', $id)->update([
                     'admitted_course_id' => $request->admitted_course_id
                 ]);
             }

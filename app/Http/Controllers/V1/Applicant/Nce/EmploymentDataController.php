@@ -18,7 +18,7 @@ class EmploymentDataController extends Controller
      */
     public function index(EmploymentDataRequest $request)
     {
-        $employmentData = Auth::user()->dipEmploymentData()->latest()->paginate($request->per_page);
+        $employmentData = Auth::user()->nceEmploymentData()->latest()->paginate($request->per_page);
         return EmploymentDataResource::collection($employmentData);
     }
 
@@ -32,7 +32,7 @@ class EmploymentDataController extends Controller
     {
         try
         {
-            Auth::user()->dipEmploymentData()->create($request->all());
+            Auth::user()->nceEmploymentData()->create($request->all());
             $data['message'] = 'Applicant employment data was created successfully';
             return successParser($data,201);
         }
@@ -54,7 +54,7 @@ class EmploymentDataController extends Controller
     {
         try
         {
-            $employmentData = Auth::user()->dipEmploymentData()->find($id);
+            $employmentData = Auth::user()->nceEmploymentData()->find($id);
             
             if($employmentData == null)
             {

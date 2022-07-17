@@ -6,12 +6,12 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use App\Models\ApplicationPayment;
-class VerifyApplicationPayment
+use App\Models\NceApplicationPayment;
+class VerifyNceApplicationPayment
 {
-    public function __construct(ApplicationPayment $applicationPayment)
+    public function __construct(NceApplicationPayment $NceApplicationPayment)
     {
-        $this->applicationPayment = $applicationPayment;
+        $this->NceApplicationPayment = $NceApplicationPayment;
     }
     /**
      * Handle an incoming request.
@@ -22,7 +22,7 @@ class VerifyApplicationPayment
      */
     public function handle(Request $request, Closure $next)
     {
-        $payment = $this->applicationPayment->where([
+        $payment = $this->NceApplicationPayment->where([
             'user_id' => Auth::id(),
         ])->first();
         

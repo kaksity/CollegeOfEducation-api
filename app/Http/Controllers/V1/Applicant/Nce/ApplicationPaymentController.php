@@ -3,30 +3,30 @@
 namespace App\Http\Controllers\V1\Applicant\Nce;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Applicant\ApplicationPayment\ApplicationPaymentRequest;
+use App\Http\Requests\V1\Applicant\NceApplicationPayment\NceApplicationPaymentRequest;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use App\Models\{ ApplicationPayment };
+use App\Models\{ NceApplicationPayment };
 
-class ApplicationPaymentController extends Controller
+class NceApplicationPaymentController extends Controller
 {
-    public function __construct(ApplicationPayment $applicationPayment)
+    public function __construct(NceApplicationPayment $NceApplicationPayment)
     {
-        $this->applicationPayment = $applicationPayment;
+        $this->NceApplicationPayment = $NceApplicationPayment;
     }
-    public function initiatePayment(ApplicationPaymentRequest $request)
+    public function initiatePayment(NceApplicationPaymentRequest $request)
     {
         try
         {
             if ($request->payment_gateway == 'interswitch')
             {
 
-                $personalData = Auth::user()->dipPersonalData()->first();
-                $contactData = Auth::user()->dipContactData()->first();                
+                $personalData = Auth::user()->ncePersonalData()->first();
+                $contactData = Auth::user()->nceContactData()->first();                
 
-                $interswitchPayment = $this->applicationPayment->where([
+                $interswitchPayment = $this->NceApplicationPayment->where([
                     'user_id' => Auth::id()
                 ])->first();
 
@@ -34,7 +34,7 @@ class ApplicationPaymentController extends Controller
                 {
                     $referenceCode = generateRandomString(8)."".round(microtime(true) * 1000)."".generateRandomNumber(8);
 
-                    $interswitchPayment = $this->applicationPayment->create([
+                    $interswitchPayment = $this->NceApplicationPayment->create([
                         'user_id' => Auth::id(),
                         'reference_code' => $referenceCode,
                         'amount' => 1000

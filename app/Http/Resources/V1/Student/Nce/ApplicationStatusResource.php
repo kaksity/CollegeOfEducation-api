@@ -19,7 +19,7 @@ class ApplicationStatusResource extends JsonResource
             'status' => $this->status,
             $this->mergeWhen($this->status == 'admitted', function() {
                 return [
-                    'course' => new CourseDataResource($this->user->dipCourseData),
+                    'course' => new CourseDataResource($this->user->NceCourseData),
                 ];
             }),
         ];

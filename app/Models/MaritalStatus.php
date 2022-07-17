@@ -13,8 +13,8 @@ class MaritalStatus extends Model
     
     protected $guarded;
 
-    public function dipPersonalData()
+    public function ncePersonalData()
     {
-        return $this->hasMany(DipPersonalData::class, 'marital_status_id');
+        return $this->hasMany(NcePersonalData::class, 'marital_status_id');
     }
 }

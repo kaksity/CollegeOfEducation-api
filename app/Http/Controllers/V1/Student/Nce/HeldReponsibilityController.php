@@ -20,7 +20,7 @@ class HeldReponsibilityController extends Controller
     {
         $perPage = $request->per_page ?? 10;
         
-        $heldResponsibilities = Auth::user()->dipHeldResponsibilityData()->latest()->paginate($perPage);
+        $heldResponsibilities = Auth::user()->nceHeldResponsibilityData()->latest()->paginate($perPage);
         return HeldResponsibilityDataResource::collection($heldResponsibilities);
     }
 
@@ -34,7 +34,7 @@ class HeldReponsibilityController extends Controller
     {
         try
         {
-            Auth::user()->dipHeldResponsibilityData()->create($request->all());
+            Auth::user()->nceHeldResponsibilityData()->create($request->all());
             $data['message'] = 'Student held responsiblity data was added successfully';
             return successParser($data,201);
         }
@@ -56,7 +56,7 @@ class HeldReponsibilityController extends Controller
     {
         try
         {
-            $heldResponsibility = Auth::user()->dipHeldResponsibilityData()->find($id);
+            $heldResponsibility = Auth::user()->nceHeldResponsibilityData()->find($id);
             
             if($heldResponsibility == null)
             {

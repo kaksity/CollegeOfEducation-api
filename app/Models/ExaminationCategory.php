@@ -12,9 +12,9 @@ class ExaminationCategory extends Model
     use UuidTrait, HasFactory, SoftDeletes;
     protected $guarded;
  
-    public function dipExaminationData()
+    public function nceExaminationData()
     {
-        return $this->hasMany(DipExaminationData::class, 'examination_category_id');
+        return $this->hasMany(NceExaminationData::class, 'examination_category_id');
     }
     public function subjects()
     {

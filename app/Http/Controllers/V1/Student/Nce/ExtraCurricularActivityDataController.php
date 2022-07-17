@@ -19,7 +19,7 @@ class ExtraCurricularActivityDataController extends Controller
     public function index(ExtraCurricularActivityDataRequest $request)
     {
         $perPage = $request->per_page ?? 10;
-        $extraCurricularActivities = Auth::user()->dipExtraCurricularActivityData()->latest()->paginate($perPage);
+        $extraCurricularActivities = Auth::user()->nceExtraCurricularActivityData()->latest()->paginate($perPage);
         return ExtraCurricularActivityDataResource::collection($extraCurricularActivities);
     }
 
@@ -33,7 +33,7 @@ class ExtraCurricularActivityDataController extends Controller
     {
         try
         {
-            Auth::user()->dipExtraCurricularActivityData()->create($request->all());
+            Auth::user()->nceExtraCurricularActivityData()->create($request->all());
             $data['message'] = 'Student extra-curricular activity data was added successfully';
             return successParser($data,201);
         }
@@ -55,7 +55,7 @@ class ExtraCurricularActivityDataController extends Controller
     {
         try
         {
-            $extraCurricularActivity = Auth::user()->dipExtraCurricularActivityData()->find($id);
+            $extraCurricularActivity = Auth::user()->nceExtraCurricularActivityData()->find($id);
             
             if($extraCurricularActivity == null)
             {

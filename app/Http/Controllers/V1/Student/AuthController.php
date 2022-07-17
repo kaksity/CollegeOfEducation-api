@@ -5,7 +5,7 @@ namespace App\Http\Controllers\V1\Student;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Applicant\Authentication\LoginRequest as AuthenticationLoginRequest;
 use App\Http\Requests\V1\Student\Authentication\RegisterRequest;
-use App\Models\{DipContactData, User, DipPersonalData, DipCourseData, DipApplicationStatus, DipPassport};
+use App\Models\{NceContactData, User, NcePersonalData, NceCourseData, NceApplicationStatus, NcePassport};
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -14,14 +14,14 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     
-    public function __construct(User $user, DipPersonalData $dipPersonalData, DipPassport $dipPassport,DipApplicationStatus $dipApplicationStatus,DipContactData $dipContactData, DipCourseData $dipCourseData)
+    public function __construct(User $user, NcePersonalData $NcePersonalData, NcePassport $NcePassport,NceApplicationStatus $NceApplicationStatus,NceContactData $NceContactData, NceCourseData $NceCourseData)
     {
         $this->user = $user;
-        $this->dipPersonalData = $dipPersonalData;
-        $this->dipContactData = $dipContactData;
-        $this->dipCourseData = $dipCourseData;
-        $this->dipApplicationStatus = $dipApplicationStatus;
-        $this->dipPassport = $dipPassport;
+        $this->NcePersonalData = $NcePersonalData;
+        $this->NceContactData = $NceContactData;
+        $this->NceCourseData = $NceCourseData;
+        $this->NceApplicationStatus = $NceApplicationStatus;
+        $this->NcePassport = $NcePassport;
     }
     public function login(AuthenticationLoginRequest $request)
     {
@@ -38,10 +38,10 @@ class AuthController extends Controller
             {
                 throw new Exception("Account has been disabled",400);
             }
-            if($user->dipApplicationStatus()->first()->status != 'admitted'){
+            if($user->nceApplicationStatus()->first()->status != 'admitted'){
                 throw new Exception("Username or Password is not correct",400);
             }
-            if($user->dipPersonalData()->exists() == false || $user->dipContactData()->exists() == false)
+            if($user->ncePersonalData()->exists() == false || $user->nceContactData()->exists() == false)
             {
                 throw new Exception('Sorry, Access Denied', 401);
             }
@@ -84,24 +84,24 @@ class AuthController extends Controller
                     'username' => $request->username,
                     'password' => Hash::make($request->password)
                 ]);
-                $this->dipPersonalData->create([
+                $this->NcePersonalData->create([
                     'user_id' => $user->id,
                     'surname' => $request->surname,
                     'other_names' => $request->other_names,
                 ]);
-                $this->dipContactData->create([
+                $this->NceContactData->create([
                     'user_id' => $user->id,
                     'email_address' => $request->email_address
                 ]);
-                $this->dipCourseData->create([
+                $this->NceCourseData->create([
                     'user_id' => $user->id,
                 ]);
 
-                $this->dipApplicationStatus->create([
+                $this->NceApplicationStatus->create([
                     'user_id' => $user->id,
                     'status' => 'applying'
                 ]);
-                $this->dipPassport->create([
+                $this->NcePassport->create([
                     'user_id' => $user->id
                 ]);
                 DB::commit();

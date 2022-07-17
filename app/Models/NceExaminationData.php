@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DipContactData extends Model
+class NceExaminationData extends Model
 {
     use UuidTrait, HasFactory, SoftDeletes;
     protected $guarded;
@@ -15,5 +15,15 @@ class DipContactData extends Model
     public function user()
     {
         return $this->belongsTo(User::class,'user_id');
+    }
+
+    public function examinationCategory()
+    {
+        return $this->belongsTo(ExaminationCategory::class, 'examination_category_id');
+    }
+
+    public function examinationSubject()
+    {
+        return $this->belongsTo(ExaminationSubject::class, 'examination_subject_id');
     }
 }

@@ -7,19 +7,28 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Lga extends Model
+class NcePersonalData extends Model
 {
     use UuidTrait, HasFactory, SoftDeletes;
-
     protected $guarded;
+
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
+
+    public function maritalStatus()
+    {
+        return $this->belongsTo(MaritalStatus::class, 'marital_status_id');
+    }
 
     public function state()
     {
         return $this->belongsTo(State::class, 'state_id');
     }
 
-    public function ncePersonalData()
+    public function lga()
     {
-        return $this->hasMany(NcePersonalData::class, 'lga_id');
+        return $this->belongsTo(Lga::class, 'lga_id');
     }
 }
