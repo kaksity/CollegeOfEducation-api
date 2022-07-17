@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Models\{ NceApplicationPayment };
 
-class NceApplicationPaymentController extends Controller
+class ApplicationPaymentController extends Controller
 {
     public function __construct(NceApplicationPayment $NceApplicationPayment)
     {

@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\V1\Applicant\AuthController;
 use App\Http\Controllers\V1\Applicant\Nce\ApplicantController;
-use App\Http\Controllers\V1\Applicant\Nce\NceApplicationPaymentController;
+use App\Http\Controllers\V1\Applicant\Nce\ApplicationPaymentController;
 use App\Http\Controllers\V1\Applicant\Nce\ApplicationStatusController;
 use App\Http\Controllers\V1\Applicant\Nce\CertificateController;
 use App\Http\Controllers\V1\Applicant\Nce\ContactDataController;
@@ -29,7 +29,7 @@ use App\Http\Controllers\V1\Applicant\Nce\ExaminationSubjectController;
     });
     
     Route::group(['prefix' => 'nce', 'middleware' => ['auth:sanctum']], function() {
-        Route::post('/application-payments/initialize', [NceApplicationPaymentController::class, 'initiatePayment']);
+        Route::post('/application-payments/initialize', [ApplicationPaymentController::class, 'initiatePayment']);
     });
 
     Route::group(['prefix'=>'nce','middleware' => ['auth:sanctum', 'verify.application.payment']], function(){
