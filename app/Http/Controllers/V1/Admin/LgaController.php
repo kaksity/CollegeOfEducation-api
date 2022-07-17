@@ -16,7 +16,7 @@ class LgaController extends Controller
     {
         $this->lga = $lga;
         $this->state = $state;
-    }
+    } 
     /**
      * Display a listing of the resource.
      *
