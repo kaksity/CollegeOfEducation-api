@@ -32,7 +32,7 @@ use App\Http\Controllers\V1\Applicant\Nce\ExaminationSubjectController;
         Route::post('/application-payments/initialize', [NceApplicationPaymentController::class, 'initiatePayment']);
     });
 
-    Route::group(['prefix'=>'nce','middleware' => ['auth:sanctum', 'verify.application.payment']], function(){
+    Route::group(['prefix'=>'nce','middleware' => ['auth:sanctum']], function(){
         Route::apiResource('personal-data',PersonalDataController::class);
         Route::apiResource('contact-data', ContactDataController::class);
         Route::apiResource('educational-background-data', EducationalBackgroundDataController::class);
