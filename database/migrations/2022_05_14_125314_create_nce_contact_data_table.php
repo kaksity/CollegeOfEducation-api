@@ -13,12 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('application_payments', function (Blueprint $table) {
+        Schema::create('nce_contact_data', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
-            $table->string('reference_code')->nullable();
-            $table->decimal('amount');
-            $table->string('status')->default('pending');
+            $table->string('name_of_guardian')->nullable();
+            $table->string('address_of_guardian')->nullable();
+            $table->string('name_of_employer')->nullable();
+            $table->string('address_of_employer')->nullable();
+            $table->string('contact_address')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->string('email_address');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -31,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('application_payments');
+        Schema::dropIfExists('nce_contact_data');
     }
 };

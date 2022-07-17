@@ -13,14 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('dip_employment_data', function (Blueprint $table) {
+        Schema::create('nce_educational_background_data', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
-            $table->string('name_of_employer');
-            $table->string('type_of_employment')->nullable();
-            $table->integer('duration')->nullable();
-            $table->string('unit')->nullable();
-            $table->double('average_salary')->nullable();
+            $table->uuid('certificate_id')->index();
+            $table->string('name_of_institute');
+            $table->date('from_date');
+            $table->date('to_date');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -33,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dip_employment_data');
+        Schema::dropIfExists('nce_educational_background_data');
     }
 };

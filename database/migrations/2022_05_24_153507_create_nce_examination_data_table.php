@@ -13,16 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('dip_contact_data', function (Blueprint $table) {
+        Schema::create('nce_examination_data', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
-            $table->string('name_of_guardian')->nullable();
-            $table->string('address_of_guardian')->nullable();
-            $table->string('name_of_employer')->nullable();
-            $table->string('address_of_employer')->nullable();
-            $table->string('contact_address')->nullable();
-            $table->string('phone_number')->nullable();
-            $table->string('email_address');
+            $table->uuid('examination_category_id')->index();
+            $table->uuid('examination_subject_id');
+            $table->string('grade');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -35,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dip_contact_data');
+        Schema::dropIfExists('nce_examination_data');
     }
 };

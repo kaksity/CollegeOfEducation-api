@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('dip_personal_data', function (Blueprint $table) {
+        Schema::create('nce_personal_data', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
             $table->string('surname');
@@ -38,6 +38,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dip_personal_data');
+        Schema::dropIfExists('nce_personal_data');
     }
 };

@@ -13,13 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('dip_course_data', function (Blueprint $table) {
+        Schema::create('nce_passports', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
-            $table->uuid('first_choice_course_id')->index()->nullable();
-            $table->uuid('second_choice_course_id')->index()->nullable();
-            $table->uuid('third_choice_course_id')->index()->nullable();
-            $table->uuid('admitted_course_id')->index()->nullable();;
+            $table->string('file_path')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dip_course_data');
+        Schema::dropIfExists('nce_passports');
     }
 };

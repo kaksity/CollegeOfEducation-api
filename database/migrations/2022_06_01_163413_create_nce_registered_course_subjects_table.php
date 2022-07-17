@@ -13,13 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('dip_examination_center_data', function (Blueprint $table) {
+        Schema::create('nce_registered_course_subjects', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
-            $table->string('center_number')->nullable();
-            $table->date('date_of_examination')->nullable();
-            $table->string('examination_number')->nullable();
-            $table->string('overall_result')->nullable();
+            $table->uuid('course_subject_id')->index();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dip_examination_center_data');
+        Schema::dropIfExists('nce_registered_course_subjects');
     }
 };

@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('dip_extra_curricular_activity_data', function (Blueprint $table) {
+        Schema::create('nce_application_payments', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
-            $table->string('activity');
+            $table->string('reference_code')->nullable();
+            $table->decimal('amount');
+            $table->string('status')->default('pending');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dip_extra_curricular_activity_data');
+        Schema::dropIfExists('application_payments');
     }
 };

@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('dip_held_responsibility_data', function (Blueprint $table) {
+        Schema::create('nce_extra_curricular_activity_data', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
-            $table->string('responsibility');
+            $table->string('activity');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dip_held_responsibility_data');
+        Schema::dropIfExists('nce_extra_curricular_activity_data');
     }
 };
