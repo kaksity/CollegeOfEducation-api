@@ -28,9 +28,9 @@ class AuthController extends Controller
     {
         try
         {
-            if(Auth::attempt(['username' => $request->username, 'password' => $request->password ]) == false)
+            if(Auth::attempt(['email_address' => $request->email_address, 'password' => $request->password ]) == false)
             {
-                throw new Exception("Username or Password is not correct",400);
+                throw new Exception("Email Address or Password is not correct",400);
             }
 
             $user = Auth::user();
@@ -68,19 +68,19 @@ class AuthController extends Controller
     {
         try
         {
-            // Check if the username already exist
-            $user = $this->user->where('username', $request->username)->first();
+            // Check if the email_address already exist
+            $user = $this->user->where('email_address', $request->email_address)->first();
             
             if($user != null)
             {
-                throw new Exception('Username has already been taken',400);
+                throw new Exception('Email Address has already been taken',400);
             }
 
             DB::beginTransaction();
             try
             {
                 $user = $this->user->create([
-                    'username' => $request->username,
+                    'email_address' => $request->email_address,
                     'password' => Hash::make($request->password),
                 ]);
                 $this->NcePersonalData->create([

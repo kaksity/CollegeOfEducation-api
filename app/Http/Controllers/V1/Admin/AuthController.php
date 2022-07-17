@@ -24,11 +24,11 @@ class AuthController extends Controller
         try
         {
             if(Auth::attempt([
-                'username' => $request->username,
+                'email_address' => $request->email_address,
                 'password' => $request->password
             ]) == false)
             {
-                throw new Exception("Username or Password is not correct",400);
+                throw new Exception("Email Address or Password is not correct",400);
             }
 
             $user = Auth::user();
@@ -83,7 +83,7 @@ class AuthController extends Controller
         {
             
             $user = $this->user->create([
-                'username' => $request->username,
+                'email_address' => $request->email_address,
                 'password' => Hash::make($request->password)
             ]);
             $admin = $this->admin->create([

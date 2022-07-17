@@ -14,7 +14,7 @@ class LoginRequest extends BaseFormRequest
     public function rules()
     {
         return [
-            'username' => ['required', 'string'],
+            'email_address' => ['required', 'string'],
             'password' => ['required', 'string', 'min:8']
         ];
     }

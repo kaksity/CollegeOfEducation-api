@@ -17,7 +17,6 @@ class RegisterRequest extends BaseFormRequest
             'surname' => ['required', 'string', 'min:3'],
             'other_names' => ['required', 'string', 'min:3'],
             'email_address' => ['required', 'string', 'min:3'],
-            'username' => ['required', 'string'],
             'password' => ['required', 'string', 'min:8']
         ];
     }
