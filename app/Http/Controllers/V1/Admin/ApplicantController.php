@@ -28,7 +28,10 @@ class ApplicantController extends Controller
     {
         $perPage = $request->per_page;
         $status = $request->status;
-        $applicants = $this->nceApplicationStatus->where('status', $status)->latest()->paginate($perPage);
+        $nceStudentIdNumber = $request->id_number ?? null;
+        $applicants = $this->nceApplicationStatus->where('status', $status)->when($nceStudentIdNumber, function ($model, $nceStudentIdNumber){
+            $model->where('id_number', 'LIKE', "{$nceStudentIdNumber}%");
+        })->latest()->paginate($perPage);
         return ApplicantListResource::collection($applicants);
     }
 

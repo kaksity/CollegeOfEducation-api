@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\V1\Student\Nce;
 
+use App\Http\Resources\V1\Applicant\Nce\ExaminationCenterDataResource;
+use App\Models\NceApplicationStatus;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class StudentResource extends JsonResource
@@ -14,6 +16,11 @@ class StudentResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [];
+        return [
+            'id' => $this->id,
+            'id_number' => $this->nceApplicationStatus->id_number,
+            'personal_data' => new PersonalDataResource($this->ncePersonalData),
+            'contact_data' => new ContactDataResource($this->nceContactData),
+        ];
     }
 }

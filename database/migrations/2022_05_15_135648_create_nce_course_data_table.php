@@ -19,7 +19,7 @@ return new class extends Migration
             $table->uuid('first_choice_course_id')->index()->nullable();
             $table->uuid('second_choice_course_id')->index()->nullable();
             $table->uuid('third_choice_course_id')->index()->nullable();
-            $table->uuid('admitted_course_id')->index()->nullable();;
+            $table->uuid('admitted_course_id')->index()->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

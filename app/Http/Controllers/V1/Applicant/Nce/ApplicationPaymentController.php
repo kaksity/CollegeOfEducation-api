@@ -32,7 +32,7 @@ class ApplicationPaymentController extends Controller
 
                 if($interswitchPayment == null)
                 {
-                    $referenceCode = generateRandomString(8)."".round(microtime(true) * 1000)."".generateRandomNumber(8);
+                    $referenceCode = generateTransactionReferenceCode();
 
                     $interswitchPayment = $this->NceApplicationPayment->create([
                         'user_id' => Auth::id(),

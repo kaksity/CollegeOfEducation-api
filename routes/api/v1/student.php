@@ -20,11 +20,16 @@ use App\Http\Controllers\V1\Student\Nce\PassportController;
 use App\Http\Controllers\V1\Student\Nce\ExaminationCategoryController;
 use App\Http\Controllers\V1\Student\Nce\ExaminationSubjectController;
 use App\Http\Controllers\V1\Student\Nce\RegisterCourseSubjectController;
+use App\Http\Controllers\V1\Student\Nce\RegistrationPaymentController;
+use App\Http\Controllers\V1\Student\Nce\RequiredDocumentDataController;
 
     Route::group(['prefix' => 'nce/auth'],function(){
         Route::post('login',[AuthController::class,'login']);
         Route::post('register', [AuthController::class,'register']);
         Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
+    });
+    Route::group(['prefix' => 'nce', 'middleware' => ['auth:sanctum']], function() {
+        Route::post('/registeration-payments/initialize', [RegistrationPaymentController::class, 'initiatePayment']);
     });
     Route::group(['prefix'=>'nce','middleware' => ['auth:sanctum']], function(){
         Route::apiResource('personal-data',PersonalDataController::class);
@@ -37,9 +42,10 @@ use App\Http\Controllers\V1\Student\Nce\RegisterCourseSubjectController;
         Route::apiResource('passport-data', PassportController::class);
         Route::apiResource('examination-data', ExaminationDataController::class);
         Route::apiResource('application-statuses', ApplicationStatusController::class);
-        Route::apiResource('registered-course-subjects', RegisterCourseSubjectController::class);
-
-        Route::post('registered-course-subjects/autofill', [RegisterCourseSubjectController::class, 'autoFillCourses']);
+        Route::apiResource('registered-course-subjects', RegisterCourseSubjectController::class)->middleware('verify.nce.id.number')->middleware('verify.nce.registeration.payment');
+        Route::apiResource('required-document-data', RequiredDocumentDataController::class);
+        
+        Route::post('registered-course-subjects/autofill', [RegisterCourseSubjectController::class, 'autoFillCourses'])->middleware('verify.nce.registeration.payment');
         Route::get('marital-statuses', [MaritalStatusController::class, 'index']);
         Route::get('states', [StateController::class, 'index']);
         Route::get('lgas', [LgaController::class, 'index']);

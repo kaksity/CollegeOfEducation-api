@@ -20,17 +20,23 @@ class ApplicationStatusController extends Controller
         $applicationStatus = Auth::user()->nceApplicationStatus()->first();
         return new ApplicationStatusResource($applicationStatus);
     }
-    public function store()
+    public function store(Request $request)
     {
+        $request->validate([
+            'id_number' => ['required', 'string']
+        ]);
         try
         {
             $applicationStatus = Auth::user()->nceApplicationStatus()->first();
-            if($applicationStatus->status != 'applying'){
-                throw new Exception('Student has already been '.$applicationStatus->status, 400);
+            
+            if($applicationStatus->id_number != null)
+            {
+                throw new Exception('Student ID Number has already been set', 400);
             }
-            $applicationStatus->status = 'applied';
+            
+            $applicationStatus->id_number = $request->id_number;
             $applicationStatus->save();
-            $data['message'] = 'Application to the Institution was successfully done';
+            $data['message'] = 'ID Number was set successfully';
             return successParser($data);
         }
         catch(Exception $ex)

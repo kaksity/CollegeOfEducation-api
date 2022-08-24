@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\V1\Admin;
+namespace App\Http\Controllers\V1\Admin\GeneralSettings;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\ExaminationSubject\ExaminationSubjectRequest;

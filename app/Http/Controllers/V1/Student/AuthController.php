@@ -53,7 +53,6 @@ class AuthController extends Controller
             ]);
 
             $data['access_token'] = $accessToken;
-            // $data['user'] = new AdminResource(Auth::user());
             $data['message'] = 'Login was succesful.';
             return successParser($data);
         }   

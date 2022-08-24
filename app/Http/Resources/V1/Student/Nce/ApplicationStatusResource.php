@@ -22,6 +22,7 @@ class ApplicationStatusResource extends JsonResource
                     'course' => new CourseDataResource($this->user->NceCourseData),
                 ];
             }),
+            'id_number' => $this->id_number,
         ];
     }
 }

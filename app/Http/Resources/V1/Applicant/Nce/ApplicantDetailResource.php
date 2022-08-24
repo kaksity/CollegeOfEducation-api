@@ -34,7 +34,7 @@ class ApplicantDetailResource extends JsonResource
             // 'application_status' => new ApplicationStatusResource($this->user->nceApplicationStatus),
             'course_data' =>  new CourseDataResource($this->nceCourseData),
             'examination_center_data' => new ExaminationCenterDataResource($this->nceExaminationCenterData),
-            
+            'required_document_data' => RequiredDocumentDataResource::collection($this->nceRequiredDocumentData)
         ];
     }
 }

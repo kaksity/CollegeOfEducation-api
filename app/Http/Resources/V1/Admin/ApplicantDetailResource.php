@@ -12,6 +12,7 @@ use App\Http\Resources\V1\Applicant\Nce\ExtraCurricularActivityDataResource;
 use App\Http\Resources\V1\Applicant\Nce\HeldResponsibilityDataResource;
 use App\Http\Resources\V1\Applicant\Nce\PassportResource;
 use App\Http\Resources\V1\Applicant\Nce\PersonalDataResource;
+use App\Http\Resources\V1\Applicant\Nce\RequiredDocumentDataResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ApplicantDetailResource extends JsonResource
@@ -37,6 +38,7 @@ class ApplicantDetailResource extends JsonResource
             // 'application_status' => new ApplicationStatusResource($this->user->nceApplicationStatus),
             'course_data' => new CourseDataResource($this->nceCourseData),
             'examination_center_data' => new ExaminationCenterDataResource($this->nceExaminationCenterData),
+            'required_document_data' => RequiredDocumentDataResource::collection($this->nceRequiredDocumentData)
         ];
     }
 }

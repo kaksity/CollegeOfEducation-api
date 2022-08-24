@@ -1,20 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\V1\Admin;
+namespace App\Http\Controllers\V1\Admin\GeneralSettings;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Course\CourseRequest;
-use App\Http\Resources\V1\Course\CourseResource;
-use Illuminate\Http\Request;
-
-use App\Models\{Course};
+use App\Http\Requests\V1\MaritalStatus\MaritalStatusRequest;
+use App\Http\Resources\V1\MaritalStatus\MaritalStatusResource;
+use App\Models\MaritalStatus;
 use Exception;
 
-class CourseController extends Controller
+class MaritalStatusController extends Controller
 {
-    public function __construct(Course $course)
+    public function __construct(MaritalStatus $maritalStatus)
     {
-        $this->course = $course;
+        $this->maritalStatus = $maritalStatus;
     }
     /**
      * Display a listing of the resource.
@@ -23,8 +21,8 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = $this->course->latest()->get();
-        return CourseResource::collection($courses);
+        $maritalStatuses = $this->maritalStatus->latest()->get();
+        return MaritalStatusResource::collection($maritalStatuses);
     }
 
 
@@ -34,12 +32,12 @@ class CourseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CourseRequest $request)
+    public function store(MaritalStatusRequest $request)
     {
         try
         {
-            $this->course->create($request->all());
-            $data['message'] = 'Course record was created successfully';
+            $this->maritalStatus->create($request->all());
+            $data['message'] = 'Marital Status record was created successfully';
             return successParser($data,201);
         }
         catch(Exception $ex)
@@ -57,21 +55,21 @@ class CourseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CourseRequest $request, $id)
+    public function update(MaritalStatusRequest $request, $id)
     {
         try
         {
-            $course = $this->course->find($id);
+            $maritalStatus = $this->maritalStatus->find($id);
             
-            if($course == null)
+            if($maritalStatus == null)
             {
-                throw new Exception('Course record does not exist',404);
+                throw new Exception('Marital Status record does not exist',404);
             }
 
-            $course->name = $request->name;
-            $course->save();
+            $maritalStatus->name = $request->name;
+            $maritalStatus->save();
 
-            $data['message'] = 'Course record was updated successfully';
+            $data['message'] = 'Marital Status record was updated successfully';
             return successParser($data);
         }
         catch(Exception $ex)
@@ -92,16 +90,16 @@ class CourseController extends Controller
     {
         try
         {
-            $course = $this->course->find($id);
+            $maritalStatus = $this->maritalStatus->find($id);
             
-            if($course == null)
+            if($maritalStatus == null)
             {
-                throw new Exception('Course record does not exist',404);
+                throw new Exception('Marital Status record does not exist',404);
             }
 
-            $course->delete();
+            $maritalStatus->delete();
 
-            $data['message'] = 'Course record was deleted successfully';
+            $data['message'] = 'Marital Status record was deleted successfully';
             return successParser($data);
         }
         catch(Exception $ex)

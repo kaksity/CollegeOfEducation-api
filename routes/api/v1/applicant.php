@@ -21,6 +21,8 @@ use App\Http\Controllers\V1\Applicant\Nce\PassportController;
 use App\Http\Controllers\V1\Applicant\Nce\ExaminationCategoryController;
 use App\Http\Controllers\V1\Applicant\Nce\ExaminationCenterDataController;
 use App\Http\Controllers\V1\Applicant\Nce\ExaminationSubjectController;
+use App\Http\Controllers\V1\Applicant\Nce\RequiredDocumentController;
+use App\Http\Controllers\V1\Applicant\Nce\RequiredDocumentDataController;
 
     Route::group(['prefix' => 'nce/auth'],function(){
         Route::post('login',[AuthController::class,'login']);
@@ -32,7 +34,7 @@ use App\Http\Controllers\V1\Applicant\Nce\ExaminationSubjectController;
         Route::post('/application-payments/initialize', [ApplicationPaymentController::class, 'initiatePayment']);
     });
 
-    Route::group(['prefix'=>'nce','middleware' => ['auth:sanctum', 'verify.application.payment']], function(){
+    Route::group(['prefix'=>'nce','middleware' => ['auth:sanctum', 'verify.nce.application.payment']], function(){
         Route::apiResource('personal-data',PersonalDataController::class);
         Route::apiResource('contact-data', ContactDataController::class);
         Route::apiResource('educational-background-data', EducationalBackgroundDataController::class);
@@ -41,6 +43,7 @@ use App\Http\Controllers\V1\Applicant\Nce\ExaminationSubjectController;
         Route::apiResource('extra-curricular-activity-data', ExtraCurricularActivityDataController::class);
         Route::apiResource('held-responsibility-data', HeldReponsibilityController::class);
         Route::apiResource('passport-data', PassportController::class);
+        Route::apiResource('required-document-data', RequiredDocumentDataController::class);
         Route::apiResource('examination-data', ExaminationDataController::class);
         Route::apiResource('examination-center-data', ExaminationCenterDataController::class);
         Route::apiResource('application-statuses', ApplicationStatusController::class);
@@ -50,6 +53,7 @@ use App\Http\Controllers\V1\Applicant\Nce\ExaminationSubjectController;
 
 
         Route::get('marital-statuses', [MaritalStatusController::class, 'index']);
+        Route::get('required-documents', [RequiredDocumentController::class, 'index']);
         Route::get('states', [StateController::class, 'index']);
         Route::get('lgas', [LgaController::class, 'index']);
         Route::get('certificates', [CertificateController::class, 'index']);

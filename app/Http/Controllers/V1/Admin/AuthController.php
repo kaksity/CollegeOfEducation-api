@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Auth\LoginRequest;
+use App\Http\Requests\V1\Auth\RegisterRequest;
 use App\Http\Resources\V1\Admin\AdminResource;
 use Exception;
 use App\Models\{User, Admin};
@@ -77,28 +78,38 @@ class AuthController extends Controller
             return errorParser($data,$code);
         }
     }
-    public function register(LoginRequest $request)
+    public function register(RegisterRequest $request)
     {
         try
         {
-            
+            $user = $this->user->where([
+                'email_address' => $request->email_address
+            ])->first();       
+            if($user != null)
+            {
+                throw new Exception('Email Address has already been used', 400);
+            }
+            DB::beginTransaction();
             $user = $this->user->create([
                 'email_address' => $request->email_address,
+                'role' => $request->role,
                 'password' => Hash::make($request->password)
             ]);
             $admin = $this->admin->create([
                 'user_id' => $user->id,
-                'email_address' => 'admin@test.com',
-                'first_name' => 'Test',
-                'last_name' => 'Test',
-                'middle_name' => 'Test'
+                'email_address' => $request->email_address,
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'middle_name' => $request->middle_name
             ]);
+            DB::commit();
             return successParser([
                 'message' => 'Admin account was created successfully'
             ],201);
         }
         catch(Exception $ex)
         {
+            DB::rollBack();
             $data['message'] = $ex->getMessage();
             $code = $ex->getCode();
             return errorParser($data,$code);

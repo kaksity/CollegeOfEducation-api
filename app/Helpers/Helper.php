@@ -29,3 +29,7 @@ function generateRandomString($string = 8)
     $token = substr(str_shuffle("123456789ABCDEFGHIJKLMOPQRSTUWXYZ"), 0, $string);
     return $token;
 }
+function generateTransactionReferenceCode()
+{
+    return generateRandomString(8)."".round(microtime(true) * 1000)."".generateRandomNumber(8);
+}

@@ -1,18 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\V1\Admin;
+namespace App\Http\Controllers\V1\Admin\GeneralSettings;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\State\StateRequest;
-use App\Http\Resources\V1\State\StateResource;
-use Exception;
+use App\Http\Requests\V1\Course\CourseRequest;
+use App\Http\Resources\V1\Course\CourseResource;
 use Illuminate\Http\Request;
-use App\Models\State;
-class StateController extends Controller
+
+use App\Models\{Course};
+use Exception;
+
+class CourseController extends Controller
 {
-    public function __construct(State $state)
+    public function __construct(Course $course)
     {
-        $this->state = $state;
+        $this->course = $course;
     }
     /**
      * Display a listing of the resource.
@@ -21,11 +23,10 @@ class StateController extends Controller
      */
     public function index()
     {
-        $states = $this->state->orderBy('name','ASC')->get();
-        return StateResource::collection($states);
+        $courses = $this->course->latest()->get();
+        return CourseResource::collection($courses);
     }
 
-    
 
     /**
      * Store a newly created resource in storage.
@@ -33,12 +34,12 @@ class StateController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StateRequest $request)
+    public function store(CourseRequest $request)
     {
         try
         {
-            $this->state->create($request->all());
-            $data['message'] = 'State record was created successully';
+            $this->course->create($request->all());
+            $data['message'] = 'Course record was created successfully';
             return successParser($data,201);
         }
         catch(Exception $ex)
@@ -50,38 +51,27 @@ class StateController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $state = $this->state->find($id);
-        // dd($state);
-        return new StateResource($state);
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StateRequest $request, $id)
+    public function update(CourseRequest $request, $id)
     {
         try
         {
-            $state = $this->state->find($id);
-            if($state == null)
+            $course = $this->course->find($id);
+            
+            if($course == null)
             {
-                throw new Exception("State record does not exist",404);
+                throw new Exception('Course record does not exist',404);
             }
 
-            $state->name = $request->name;
-            $state->save();
-            $data['message'] = 'State record was updated successfully';
+            $course->name = $request->name;
+            $course->save();
+
+            $data['message'] = 'Course record was updated successfully';
             return successParser($data);
         }
         catch(Exception $ex)
@@ -102,14 +92,16 @@ class StateController extends Controller
     {
         try
         {
-            $state = $this->state->find($id);
-            if($state == null)
+            $course = $this->course->find($id);
+            
+            if($course == null)
             {
-                throw new Exception("State record does not exist",404);
+                throw new Exception('Course record does not exist',404);
             }
 
-            $state->delete();
-            $data['message'] = 'State record was deleted successfully';
+            $course->delete();
+
+            $data['message'] = 'Course record was deleted successfully';
             return successParser($data);
         }
         catch(Exception $ex)

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->boolean('is_enabled')->default(true);
             $table->timestamp('last_login_at')->nullable();
+            $table->string('role')->default('student');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -28,4 +28,9 @@ class Course extends Model
     {
         return $this->hasMany(CourseSubject::class, 'course_id');
     }
+
+    public function nceCoursePayments()
+    {
+        return $this->hasMany(NceCoursePayment::class, 'course_id');
+    }
 }

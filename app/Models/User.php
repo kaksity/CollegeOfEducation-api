@@ -99,4 +99,12 @@ class User extends Authenticatable
     {
         return $this->hasOne(NceExaminationCenterData::class, 'user_id');
     }
+    public function nceRegisterationPayment()
+    {
+        return $this->hasMany(NceRegistrationPayment::class, 'user_id');
+    }
+    public function nceRequiredDocumentData()
+    {
+        return $this->hasMany(NceRequinceStudentredDocumentData::class, 'user_id');
+    }
 }

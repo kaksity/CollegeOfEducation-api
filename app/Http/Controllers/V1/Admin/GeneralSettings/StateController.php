@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\V1\Admin;
+namespace App\Http\Controllers\V1\Admin\GeneralSettings;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\MaritalStatus\MaritalStatusRequest;
-use App\Http\Resources\V1\MaritalStatus\MaritalStatusResource;
-use App\Models\MaritalStatus;
+use App\Http\Requests\V1\State\StateRequest;
+use App\Http\Resources\V1\State\StateResource;
 use Exception;
-
-class MaritalStatusController extends Controller
+use Illuminate\Http\Request;
+use App\Models\State;
+class StateController extends Controller
 {
-    public function __construct(MaritalStatus $maritalStatus)
+    public function __construct(State $state)
     {
-        $this->maritalStatus = $maritalStatus;
+        $this->state = $state;
     }
     /**
      * Display a listing of the resource.
@@ -21,10 +21,11 @@ class MaritalStatusController extends Controller
      */
     public function index()
     {
-        $maritalStatuses = $this->maritalStatus->latest()->get();
-        return MaritalStatusResource::collection($maritalStatuses);
+        $states = $this->state->orderBy('name','ASC')->get();
+        return StateResource::collection($states);
     }
 
+    
 
     /**
      * Store a newly created resource in storage.
@@ -32,12 +33,12 @@ class MaritalStatusController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(MaritalStatusRequest $request)
+    public function store(StateRequest $request)
     {
         try
         {
-            $this->maritalStatus->create($request->all());
-            $data['message'] = 'Marital Status record was created successfully';
+            $this->state->create($request->all());
+            $data['message'] = 'State record was created successully';
             return successParser($data,201);
         }
         catch(Exception $ex)
@@ -49,27 +50,38 @@ class MaritalStatusController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $state = $this->state->find($id);
+        // dd($state);
+        return new StateResource($state);
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(MaritalStatusRequest $request, $id)
+    public function update(StateRequest $request, $id)
     {
         try
         {
-            $maritalStatus = $this->maritalStatus->find($id);
-            
-            if($maritalStatus == null)
+            $state = $this->state->find($id);
+            if($state == null)
             {
-                throw new Exception('Marital Status record does not exist',404);
+                throw new Exception("State record does not exist",404);
             }
 
-            $maritalStatus->name = $request->name;
-            $maritalStatus->save();
-
-            $data['message'] = 'Marital Status record was updated successfully';
+            $state->name = $request->name;
+            $state->save();
+            $data['message'] = 'State record was updated successfully';
             return successParser($data);
         }
         catch(Exception $ex)
@@ -90,16 +102,14 @@ class MaritalStatusController extends Controller
     {
         try
         {
-            $maritalStatus = $this->maritalStatus->find($id);
-            
-            if($maritalStatus == null)
+            $state = $this->state->find($id);
+            if($state == null)
             {
-                throw new Exception('Marital Status record does not exist',404);
+                throw new Exception("State record does not exist",404);
             }
 
-            $maritalStatus->delete();
-
-            $data['message'] = 'Marital Status record was deleted successfully';
+            $state->delete();
+            $data['message'] = 'State record was deleted successfully';
             return successParser($data);
         }
         catch(Exception $ex)

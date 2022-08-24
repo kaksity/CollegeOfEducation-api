@@ -18,7 +18,8 @@ class ApplicantRequest extends BaseFormRequest
         {
             $rules += [
                 'per_page' => ['required', 'integer', 'min:0', 'max:100'],
-                'status' => ['required', 'in:applied,admitted,rejected']
+                'status' => ['required', 'in:applied,admitted,rejected'],
+                'id_number' => ['string']
             ];
         }
         if($this->getMethod() == 'PUT')

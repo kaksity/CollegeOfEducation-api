@@ -18,6 +18,7 @@ return new class extends Migration
             $table->uuid('user_id')->index();
             $table->string('admission_number')->nullable();
             $table->string('status');
+            $table->string('id_number')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
