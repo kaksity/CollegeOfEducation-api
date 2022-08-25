@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->uuid('course_group_id')->index();
             $table->string('name');
             $table->softDeletes();
             $table->timestamps();

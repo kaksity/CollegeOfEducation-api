@@ -33,4 +33,9 @@ class Course extends Model
     {
         return $this->hasMany(NceCoursePayment::class, 'course_id');
     }
+
+    public function courseGroup()
+    {
+        return $this->belongsTo(CourseGroup::class, 'course_group_id');
+    }
 }

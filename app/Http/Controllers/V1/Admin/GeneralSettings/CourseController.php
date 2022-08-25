@@ -21,9 +21,12 @@ class CourseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $courses = $this->course->latest()->get();
+        $courseGroup = $request->course_group ?? null;
+        $courses = $this->course->when($courseGroup, function($model, $courseGroup) {
+            $model->where('course_group_id', $courseGroup);
+        })->latest()->get();
         return CourseResource::collection($courses);
     }
 
@@ -38,7 +41,10 @@ class CourseController extends Controller
     {
         try
         {
-            $this->course->create($request->all());
+            $this->course->create([
+                'name' => $request->name,
+                'course_group_id' => $request->course_group_id
+            ]);
             $data['message'] = 'Course record was created successfully';
             return successParser($data,201);
         }

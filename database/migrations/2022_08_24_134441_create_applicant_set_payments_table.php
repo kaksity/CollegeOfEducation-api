@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('course_groups', function (Blueprint $table) {
+        Schema::create('applicant_set_payments', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
+            $table->uuid('course_group_id')->index();
+            $table->decimal('amount');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('course_groups');
+        Schema::dropIfExists('applicant_set_payments');
     }
 };

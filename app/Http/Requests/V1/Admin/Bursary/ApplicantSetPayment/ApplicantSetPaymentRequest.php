@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests\V1\Course;
+namespace App\Http\Requests\V1\Admin\Bursary\ApplicantSetPayment;
 
 use App\Http\Requests\Base\BaseFormRequest;
 
-class CourseRequest extends BaseFormRequest
+class ApplicantSetPaymentRequest extends BaseFormRequest
 {
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -14,11 +15,12 @@ class CourseRequest extends BaseFormRequest
     public function rules()
     {
         $rules = [];
-        if($this->getMethod() == 'POST' || $this->getMethod() == 'PUT')
+
+        if($this->getMethod() == 'POST')
         {
             $rules += [
-                'name' => ['required', 'string'],
-                'course_group_id' => ['required', 'uuid']
+                'course_group_id' => ['required', 'uuid'],
+                'amount' => ['required', 'numeric', 'min:0']
             ];
         }
         return $rules;

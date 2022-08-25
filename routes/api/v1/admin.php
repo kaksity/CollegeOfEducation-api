@@ -1,8 +1,10 @@
 <?php
 use App\Http\Controllers\V1\Admin\{AuthController, ApplicantController, DashboardController};
+use App\Http\Controllers\V1\Admin\Bursary\ApplicantSetPaymentController;
 use App\Http\Controllers\V1\Admin\GeneralSettings\{
     CertificateController,
     CourseController,
+    CourseGroupController,
     CourseSubjectController,
     ExaminationCategoryController,
     ExaminationSubjectController,
@@ -33,6 +35,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verify.is.admin']], function() {
         Route::apiResource('examination-subjects', ExaminationSubjectController::class);
         Route::apiResource('course-subjects', CourseSubjectController::class);
         Route::apiResource('nce-academic-sessions', NceAcademicSessionController::class);
+        Route::apiResource('course-groups', CourseGroupController::class);
     });
 
     Route::get('dashboard',[DashboardController::class, 'index']);
@@ -43,8 +46,9 @@ Route::group(['middleware' => ['auth:sanctum', 'verify.is.admin']], function() {
         });
     });
     Route::group(['prefix'=> 'bursary', 'middleware' => ['verify.is.bursary.office']], function(){
-        Route::apiResource('nce-course-payments', NceCoursePaymentController::class);
-        Route::apiResource('nce-registeration-payments', NceRegisterationPaymentController::class);
+        Route::apiResource('course-payments', NceCoursePaymentController::class);
+        Route::apiResource('registeration-payments', NceRegisterationPaymentController::class);
+        Route::apiResource('applicant-set-payments', ApplicantSetPaymentController::class);
     });
 });
 

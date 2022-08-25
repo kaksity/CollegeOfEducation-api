@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Resources\V1\CourseGroup;
+namespace App\Http\Resources\V1\Admin\Bursary;
 
+use App\Http\Resources\V1\CourseGroup\CourseGroupResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CourseGroupResource extends JsonResource
+class ApplicantSetPaymentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,7 +17,8 @@ class CourseGroupResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name
+            'course_group' => new CourseGroupResource($this->courseGroup),
+            'amount' => $this->amount
         ];
     }
 }

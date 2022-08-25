@@ -7,19 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class CourseGroup extends Model
+class ApplicantSetPayment extends Model
 {
     use HasFactory, SoftDeletes, UuidTrait;
 
     protected $guarded = [];
-
-    public function courses()
+    public function courseGroup()
     {
-        return $this->hasMany(Course::class, 'course_group_id');
-    }
-
-    public function applicantSetPayments()
-    {
-        return $this->hasMany(CourseGroup::class, 'course_group_id');
+        return $this->belongsTo(CourseGroup::class, 'course_group_id');
     }
 }
