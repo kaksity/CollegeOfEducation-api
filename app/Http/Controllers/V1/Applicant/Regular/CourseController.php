@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\V1\Applicant\Nce;
+namespace App\Http\Controllers\V1\Applicant\Regular;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Course\CourseRequest;
@@ -21,9 +21,12 @@ class CourseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $courses = $this->course->latest()->get();
+        $courseGroup = $request->course_group ?? null;
+        $courses = $this->course->when($courseGroup, function($model, $courseGroup) {
+            $model->where('course_group_id', $courseGroup);
+        })->latest()->get();
         return CourseResource::collection($courses);
     }
 }

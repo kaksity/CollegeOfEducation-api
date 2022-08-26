@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\V1\Applicant\Nce;
+namespace App\Http\Controllers\V1\Applicant\Regular;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Applicant\RequiredDocumentData\RequiredDocumentDataRequest;
@@ -72,7 +72,7 @@ class RequiredDocumentDataController extends Controller
             return errorParser($data, $code);
         }
     }
-    public function destory($id)
+    public function destroy($id)
     {
         try
         {

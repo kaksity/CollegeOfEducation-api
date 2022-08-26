@@ -20,7 +20,7 @@ class ContactDataRequest extends BaseFormRequest
             'address_of_employer' => ['string'],
             'contact_address' => ['required','string'],
             'email_address' => ['required','string'],
-            'phone_number' => ['required', 'string']
+            'phone_number' => ['required', 'string', 'min:10', 'max:11']
         ];
     }
 }

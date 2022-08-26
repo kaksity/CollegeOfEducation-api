@@ -16,8 +16,9 @@ class RegisterRequest extends BaseFormRequest
         return [
             'surname' => ['required', 'string', 'min:3'],
             'other_names' => ['required', 'string', 'min:3'],
-            'email_address' => ['required', 'string', 'min:3'],
-            'password' => ['required', 'string', 'min:8']
+            'email_address' => ['required', 'email'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'course_group_id' => ['required', 'uuid']
         ];
     }
 }

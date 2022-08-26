@@ -105,6 +105,6 @@ class User extends Authenticatable
     }
     public function nceRequiredDocumentData()
     {
-        return $this->hasMany(NceRequinceStudentredDocumentData::class, 'user_id');
+        return $this->hasMany(NceRequiredDocumentData::class, 'user_id');
     }
 }

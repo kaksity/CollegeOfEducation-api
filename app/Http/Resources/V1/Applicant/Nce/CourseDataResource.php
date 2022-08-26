@@ -3,6 +3,7 @@
 namespace App\Http\Resources\V1\Applicant\Nce;
 
 use App\Http\Resources\V1\Course\CourseResource;
+use App\Http\Resources\V1\CourseGroup\CourseGroupResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CourseDataResource extends JsonResource
@@ -17,6 +18,7 @@ class CourseDataResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'course_group' => new CourseGroupResource($this->courseGroup),
             'first_choice_course' => $this->NceCourseDataFirstChoice == null ? null : new CourseResource($this->NceCourseDataFirstChoice),
             'second_choice_course' => $this->NceCourseDataSecondChoice == null ? null : new CourseResource($this->NceCourseDataSecondChoice),
             'third_choice_course' => $this->NceCourseDataThirdChoice == null ? null : new CourseResource($this->NceCourseDataThirdChoice),

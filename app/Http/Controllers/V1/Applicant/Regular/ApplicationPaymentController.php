@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\V1\Applicant\Nce;
+namespace App\Http\Controllers\V1\Applicant\Regular;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Applicant\NceApplicationPayment\NceApplicationPaymentRequest;
@@ -8,13 +8,14 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use App\Models\{ NceApplicationPayment };
+use App\Models\{ApplicantSetPayment, NceApplicationPayment };
 
 class ApplicationPaymentController extends Controller
 {
-    public function __construct(NceApplicationPayment $NceApplicationPayment)
+    public function __construct(NceApplicationPayment $NceApplicationPayment, ApplicantSetPayment $applicantSetPayment)
     {
         $this->NceApplicationPayment = $NceApplicationPayment;
+        $this->applicantSetPayment = $applicantSetPayment;
     }
     public function initiatePayment(NceApplicationPaymentRequest $request)
     {
@@ -24,6 +25,8 @@ class ApplicationPaymentController extends Controller
             {
 
                 $personalData = Auth::user()->ncePersonalData()->first();
+                $courseData = Auth::user()->nceCourseData()->first();
+                $applicantSetPayment = $this->applicantSetPayment->where('course_group_id', $courseData->course_group_id)->first();
                 $contactData = Auth::user()->nceContactData()->first();                
 
                 $interswitchPayment = $this->NceApplicationPayment->where([
@@ -37,7 +40,7 @@ class ApplicationPaymentController extends Controller
                     $interswitchPayment = $this->NceApplicationPayment->create([
                         'user_id' => Auth::id(),
                         'reference_code' => $referenceCode,
-                        'amount' => 1000
+                        'amount' => $applicantSetPayment->amount
                     ]);
                 }
                 

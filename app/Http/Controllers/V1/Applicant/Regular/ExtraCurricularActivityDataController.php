@@ -1,27 +1,26 @@
 <?php
 
-namespace App\Http\Controllers\V1\Applicant\Nce;
+namespace App\Http\Controllers\V1\Applicant\Regular;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Applicant\HeldResponsibilityData\HeldResponsibilityDataRequest;
-use App\Http\Resources\V1\Applicant\Nce\HeldResponsibilityDataResource;
+use App\Http\Requests\V1\Applicant\ExtraCurricularActivityData\ExtraCurricularActivityDataRequest;
+use App\Http\Resources\V1\Applicant\Nce\ExtraCurricularActivityDataResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class HeldReponsibilityController extends Controller
+class ExtraCurricularActivityDataController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(HeldResponsibilityDataRequest $request)
+    public function index(ExtraCurricularActivityDataRequest $request)
     {
         $perPage = $request->per_page ?? 10;
-        
-        $heldResponsibilities = Auth::user()->nceHeldResponsibilityData()->latest()->paginate($perPage);
-        return HeldResponsibilityDataResource::collection($heldResponsibilities);
+        $extraCurricularActivities = Auth::user()->nceExtraCurricularActivityData()->latest()->paginate($perPage);
+        return ExtraCurricularActivityDataResource::collection($extraCurricularActivities);
     }
 
     /**
@@ -30,12 +29,12 @@ class HeldReponsibilityController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(HeldResponsibilityDataRequest $request)
+    public function store(ExtraCurricularActivityDataRequest $request)
     {
         try
         {
-            Auth::user()->nceHeldResponsibilityData()->create($request->all());
-            $data['message'] = 'Applicant held responsiblity data was added successfully';
+            Auth::user()->nceExtraCurricularActivityData()->create($request->all());
+            $data['message'] = 'Applicant extra-curricular activity data was added successfully';
             return successParser($data,201);
         }
         catch(Exception $ex)
@@ -56,16 +55,16 @@ class HeldReponsibilityController extends Controller
     {
         try
         {
-            $heldResponsibility = Auth::user()->nceHeldResponsibilityData()->find($id);
+            $extraCurricularActivity = Auth::user()->nceExtraCurricularActivityData()->find($id);
             
-            if($heldResponsibility == null)
+            if($extraCurricularActivity == null)
             {
-                throw new Exception('Applicant held Responsibility does not exist',404);
+                throw new Exception('Applicant extra-curricular activity does not exist',404);
             }
 
-            $heldResponsibility->delete();
+            $extraCurricularActivity->delete();
 
-            $data['message'] = 'Applicant held responsiblity data was deleted successfully';
+            $data['message'] = 'Applicant extra-curricular activity data was deleted successfully';
             return successParser($data,201);
         }
         catch(Exception $ex)

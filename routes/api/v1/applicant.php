@@ -1,40 +1,44 @@
 <?php
 
 use App\Http\Controllers\V1\Applicant\AuthController;
-use App\Http\Controllers\V1\Applicant\Nce\ApplicantController;
-use App\Http\Controllers\V1\Applicant\Nce\ApplicationPaymentController;
-use App\Http\Controllers\V1\Applicant\Nce\ApplicationStatusController;
-use App\Http\Controllers\V1\Applicant\Nce\CertificateController;
-use App\Http\Controllers\V1\Applicant\Nce\ContactDataController;
-use App\Http\Controllers\V1\Applicant\Nce\CourseController;
-use App\Http\Controllers\V1\Applicant\Nce\CourseDataController;
-use App\Http\Controllers\V1\Applicant\Nce\EducationalBackgroundDataController;
-use App\Http\Controllers\V1\Applicant\Nce\EmploymentDataController;
-use App\Http\Controllers\V1\Applicant\Nce\ExaminationDataController;
-use App\Http\Controllers\V1\Applicant\Nce\LgaController;
-use App\Http\Controllers\V1\Applicant\Nce\MaritalStatusController;
-use App\Http\Controllers\V1\Applicant\Nce\PersonalDataController;
-use App\Http\Controllers\V1\Applicant\Nce\StateController;
-use App\Http\Controllers\V1\Applicant\Nce\ExtraCurricularActivityDataController;
-use App\Http\Controllers\V1\Applicant\Nce\HeldReponsibilityController;
-use App\Http\Controllers\V1\Applicant\Nce\PassportController;
-use App\Http\Controllers\V1\Applicant\Nce\ExaminationCategoryController;
-use App\Http\Controllers\V1\Applicant\Nce\ExaminationCenterDataController;
-use App\Http\Controllers\V1\Applicant\Nce\ExaminationSubjectController;
-use App\Http\Controllers\V1\Applicant\Nce\RequiredDocumentController;
-use App\Http\Controllers\V1\Applicant\Nce\RequiredDocumentDataController;
+use App\Http\Controllers\V1\Applicant\Regular\ApplicantController;
+use App\Http\Controllers\V1\Applicant\Regular\ApplicationPaymentController;
+use App\Http\Controllers\V1\Applicant\Regular\ApplicationStatusController;
+use App\Http\Controllers\V1\Applicant\Regular\CertificateController;
+use App\Http\Controllers\V1\Applicant\Regular\ContactDataController;
+use App\Http\Controllers\V1\Applicant\Regular\CourseController;
+use App\Http\Controllers\V1\Applicant\Regular\CourseDataController;
+use App\Http\Controllers\V1\Applicant\Regular\CourseGroupController;
+use App\Http\Controllers\V1\Applicant\Regular\EducationalBackgroundDataController;
+use App\Http\Controllers\V1\Applicant\Regular\EmploymentDataController;
+use App\Http\Controllers\V1\Applicant\Regular\ExaminationDataController;
+use App\Http\Controllers\V1\Applicant\Regular\LgaController;
+use App\Http\Controllers\V1\Applicant\Regular\MaritalStatusController;
+use App\Http\Controllers\V1\Applicant\Regular\PersonalDataController;
+use App\Http\Controllers\V1\Applicant\Regular\StateController;
+use App\Http\Controllers\V1\Applicant\Regular\ExtraCurricularActivityDataController;
+use App\Http\Controllers\V1\Applicant\Regular\HeldReponsibilityController;
+use App\Http\Controllers\V1\Applicant\Regular\PassportController;
+use App\Http\Controllers\V1\Applicant\Regular\ExaminationCategoryController;
+use App\Http\Controllers\V1\Applicant\Regular\ExaminationCenterDataController;
+use App\Http\Controllers\V1\Applicant\Regular\ExaminationSubjectController;
+use App\Http\Controllers\V1\Applicant\Regular\RequiredDocumentController;
+use App\Http\Controllers\V1\Applicant\Regular\RequiredDocumentDataController;
 
-    Route::group(['prefix' => 'nce/auth'],function(){
+    Route::group(['prefix' => 'regular/auth'],function(){
         Route::post('login',[AuthController::class,'login']);
         Route::post('register', [AuthController::class,'register']);
         Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
     });
     
-    Route::group(['prefix' => 'nce', 'middleware' => ['auth:sanctum']], function() {
+    Route::group(['prefix' => 'regular'], function() {
+        Route::get('course-groups', [CourseGroupController::class, 'index']);
+    });
+    Route::group(['prefix' => 'regular', 'middleware' => ['auth:sanctum']], function() {
         Route::post('/application-payments/initialize', [ApplicationPaymentController::class, 'initiatePayment']);
     });
 
-    Route::group(['prefix'=>'nce','middleware' => ['auth:sanctum', 'verify.nce.application.payment']], function(){
+    Route::group(['prefix'=>'regular','middleware' => ['auth:sanctum', 'verify.nce.application.payment']], function(){
         Route::apiResource('personal-data',PersonalDataController::class);
         Route::apiResource('contact-data', ContactDataController::class);
         Route::apiResource('educational-background-data', EducationalBackgroundDataController::class);
@@ -60,4 +64,5 @@ use App\Http\Controllers\V1\Applicant\Nce\RequiredDocumentDataController;
         Route::get('courses', [CourseController::class, 'index']);
         Route::get('examination-categories', [ExaminationCategoryController::class, 'index']);
         Route::get('examination-subjects', [ExaminationSubjectController::class, 'index']);
+        
     });

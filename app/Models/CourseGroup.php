@@ -18,6 +18,11 @@ class CourseGroup extends Model
         return $this->hasMany(Course::class, 'course_group_id');
     }
 
+    public function courseData()
+    {
+        return $this->hasMany(NceCourseData::class, 'course_group_id');
+    }
+
     public function applicantSetPayments()
     {
         return $this->hasMany(CourseGroup::class, 'course_group_id');

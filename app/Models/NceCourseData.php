@@ -16,6 +16,10 @@ class NceCourseData extends Model
     {
         return $this->belongsTo(User::class,'user_id');
     }
+    public function courseGroup()
+    {
+        return $this->belongsTo(CourseGroup::class, 'course_group_id');
+    }
     public function NceCourseDataFirstChoice()
     {
         return $this->belongsTo(Course::class,'first_choice_course_id');

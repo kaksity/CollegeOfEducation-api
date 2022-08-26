@@ -94,6 +94,7 @@ class AuthController extends Controller
                 ]);
                 $this->NceCourseData->create([
                     'user_id' => $user->id,
+                    'course_group_id' => $request->course_group_id
                 ]);
 
                 $this->NceApplicationStatus->create([
