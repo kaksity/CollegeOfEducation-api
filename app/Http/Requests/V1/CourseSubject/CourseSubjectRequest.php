@@ -25,6 +25,7 @@ class CourseSubjectRequest extends BaseFormRequest
         if($this->getMethod() == 'POST')
         {
             $rules += [
+                'course_unit' => ['required', 'integer'],
                 'course_title' => ['required', 'string'],
                 'course_code' => ['required', 'string'],
                 'semester' => ['required', 'in:first,second'],

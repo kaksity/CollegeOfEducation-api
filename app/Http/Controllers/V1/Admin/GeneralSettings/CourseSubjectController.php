@@ -51,6 +51,7 @@ class CourseSubjectController extends Controller
             $this->courseSubject->create([
                 'course_code' => $request->course_code,
                 'course_title' => $request->course_title,
+                'course_unit' => $request->course_unit,
                 'semester' => $request->semester,
                 'course_id' => $request->course_id
             ]);

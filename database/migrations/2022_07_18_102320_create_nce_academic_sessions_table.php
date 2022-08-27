@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('nce_academic_sessions', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->uuid('course_group_id')->index();
             $table->integer('start_year');
             $table->integer('end_year');
             $table->softDeletes();

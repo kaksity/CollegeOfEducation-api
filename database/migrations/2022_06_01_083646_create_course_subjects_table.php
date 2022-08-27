@@ -18,6 +18,7 @@ return new class extends Migration
             $table->uuid('course_id')->index();
             $table->string('course_title');
             $table->string('course_code');
+            $table->string('course_unit');
             $table->string('semester');
             $table->softDeletes();
             $table->timestamps();

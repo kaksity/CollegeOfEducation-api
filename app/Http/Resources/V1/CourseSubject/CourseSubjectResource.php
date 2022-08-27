@@ -20,6 +20,7 @@ class CourseSubjectResource extends JsonResource
             'course' => new CourseResource($this->course), 
             'course_title' => $this->course_title,
             'course_code' => $this->course_code,
+            'course_unit' => $this->course_unit,
             'semester' => $this->semester,
         ];
     }

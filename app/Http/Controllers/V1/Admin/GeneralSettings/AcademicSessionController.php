@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\NceAcademicSession;
 use Exception;
 
-class NceAcademicSessionController extends Controller
+class AcademicSessionController extends Controller
 {
     public function __construct(NceAcademicSession $nceAcademicSession)
     {
@@ -37,6 +37,7 @@ class NceAcademicSessionController extends Controller
         try
         {
             $nceAcademicSession = $this->nceAcademicSession->where([
+                'course_group' => $request->course_group_id,
                 'start_year' => $request->start_year,
                 'end_year' => $request->end_year
             ])->first();

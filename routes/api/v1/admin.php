@@ -10,7 +10,7 @@ use App\Http\Controllers\V1\Admin\GeneralSettings\{
     ExaminationSubjectController,
     LgaController,
     MaritalStatusController,
-    NceAcademicSessionController,
+    AcademicSessionController,
     RequiredDocumentController,
     StateController
 };
@@ -34,7 +34,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verify.is.admin']], function() {
         Route::apiResource('examination-categories', ExaminationCategoryController::class);
         Route::apiResource('examination-subjects', ExaminationSubjectController::class);
         Route::apiResource('course-subjects', CourseSubjectController::class);
-        Route::apiResource('nce-academic-sessions', NceAcademicSessionController::class);
+        Route::apiResource('academic-sessions', AcademicSessionController::class);
         Route::apiResource('course-groups', CourseGroupController::class);
     });
 

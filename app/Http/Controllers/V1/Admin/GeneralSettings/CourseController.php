@@ -23,7 +23,7 @@ class CourseController extends Controller
      */
     public function index(Request $request)
     {
-        $courseGroup = $request->course_group ?? null;
+        $courseGroup = $request->course_group_id ?? null;
         $courses = $this->course->when($courseGroup, function($model, $courseGroup) {
             $model->where('course_group_id', $courseGroup);
         })->latest()->get();

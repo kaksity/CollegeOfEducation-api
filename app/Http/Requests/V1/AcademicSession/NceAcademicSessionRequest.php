@@ -18,6 +18,7 @@ class NceAcademicSessionRequest extends BaseFormRequest
         if($this->getMethod() == 'POST')
         {
             $rules += [
+                'course_group_id' => ['required', 'uuid'],
                 'start_year' => ['required', 'integer'],
                 'end_year' => ['required', 'integer']
             ];
