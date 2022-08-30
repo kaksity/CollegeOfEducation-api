@@ -42,6 +42,7 @@ class CourseGroupController extends Controller
             }
 
             $this->courseGroup->create([
+                'code' => $request->code,
                 'name' => $request->name
             ]);
 

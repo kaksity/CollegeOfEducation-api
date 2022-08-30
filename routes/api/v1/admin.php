@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\V1\Admin\{AuthController, ApplicantController, DashboardController};
+use App\Http\Controllers\V1\Admin\Bursary\ApplicantProcessedPaymentController;
 use App\Http\Controllers\V1\Admin\Bursary\ApplicantSetPaymentController;
 use App\Http\Controllers\V1\Admin\GeneralSettings\{
     CertificateController,
@@ -41,7 +42,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verify.is.admin']], function() {
     Route::get('dashboard',[DashboardController::class, 'index']);
 
     Route::group(['prefix' => 'admission', 'middleware' => 'verify.is.admission.office'], function() {
-        Route::group(['prefix' => 'nce'], function() {
+        Route::group(['prefix' => 'regular'], function() {
             Route::apiResource('applicants', ApplicantController::class);
         });
     });
@@ -49,6 +50,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verify.is.admin']], function() {
         Route::apiResource('course-payments', NceCoursePaymentController::class);
         Route::apiResource('registeration-payments', NceRegisterationPaymentController::class);
         Route::apiResource('applicant-set-payments', ApplicantSetPaymentController::class);
+        Route::apiResource('applicant-processed-payments', ApplicantProcessedPaymentController::class);
     });
 });
 

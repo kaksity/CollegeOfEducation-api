@@ -37,7 +37,7 @@ class AcademicSessionController extends Controller
         try
         {
             $nceAcademicSession = $this->nceAcademicSession->where([
-                'course_group' => $request->course_group_id,
+                'course_group_id' => $request->course_group_id,
                 'start_year' => $request->start_year,
                 'end_year' => $request->end_year
             ])->first();

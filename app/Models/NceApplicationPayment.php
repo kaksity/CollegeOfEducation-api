@@ -16,4 +16,8 @@ class NceApplicationPayment extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function nceCourse()
+    {
+        return $this->hasOne(NceCourseData::class);
+    }
 }
