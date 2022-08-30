@@ -14,12 +14,24 @@ class CourseRegisterationPinRequest extends BaseFormRequest
     public function rules()
     {
         $rules = [];
+        if($this->getMethod() == 'GET')
+        {
+            $rules += [
+                'per_page' => ['max: 500'],
+            ];
+        }
         if($this->getMethod() == 'POST')
         {
             $rules += [
                 'academic_session_id' => ['required', 'uuid'],
                 'course_group_id' => ['required', 'uuid'],
                 'number_of_cards' => ['required', 'integer'] 
+            ];
+        }
+        if($this->getMethod() == 'PUT')
+        {
+            $rules += [
+                'status' => ['required', 'in:disabled']
             ];
         }
         return $rules;

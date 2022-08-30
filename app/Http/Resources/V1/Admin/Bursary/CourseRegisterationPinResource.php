@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Resources\V1\AcademicSession;
+namespace App\Http\Resources\V1\Admin\Bursary;
 
+use App\Http\Resources\V1\AcademicSession\NceAcademicSessionResource;
 use App\Http\Resources\V1\CourseGroup\CourseGroupResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class NceAcademicSessionResource extends JsonResource
+class CourseRegisterationPinResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,8 +19,11 @@ class NceAcademicSessionResource extends JsonResource
         return [
             'id' => $this->id,
             'course_group' => new CourseGroupResource($this->courseGroup),
-            'start_year' => $this->start_year,
-            'end_year' => $this->end_year
+            'used_counter' => $this->used_counter,
+            'serial_number' => $this->serial_number,
+            'pin' => $this->pin,
+            'status' => $this->status,
+            'academic_session' => new NceAcademicSessionResource($this->academicSession),
         ];
     }
 }

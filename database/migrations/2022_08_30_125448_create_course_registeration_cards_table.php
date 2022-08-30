@@ -19,8 +19,8 @@ return new class extends Migration
             $table->uuid('course_group_id')->index();
             $table->string('serial_number');
             $table->string('pin');
-            $table->integer('used_counter');
-            $table->string('status');
+            $table->integer('used_counter')->default(0);
+            $table->string('status')->default('active');
             $table->softDeletes();
             $table->timestamps();
         });

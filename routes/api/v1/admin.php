@@ -2,6 +2,7 @@
 use App\Http\Controllers\V1\Admin\{AuthController, ApplicantController, DashboardController};
 use App\Http\Controllers\V1\Admin\Bursary\ApplicantProcessedPaymentController;
 use App\Http\Controllers\V1\Admin\Bursary\ApplicantSetPaymentController;
+use App\Http\Controllers\V1\Admin\Bursary\CourseRegisterationPinController;
 use App\Http\Controllers\V1\Admin\GeneralSettings\{
     CertificateController,
     CourseController,
@@ -51,6 +52,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verify.is.admin']], function() {
         Route::apiResource('registeration-payments', NceRegisterationPaymentController::class);
         Route::apiResource('applicant-set-payments', ApplicantSetPaymentController::class);
         Route::apiResource('applicant-processed-payments', ApplicantProcessedPaymentController::class);
+        Route::apiResource('course-registeration-pins', CourseRegisterationPinController::class);
     });
 });
 

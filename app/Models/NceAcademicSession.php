@@ -20,4 +20,12 @@ class NceAcademicSession extends Model
     {
         return $this->hasMany(NceRegistrationPayment::class, 'nce_academic_session_id');
     }
+    public function courseGroup()
+    {
+        return $this->belongsTo(CourseGroup::class, 'course_group_id');
+    }
+    public function courseRegisterationCards()
+    {
+        return $this->hasMany(CourseRegisterationCard::class, 'academic_session_id');
+    }
 }

@@ -43,14 +43,15 @@ class AcademicSessionController extends Controller
             ])->first();
             if($nceAcademicSession != null)
             {
-                throw new Exception('NCE Academic Session has been already been set', 400);
+                throw new Exception('Academic Session has been already been set', 400);
             }
 
             $this->nceAcademicSession->create([
+                'course_group_id' => $request->course_group_id,
                 'start_year' => $request->start_year,
                 'end_year' => $request->end_year
             ]);
-            $data['message'] = 'NCE Academic Session was created successfully';
+            $data['message'] = 'Academic Session was created successfully';
 
             return successParser($data, 201);
         }
@@ -76,11 +77,11 @@ class AcademicSessionController extends Controller
 
             if($nceAcademicSession == null)
             {
-                throw new Exception('NCE Academic Session does not exist', 404);
+                throw new Exception('Academic Session does not exist', 404);
             }
 
             $nceAcademicSession->delete();
-            $data['message'] = 'NCE Academic Session was deleted successfully';
+            $data['message'] = 'Academic Session was deleted successfully';
 
             return successParser($data, 200);
         }
