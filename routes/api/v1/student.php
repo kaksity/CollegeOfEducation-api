@@ -1,37 +1,38 @@
 <?php
 
 use App\Http\Controllers\V1\Student\AuthController;
-use App\Http\Controllers\V1\Student\Nce\ApplicationStatusController;
-use App\Http\Controllers\V1\Student\Nce\CertificateController;
-use App\Http\Controllers\V1\Student\Nce\ContactDataController;
-use App\Http\Controllers\V1\Student\Nce\CourseController;
-use App\Http\Controllers\V1\Student\Nce\CourseDataController;
-use App\Http\Controllers\V1\Student\Nce\CourseSubjectController;
-use App\Http\Controllers\V1\Student\Nce\EducationalBackgroundDataController;
-use App\Http\Controllers\V1\Student\Nce\EmploymentDataController;
-use App\Http\Controllers\V1\Student\Nce\ExaminationDataController;
-use App\Http\Controllers\V1\Student\Nce\LgaController;
-use App\Http\Controllers\V1\Student\Nce\MaritalStatusController;
-use App\Http\Controllers\V1\Student\Nce\PersonalDataController;
-use App\Http\Controllers\V1\Student\Nce\StateController;
-use App\Http\Controllers\V1\Student\Nce\ExtraCurricularActivityDataController;
-use App\Http\Controllers\V1\Student\Nce\HeldReponsibilityController;
-use App\Http\Controllers\V1\Student\Nce\PassportController;
-use App\Http\Controllers\V1\Student\Nce\ExaminationCategoryController;
-use App\Http\Controllers\V1\Student\Nce\ExaminationSubjectController;
-use App\Http\Controllers\V1\Student\Nce\RegisterCourseSubjectController;
-use App\Http\Controllers\V1\Student\Nce\RegistrationPaymentController;
-use App\Http\Controllers\V1\Student\Nce\RequiredDocumentDataController;
+use App\Http\Controllers\V1\Student\Regular\ApplicationStatusController;
+use App\Http\Controllers\V1\Student\Regular\CertificateController;
+use App\Http\Controllers\V1\Student\Regular\ContactDataController;
+use App\Http\Controllers\V1\Student\Regular\CourseController;
+use App\Http\Controllers\V1\Student\Regular\CourseDataController;
+use App\Http\Controllers\V1\Student\Regular\CourseSubjectController;
+use App\Http\Controllers\V1\Student\Regular\EducationalBackgroundDataController;
+use App\Http\Controllers\V1\Student\Regular\EmploymentDataController;
+use App\Http\Controllers\V1\Student\Regular\ExaminationDataController;
+use App\Http\Controllers\V1\Student\Regular\LgaController;
+use App\Http\Controllers\V1\Student\Regular\MaritalStatusController;
+use App\Http\Controllers\V1\Student\Regular\PersonalDataController;
+use App\Http\Controllers\V1\Student\Regular\StateController;
+use App\Http\Controllers\V1\Student\Regular\ExtraCurricularActivityDataController;
+use App\Http\Controllers\V1\Student\Regular\HeldReponsibilityController;
+use App\Http\Controllers\V1\Student\Regular\PassportController;
+use App\Http\Controllers\V1\Student\Regular\ExaminationCategoryController;
+use App\Http\Controllers\V1\Student\Regular\ExaminationCenterDataController;
+use App\Http\Controllers\V1\Student\Regular\ExaminationSubjectController;
+use App\Http\Controllers\V1\Student\Regular\RegisterCourseSubjectController;
+use App\Http\Controllers\V1\Student\Regular\RegistrationPaymentController;
+use App\Http\Controllers\V1\Student\Regular\RequiredDocumentDataController;
 
-    Route::group(['prefix' => 'nce/auth'],function(){
+    Route::group(['prefix' => 'regular/auth'],function(){
         Route::post('login',[AuthController::class,'login']);
         Route::post('register', [AuthController::class,'register']);
         Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
     });
-    Route::group(['prefix' => 'nce', 'middleware' => ['auth:sanctum']], function() {
+    Route::group(['prefix' => 'regular', 'middleware' => ['auth:sanctum']], function() {
         Route::post('/registeration-payments/initialize', [RegistrationPaymentController::class, 'initiatePayment']);
     });
-    Route::group(['prefix'=>'nce','middleware' => ['auth:sanctum']], function(){
+    Route::group(['prefix'=>'regular','middleware' => ['auth:sanctum']], function(){
         Route::apiResource('personal-data',PersonalDataController::class);
         Route::apiResource('contact-data', ContactDataController::class);
         Route::apiResource('educational-background-data', EducationalBackgroundDataController::class);
@@ -44,7 +45,8 @@ use App\Http\Controllers\V1\Student\Nce\RequiredDocumentDataController;
         Route::apiResource('application-statuses', ApplicationStatusController::class);
         Route::apiResource('registered-course-subjects', RegisterCourseSubjectController::class)->middleware('verify.nce.id.number')->middleware('verify.nce.registeration.payment');
         Route::apiResource('required-document-data', RequiredDocumentDataController::class);
-        
+        Route::apiResource('examination-center-data', ExaminationCenterDataController::class);
+
         Route::post('registered-course-subjects/autofill', [RegisterCourseSubjectController::class, 'autoFillCourses'])->middleware('verify.nce.registeration.payment');
         Route::get('marital-statuses', [MaritalStatusController::class, 'index']);
         Route::get('states', [StateController::class, 'index']);

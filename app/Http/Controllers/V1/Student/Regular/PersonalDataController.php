@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\V1\Student\Nce;
+namespace App\Http\Controllers\V1\Student\Regular;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Student\PersonalData\PersonalDataRequest;
