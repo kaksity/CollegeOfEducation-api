@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\V1\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Auth\LoginRequest;
-use App\Http\Requests\V1\Auth\RegisterRequest;
+use App\Http\Requests\V1\Admin\Auth\LoginRequest;
+use App\Http\Requests\V1\Admin\Auth\RegisterRequest;
+use App\Http\Requests\V1\Admin\Auth\RequestForgotPasswordRequest;
+use App\Http\Requests\V1\Admin\Auth\VerificationForgotPassword;
 use App\Http\Resources\V1\Admin\AdminResource;
+use Carbon\Carbon;
 use Exception;
 use App\Models\{User, Admin};
 use Illuminate\Support\Facades\Auth;
@@ -123,5 +126,73 @@ class AuthController extends Controller
 
         $data['message'] = 'Logout';
         return successParser($data);
+    }
+    public function requestPasswordVerification(RequestForgotPasswordRequest $request)
+    {
+        try
+        {
+            $user = $this->user->where([
+                'email_address' => $request->email_address
+            ])->first();
+
+            if($user)
+            {
+                $verificationToken = generateRandomNumber();
+                
+                DB::table('password_resets')->where([
+                    'email' => $request->email_address,
+                ])->delete();
+
+                DB::table('password_resets')->insert([
+                    'email' => $request->email_address,
+                    'token' => $verificationToken,
+                    'created_at' => Carbon::now()
+                ]);
+
+                //Send a Mail
+            }
+
+            $data['message'] = 'Password reset instruction has been sent to this mail';
+            return successParser($data);
+        }
+        
+        catch(Exception $ex)
+        {
+            $data['message'] = $ex->getMessage();
+            $code = $ex->getCode();
+
+            return errorParser($data, $code);
+        }
+    }
+    public function verifyPasswordVerificationCode(VerificationForgotPassword $request)
+    {
+        try
+        {
+            $verificationCode = DB::table('password_resets')->select('*')->where([
+                'email' => $request->email_address,
+                'token' => $request->verification_code,
+            ])->first();
+
+            if($verificationCode == null)
+            {
+                throw new Exception('Verification code does not exist', 404);
+            }
+            $hashPassword = Hash::make($request->new_password);
+            
+            DB::table('users')->where([
+                'email_address' => $request->email_address
+            ])->update([
+                'password' => $hashPassword
+            ]);
+            
+            $data['message'] = 'Password reset instruction has been sent to this mail';
+            return successParser($data);
+        }
+        catch(Exception $ex)
+        {
+            $data['message'] = $ex->getMessage();
+            $code = $ex->getCode();
+            return errorParser($data, $code);
+        }
     }
 }

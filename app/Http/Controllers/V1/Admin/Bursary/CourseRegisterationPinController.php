@@ -40,15 +40,15 @@ class CourseRegisterationPinController extends Controller
     {
         try
         {
-            $courseRegisterationCard = $this->courseRegisterationCard->where([
-                'academic_session_id' => $request->academic_session_id,
-                'course_group_id' => $request->course_group_id
-            ])->first();
+            // $courseRegisterationCard = $this->courseRegisterationCard->where([
+            //     'academic_session_id' => $request->academic_session_id,
+            //     'course_group_id' => $request->course_group_id
+            // ])->first();
 
-            if($courseRegisterationCard)
-            {
-                throw new Exception('Card for this course group and academic session has been generated', 400);
-            }
+            // if($courseRegisterationCard)
+            // {
+            //     throw new Exception('Card for this course group and academic session has been generated', 400);
+            // }
             DB::beginTransaction();
 
             for($i=0; $i < $request->number_of_cards; $i++)

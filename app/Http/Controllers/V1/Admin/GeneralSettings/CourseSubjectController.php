@@ -24,10 +24,10 @@ class CourseSubjectController extends Controller
     public function index(CourseSubjectRequest $request)
     {
         $course = $request->course_id;
-
+        $perPage = $request->per_page ?? 100;
         $courseSubjects = $this->courseSubject->when($course, function($model, $course) {
             $model->where('course_id', $course);
-        })->latest()->get();
+        })->latest()->paginate($perPage);
         return CourseSubjectResource::collection($courseSubjects);
     }
 

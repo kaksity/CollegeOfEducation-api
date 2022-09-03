@@ -27,6 +27,10 @@ class ApplicationPaymentController extends Controller
                 $personalData = Auth::user()->ncePersonalData()->first();
                 $courseData = Auth::user()->nceCourseData()->first();
                 $applicantSetPayment = $this->applicantSetPayment->where('course_group_id', $courseData->course_group_id)->first();
+                if($applicantSetPayment == null)
+                {
+                    throw new Exception('Admin is yet to set the application payment amount', 400);
+                }
                 $contactData = Auth::user()->nceContactData()->first();                
 
                 $interswitchPayment = $this->NceApplicationPayment->where([

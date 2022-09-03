@@ -22,6 +22,7 @@ use App\Http\Controllers\V1\Applicant\Regular\PassportController;
 use App\Http\Controllers\V1\Applicant\Regular\ExaminationCategoryController;
 use App\Http\Controllers\V1\Applicant\Regular\ExaminationCenterDataController;
 use App\Http\Controllers\V1\Applicant\Regular\ExaminationSubjectController;
+use App\Http\Controllers\V1\Applicant\Regular\PDFController;
 use App\Http\Controllers\V1\Applicant\Regular\RequiredDocumentController;
 use App\Http\Controllers\V1\Applicant\Regular\RequiredDocumentDataController;
 
@@ -38,7 +39,7 @@ use App\Http\Controllers\V1\Applicant\Regular\RequiredDocumentDataController;
         Route::post('/application-payments/initialize', [ApplicationPaymentController::class, 'initiatePayment']);
     });
 
-    Route::group(['prefix'=>'regular','middleware' => ['auth:sanctum', 'verify.nce.application.payment']], function(){
+    Route::group(['prefix'=>'regular','middleware' => ['auth:sanctum', 'verify.regular.application.payment']], function(){
         Route::apiResource('personal-data',PersonalDataController::class);
         Route::apiResource('contact-data', ContactDataController::class);
         Route::apiResource('educational-background-data', EducationalBackgroundDataController::class);
@@ -53,7 +54,7 @@ use App\Http\Controllers\V1\Applicant\Regular\RequiredDocumentDataController;
         Route::apiResource('application-statuses', ApplicationStatusController::class);
         Route::apiResource('applicant-profiles', ApplicantController::class);
 
-        
+        Route::get('/submit-application-pdf', [PDFController::class, 'submitApplication']);
 
 
         Route::get('marital-statuses', [MaritalStatusController::class, 'index']);

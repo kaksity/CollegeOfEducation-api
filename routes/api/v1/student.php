@@ -28,9 +28,12 @@ use App\Http\Controllers\V1\Student\Regular\RequiredDocumentDataController;
         Route::post('login',[AuthController::class,'login']);
         Route::post('register', [AuthController::class,'register']);
         Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
+        Route::post('forgot-password/request', [AuthController::class, 'requestPasswordVerification']);
+        Route::post('forgot-password/verify', [AuthController::class, 'verifyPasswordVerificationCode']);
     });
     Route::group(['prefix' => 'regular', 'middleware' => ['auth:sanctum']], function() {
         Route::post('/registeration-payments/initialize', [RegistrationPaymentController::class, 'initiatePayment']);
+        Route::post('/registeration-payments/card-pin', [RegistrationPaymentController::class, 'useCourseRegisterationPin']);
     });
     Route::group(['prefix'=>'regular','middleware' => ['auth:sanctum']], function(){
         Route::apiResource('personal-data',PersonalDataController::class);
@@ -43,11 +46,14 @@ use App\Http\Controllers\V1\Student\Regular\RequiredDocumentDataController;
         Route::apiResource('passport-data', PassportController::class);
         Route::apiResource('examination-data', ExaminationDataController::class);
         Route::apiResource('application-statuses', ApplicationStatusController::class);
-        Route::apiResource('registered-course-subjects', RegisterCourseSubjectController::class)->middleware('verify.nce.id.number')->middleware('verify.nce.registeration.payment');
+        
         Route::apiResource('required-document-data', RequiredDocumentDataController::class);
         Route::apiResource('examination-center-data', ExaminationCenterDataController::class);
-
-        Route::post('registered-course-subjects/autofill', [RegisterCourseSubjectController::class, 'autoFillCourses'])->middleware('verify.nce.registeration.payment');
+        Route::group(['prefix' => 'registered-course-subjects', 'middleware' => ['verify.regular.registeration.payment', 'verify.regular.id.number','verify.regular.is.course.registered']], function() {
+            Route::apiResource('/', RegisterCourseSubjectController::class);
+            Route::post('/autofill', [RegisterCourseSubjectController::class, 'autoFillCourses']);
+        });
+        
         Route::get('marital-statuses', [MaritalStatusController::class, 'index']);
         Route::get('states', [StateController::class, 'index']);
         Route::get('lgas', [LgaController::class, 'index']);

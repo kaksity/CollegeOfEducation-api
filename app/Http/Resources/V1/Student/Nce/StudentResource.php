@@ -18,7 +18,7 @@ class StudentResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'id_number' => $this->nceApplicationStatus->id_number,
+            'id_number' => $this->id_number,
             'personal_data' => new PersonalDataResource($this->ncePersonalData),
             'contact_data' => new ContactDataResource($this->nceContactData),
         ];

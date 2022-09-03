@@ -3,21 +3,83 @@
 namespace App\Http\Controllers\V1\Student\Regular;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Student\CourseRegisterationPin\CourseRegisterationPinRequest;
 use App\Http\Requests\V1\Student\NceRegistrationPayment\NceRegisterationPaymentRequest;
+use App\Models\CourseRegisterationCard;
 use App\Models\NceAcademicSession;
 use App\Models\NceCoursePayment;
 use App\Models\NceRegistrationPayment;
+use App\Models\UsedCourseRegisterationPin;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class RegistrationPaymentController extends Controller
 {
-    public function __construct( NceAcademicSession $nceAcademicSession, NceCoursePayment $nceCoursePayment, NceRegistrationPayment $nceRegistrationPayment)
+    public function __construct( CourseRegisterationCard $courseRegisterationCard, UsedCourseRegisterationPin $usedCourseRegisterationPin,NceAcademicSession $nceAcademicSession, NceCoursePayment $nceCoursePayment, NceRegistrationPayment $nceRegistrationPayment)
     {
+        $this->courseRegisterationCard = $courseRegisterationCard;
         $this->nceRegistrationPayment = $nceRegistrationPayment;
         $this->nceCoursePayment = $nceCoursePayment;
         $this->nceAcademicSession = $nceAcademicSession;
+        $this->usedCourseRegisterationPin = $usedCourseRegisterationPin;
+    }
+    public function useCourseRegisterationPin(CourseRegisterationPinRequest $request) {
+        try
+        {
+            $courseData = Auth::user()->nceCourseData()->first();
+            $currentSession = $this->nceAcademicSession->getCurrentSession($courseData->course_group_id);
+    
+            $card = $this->courseRegisterationCard->where([
+                'academic_session_id' => $currentSession->id,
+                'course_group_id' => $courseData->course_group_id,
+                'pin' => $request->course_registeration_pin,
+                'status' => 'active'
+            ])->first();
+    
+            if($card == null)
+            {
+                throw new Exception('Course Registeration Pin is invalid', 400);
+            }
+            
+            // Check if the pin has already been used by another student
+            $usedCard = $this->usedCourseRegisterationPin->where([
+                'card_id' => $card->id,
+                'user_id' => Auth::id(),
+            ])->first();
+
+            if($usedCard != null && $usedCard->user_id != Auth::id())
+            {
+                throw new Exception('This Card has already been used by another student', 400);
+            }
+
+            DB::beginTransaction();
+            $card->update([
+                'used_counter' => $card->used_counter + 1
+            ]);
+
+            if ($usedCard == null)
+            {
+                $this->usedCourseRegisterationPin->create([
+                    'card_id' => $card->id,
+                    'user_id' => Auth::id(),
+                    'academic_session_id' => $currentSession->id,
+
+                ]);
+            }
+            DB::commit();
+
+            $data['message'] = 'User Card Pin was used';
+            return successParser($data, 201);
+        }
+        catch(Exception $ex)
+        {
+            DB::rollBack();
+            $data['message'] = $ex->getMessage();
+            $code = $ex->getCode();
+            return errorParser($data, $code);
+        }
     }
     public function initiatePayment(NceRegisterationPaymentRequest $request)
     {
@@ -39,7 +101,7 @@ class RegistrationPaymentController extends Controller
                     throw new Exception('Nce Course Payment has not been set', 404);
                 }
                 
-                $currentSession = $this->nceAcademicSession->getCurrentSession();
+                $currentSession = $this->nceAcademicSession->getCurrentSession($courseData->course_group_id);
                 $interswitchPayment = $this->nceRegistrationPayment->where([
                     'user_id' => Auth::id(),
                     'course_id' => $courseData->admitted_course_id,

@@ -24,7 +24,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courseData = Auth::user()->nceCourseData()->first();
+        $courseData = Auth::user()->nceCourseData;
         $courses = $this->course->with('courseGroup')->where('course_group_id', $courseData->course_group_id)->latest()->get();
         return CourseResource::collection($courses);
     }

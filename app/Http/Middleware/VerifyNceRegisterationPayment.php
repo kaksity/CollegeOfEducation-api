@@ -29,7 +29,10 @@ class VerifyNceRegisterationPayment
     {
         try
         {
-            $currentSession = $this->nceAcademicSession->getCurrentSession();
+            $courseData = Auth::user()->nceCourseData;
+            $currentSession = $this->nceAcademicSession->getCurrentSession($courseData->course_group_id);
+
+
             $payment = $this->nceRegistrationPayment->where([
                 'user_id' => Auth::id(),
                 'nce_academic_session_id' => $currentSession->id

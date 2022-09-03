@@ -3,18 +3,12 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
-use App\Models\NceApplicationPayment;
-use Exception;
 
-class VerifyNceIdNumberSet
+class VerifyIsICT
 {
-    public function __construct(NceApplicationPayment $NceApplicationPayment)
-    {
-        $this->NceApplicationPayment = $NceApplicationPayment;
-    }
     /**
      * Handle an incoming request.
      *
@@ -26,11 +20,9 @@ class VerifyNceIdNumberSet
     {
         try
         {
-            if(Auth::user()->id_number == null || Auth::user()->id_number == '')
+            if(Auth::user()->role != 'super-admin' && Auth::user()->role !='ict-office')
             {
-                $data['message'] = 'Student Id Number is not set, Contact School ICT Office';
-                $data['error_code'] = 'ID_NUMBER_ERROR';
-                return errorParser($data, 403);
+                throw new Exception('You are not permitted to perform this action', 403);
             }
             return $next($request);
         }
@@ -38,8 +30,8 @@ class VerifyNceIdNumberSet
         {
             $data['message'] = $ex->getMessage();
             $code = $ex->getCode();
+
             return errorParser($data, $code);
         }
-        
     }
 }

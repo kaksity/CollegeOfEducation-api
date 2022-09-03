@@ -18,11 +18,14 @@ use App\Http\Controllers\V1\Admin\GeneralSettings\{
 };
 use App\Http\Controllers\V1\Admin\Bursary\NceCoursePaymentController;
 use App\Http\Controllers\V1\Admin\Bursary\NceRegisterationPaymentController;
+use App\Http\Controllers\V1\Admin\ICT\UploadStudentController;
 
 Route::group(['prefix' => 'auth'],function(){
     Route::post('login',[AuthController::class,'login']);
     Route::post('register', [AuthController::class,'register']);
     Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
+    Route::post('forgot-password/request', [AuthController::class, 'requestPasswordVerification']);
+    Route::post('forgot-password/verify', [AuthController::class, 'verifyPasswordVerificationCode']);
 });
 
 Route::group(['middleware' => ['auth:sanctum', 'verify.is.admin']], function() {
@@ -53,6 +56,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verify.is.admin']], function() {
         Route::apiResource('applicant-set-payments', ApplicantSetPaymentController::class);
         Route::apiResource('applicant-processed-payments', ApplicantProcessedPaymentController::class);
         Route::apiResource('course-registeration-pins', CourseRegisterationPinController::class);
+    });
+
+    Route::group(['prefix' => 'ict', 'middleware' => ['verify.is.ict.office']], function() {
+        Route::apiResource('upload-students', UploadStudentController::class);
     });
 });
 

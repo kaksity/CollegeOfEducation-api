@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\V1\AcademicSession;
+namespace App\Http\Requests\V1\Admin\ICT;
 
 use App\Http\Requests\Base\BaseFormRequest;
 
-class NceAcademicSessionRequest extends BaseFormRequest
+class UploadStudentRequest extends BaseFormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,18 +14,17 @@ class NceAcademicSessionRequest extends BaseFormRequest
     public function rules()
     {
         $rules = [];
+
         if($this->getMethod() == 'GET')
         {
             $rules += [
-                'course_group_id' => [ 'uuid'],
+                'application_tracking_number' => ['required', 'string']
             ];
         }
-        if($this->getMethod() == 'POST')
+        if($this->getMethod() == 'PUT')
         {
             $rules += [
-                'course_group_id' => ['required', 'uuid'],
-                'start_year' => ['required', 'integer'],
-                'end_year' => ['required', 'integer']
+                'id_number' => ['required', 'string']
             ];
         }
         return $rules;

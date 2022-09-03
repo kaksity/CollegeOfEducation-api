@@ -63,11 +63,20 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'verify.nce.application.payment' => \App\Http\Middleware\VerifyNceApplicationPayment::class,
-        'verify.nce.registeration.payment' => \App\Http\Middleware\VerifyNceRegisterationPayment::class,
-        'verify.nce.id.number' => \App\Http\Middleware\VerifyNceIdNumberSet::class,
+        'verify.regular.application.payment' => \App\Http\Middleware\VerifyNceApplicationPayment::class,
+        'verify.regular.registeration.payment' => \App\Http\Middleware\VerifyNceRegisterationPayment::class,
+        'verify.regular.registeration.payment' => \App\Http\Middleware\VerifyNceRegisterationPayment::class,
+        'verify.regular.is.course.registered' => \App\Http\Middleware\VerifyIsCourseRegistered::class,
+        'verify.regular.id.number' => \App\Http\Middleware\VerifyNceIdNumberSet::class,
         'verify.is.admin' => \App\Http\Middleware\VerifyIsAdmin::class,
         'verify.is.admission.office' => \App\Http\Middleware\VerifyIsAdmissionOffice::class,
         'verify.is.bursary.office' => \App\Http\Middleware\VerifyIsBursaryOffice::class,
+        'verify.is.ict.office' => \App\Http\Middleware\VerifyIsICT::class,
+    ];
+
+    protected $middlewarePriority = [
+        'verify.regular.is.course.registered' => \App\Http\Middleware\VerifyIsCourseRegistered::class,
+        'verify.regular.id.number' => \App\Http\Middleware\VerifyNceIdNumberSet::class,
+        'verify.regular.registeration.payment' => \App\Http\Middleware\VerifyNceRegisterationPayment::class,
     ];
 }

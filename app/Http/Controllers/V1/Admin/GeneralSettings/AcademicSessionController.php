@@ -20,9 +20,12 @@ class AcademicSessionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(NceAcademicSessionRequest $request)
     {
-        $nceAcademicSessions = $this->nceAcademicSession->latest()->get();
+        $courseGroup = $request->course_group_id ?? null;
+        $nceAcademicSessions = $this->nceAcademicSession->when($courseGroup, function($model, $courseGroup) {
+            $model->where('course_group_id', $courseGroup);
+        })->latest()->get();
         return NceAcademicSessionResource::collection($nceAcademicSessions);
     }
 

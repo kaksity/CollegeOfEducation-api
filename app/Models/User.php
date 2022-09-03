@@ -107,4 +107,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(NceRequiredDocumentData::class, 'user_id');
     }
+    public function usedCourseRegisterationCard()
+    {
+        return $this->hasMany(UsedCourseRegisterationPin::class, 'card_id');
+    }
 }

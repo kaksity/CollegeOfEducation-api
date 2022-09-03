@@ -19,9 +19,9 @@ class ApplicantListResource extends JsonResource
         return [
             'id' => $this->user_id,
             'personal_data' => new PersonalDataResource($NcePersonalData),
-            $this->mergeWhen($this->id_number != null, function() {
+            $this->mergeWhen($this->user->id_number != null, function() {
                 return [
-                    'id_number' => $this->id_number
+                    'id_number' => $this->user->id_number
                 ];
             })
         ];

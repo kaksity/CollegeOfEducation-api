@@ -12,9 +12,9 @@ class NceAcademicSession extends Model
     use UuidTrait, HasFactory, SoftDeletes;
     protected $guarded;
 
-    public function getCurrentSession()
+    public function getCurrentSession($courseGroupId)
     {
-        return $this->latest()->first();
+        return $this->where('course_group_id', $courseGroupId)->latest()->first();
     }
     public function nceRegisterationPayments()
     {
