@@ -101,9 +101,9 @@ class RegisterCourseSubjectController extends Controller
         try
         {
             
-            $NceCourseData = $this->NceCourseData->where('user_id', Auth::user()->id)->first();
-            $courseSubjects = $this->courseSubject->where('course_id', $NceCourseData->admitted_course_id)->get();
             
+            $NceCourseData = $this->NceCourseData->where('user_id', Auth::user()->id)->first();
+            $courseSubjects = $this->courseSubject->where('course_id', $NceCourseData->admitted_course_id)->orderBy('semester', 'ASC')->get();
             DB::beginTransaction();
             foreach ($courseSubjects as $courseSubject) {
                 $this->NceRegisteredCourseSubject->create([

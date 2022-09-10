@@ -74,9 +74,25 @@ class Kernel extends HttpKernel
         'verify.is.ict.office' => \App\Http\Middleware\VerifyIsICT::class,
     ];
 
+    /**
+     * The priority-sorted list of middleware.
+     *
+     * This forces non-global middleware to always be in the given order.
+     *
+     * @var string[]
+     */
     protected $middlewarePriority = [
-        'verify.regular.is.course.registered' => \App\Http\Middleware\VerifyIsCourseRegistered::class,
-        'verify.regular.id.number' => \App\Http\Middleware\VerifyNceIdNumberSet::class,
-        'verify.regular.registeration.payment' => \App\Http\Middleware\VerifyNceRegisterationPayment::class,
+        \Illuminate\Cookie\Middleware\EncryptCookies::class,
+        \Illuminate\Session\Middleware\StartSession::class,
+        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+        \Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests::class,
+        \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        \Illuminate\Routing\Middleware\ThrottleRequestsWithRedis::class,
+        \Illuminate\Contracts\Session\Middleware\AuthenticatesSessions::class,
+        \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        \Illuminate\Auth\Middleware\Authorize::class,
+        \App\Http\Middleware\VerifyIsCourseRegistered::class,
+        \App\Http\Middleware\VerifyNceIdNumberSet::class,
+        \App\Http\Middleware\VerifyNceRegisterationPayment::class,
     ];
 }

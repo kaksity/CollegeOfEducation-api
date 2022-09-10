@@ -1,3 +1,17 @@
+<?php
+    // $avatarUrl = env('APP_URL').'/storage/passports/'.$passport->file_path;
+    // $arrContextOptions=array(
+    //             "ssl"=>array(
+    //                 "verify_peer"=>false,
+    //                 "verify_peer_name"=>false,
+    //             ),
+    //         );
+    // $type = pathinfo($avatarUrl, PATHINFO_EXTENSION);
+    // $avatarData = file_get_contents($avatarUrl, false, stream_context_create($arrContextOptions));
+    // $avatarBase64Data = base64_encode($avatarData);
+    // $imageData = 'data:image/' . $type . ';base64,' . $avatarBase64Data;
+    // echo $imageData;
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,7 +20,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href={{ asset('css/pdf.css') }} />
-    <title>Submit Application</title>
+    <title>Application Form</title>
     <style>
         .row {
             flex-shrink: 0;
@@ -64,31 +78,51 @@
         .bordered {
             border: solid black 1px;
         }
-        .heading{
-            border: 1px solid black;
-            margin: 0;
-            padding: 0;
+        .heading {
+            text-align: center;
         }
-        .header-address {
-            margin: 0 auto;
+        .heading-school-title {
+            font-size: 100px;
+        }
+        .no-margin-and-padding {
+            margin: 0px;
+            padding: 0px;
         }
     </style>
 </head>
 
 <body>
     <div>
-        <div>
-            <div class="heading">
-                <h3>
-                    <b>MOHAMMET LAWAN COLLEGE OF AGRICULTURE</b>
-                </h3>
-                <h4 class="header-address">P.M.B 14277, MAIDUGURI<br>
-                BORNO STATE, NIGERIA<br>
-                OFFICE OF THE REGISTRAR<br>
-                (ACADEMIC DIVISION)</h4>
-            </div>
+        <div class="row mt-2 table-responsive">
+            <table class="table">
+                <tbody class="">
+                    <tr>
+                        <td width="5%">
+                            <img src="{{ public_path('image/logo.png') }}" alt="">
+                        </td>
+                        <td width="95%">
+                            <div class="heading">
+                                <div style="heading-school-title">
+                                    <b>MOHAMMET LAWAN COLLEGE OF AGRICULTURE</b>
+                                </div>
+                                P.M.B 14277, MAIDUGURI <br>
+                                BORNO STATE, NIGERIA <br>
+                                OFFICE OF THE REGISTRAR <br>
+                                (ACADEMIC DIVISION)
+                                <div>
+                                    Telephone: 070-39443472 
+                                    Email Address: admissionoffice@molca.edu.ng
+                                </div>
+                                <div class="no-margin-and-padding">
+                                    <b>APPLICATION FORM</b>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <hr>
+        <hr class="no-margin-and-padding">
     </div>
     <div class="row mt-2">
         <h2>PERSONAL DATA</h2>
@@ -98,6 +132,9 @@
             <table class="table">
                 <tbody class="">
                     <tr>
+                        <td>
+                            {{-- <img src="{{ '../../storage/public/passports/'.$passport->file_path }}" alt=""> --}}
+                        </td>
                         <td>
                             <b>Surname</b>
                             <div>{{ $personalData->surname }}</div>
@@ -114,11 +151,11 @@
                         </td>
                         <td>
                             <b>Date of Birth</b>
-                            <div>{{ $personalData->place_of_birth }}</div>
+                            <div>{{ $personalData->date_of_birth }}</div>
                         </td>
                         <td>
                             <b>Sex</b>
-                            <div>{{ $personalData->home_town }}</div>
+                            <div>{{ $personalData->sex }}</div>
                         </td>
                     </tr>
                     <tr>
@@ -389,7 +426,7 @@
                 <div>
                     <h2>DECLARATION</h2>
                 </div>
-                <p> I hereby declare that the information provided stated above is to the best of my knowledge and belief accurate in every details </p>
+                <p> I <b><u>{{ $personalData->surname.' '.$personalData->other_names }}</u></b> hereby declare that the information provided above is to the best of my knowledge and belief accurate in every details </p>
                 <p> If admitted I will also comply strictly with the Rules and Regulations of the College </p>
                 <p>Sign ............................................</p>
             </div>

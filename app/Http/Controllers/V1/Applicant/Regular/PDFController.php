@@ -36,7 +36,7 @@ class PDFController extends Controller
         $educationalBackgroundData = $applicant->nceEducationalBackground()->with(['certificate'])->get();
         $extraCurricularActivityData = $applicant->nceExtraCurricularActivityData;
         $heldResponsibilityData = $applicant->nceHeldResponsibilityData;
-        // application_status = ApplicationStatusResource($this->user->nceApplicationStatus;
+        
         $courseData =  $applicant->nceCourseData()->with(['NceCourseDataFirstChoice', 'NceCourseDataSecondChoice', 'NceCourseDataThirdChoice'])->first();
         $examinationCenterData = $applicant->nceExaminationCenterData;
         $requiredDocumentData = $applicant->nceRequiredDocumentData()->with(['requiredDocument'])->get();
@@ -44,6 +44,7 @@ class PDFController extends Controller
         $data = [
            'personalData' => $personalData,
            'contactData' => $contactData,
+           'passport' => $passport,
            'educationalBackgroundData' => $educationalBackgroundData,
            'examinationCenterData' => $examinationCenterData,
            'examinationData' => $examinationData,
@@ -66,5 +67,32 @@ class PDFController extends Controller
             'path' => env('APP_URL').'/storage/pdfs/'.$fileName
         ];
         // return $pdf->stream('student-application.pdf');
+    }
+    public function generateAdmissionLetter()
+    {
+        $applicant = Auth::user();
+        $personalData = $applicant->ncePersonalData()->with(['maritalStatus', 'state', 'lga'])->first();
+        $courseData =  $applicant->nceCourseData()->with(['courseGroup', 'NceCourseDataAdmittedCourse'])->first();
+        // $dateOfAdmission = str_replace('-', '/', substr($applicationStatus->updated_atformat('Y-m-d'), 0, 10))
+        $dateOfAdmission = $courseData->updated_at->format('d/m/Y');
+        $applicationStatus = $applicant->nceApplicationStatus()->with(['nceSession'])->first();
+        $data = [
+            'personalData' => $personalData,
+            'courseData' => $courseData,
+            'applicationStatus' => $applicationStatus,
+            'dateOfAdmission' => $dateOfAdmission,
+        ];
+
+        $pdf = PDF::setPaper('a4', 'portrait')->loadView('admission-letter', $data);
+
+        $fileName = time().uniqid().'.pdf';
+
+        $fileNameToStore = 'public/pdfs/'.$fileName;
+
+        Storage::put($fileNameToStore, $pdf->output());
+        
+        return [
+            'path' => env('APP_URL').'/storage/pdfs/'.$fileName
+        ];
     }
 }

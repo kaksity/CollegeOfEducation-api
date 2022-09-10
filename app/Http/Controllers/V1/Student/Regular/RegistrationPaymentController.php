@@ -46,9 +46,7 @@ class RegistrationPaymentController extends Controller
             // Check if the pin has already been used by another student
             $usedCard = $this->usedCourseRegisterationPin->where([
                 'card_id' => $card->id,
-                'user_id' => Auth::id(),
             ])->first();
-
             if($usedCard != null && $usedCard->user_id != Auth::id())
             {
                 throw new Exception('This Card has already been used by another student', 400);

@@ -55,6 +55,7 @@ use App\Http\Controllers\V1\Applicant\Regular\RequiredDocumentDataController;
         Route::apiResource('applicant-profiles', ApplicantController::class);
 
         Route::get('/submit-application-pdf', [PDFController::class, 'submitApplication']);
+        Route::get('/generate-admission-pdf', [PDFController::class, 'generateAdmissionLetter']);
 
 
         Route::get('marital-statuses', [MaritalStatusController::class, 'index']);

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\V1\Applicant;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Applicant\Authentication\LoginRequest;
 use App\Http\Requests\V1\Applicant\Authentication\RegisterRequest;
-use App\Models\{NceContactData, User, NcePersonalData, NceCourseData, NceApplicationStatus, NcePassport, NceExaminationCenterData};
+use App\Models\{NceAcademicSession, NceContactData, User, NcePersonalData, NceCourseData, NceApplicationStatus, NcePassport, NceExaminationCenterData};
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     
-    public function __construct(User $user, NcePersonalData $NcePersonalData, NcePassport $NcePassport,NceApplicationStatus $NceApplicationStatus,NceContactData $NceContactData, NceCourseData $NceCourseData, NceExaminationCenterData $NceExaminationCenterData)
+    public function __construct(User $user, NcePersonalData $NcePersonalData, NcePassport $NcePassport,NceApplicationStatus $NceApplicationStatus,NceContactData $NceContactData, NceCourseData $NceCourseData, NceExaminationCenterData $NceExaminationCenterData, NceAcademicSession $nceAcademicSession)
     {
         $this->user = $user;
         $this->NcePersonalData = $NcePersonalData;
@@ -23,6 +23,7 @@ class AuthController extends Controller
         $this->NceApplicationStatus = $NceApplicationStatus;
         $this->NcePassport = $NcePassport;
         $this->NceExaminationCenterData = $NceExaminationCenterData;
+        $this->nceAcademicSession = $nceAcademicSession;
     }
     public function login(LoginRequest $request)
     {
@@ -76,6 +77,11 @@ class AuthController extends Controller
                 throw new Exception('Email Address has already been taken',400);
             }
 
+            $currentSession = $this->nceAcademicSession->getCurrentSession($request->course_group_id);
+            if($currentSession == null)
+            {
+                throw new Exception('Current Session has not been set by the admin',400);
+            }
             DB::beginTransaction();
             try
             {
@@ -99,7 +105,8 @@ class AuthController extends Controller
 
                 $this->NceApplicationStatus->create([
                     'user_id' => $user->id,
-                    'status' => 'applying'
+                    'status' => 'applying',
+                    'academic_session_id' => $currentSession->id 
                 ]);
                 $this->NcePassport->create([
                     'user_id' => $user->id

@@ -28,4 +28,8 @@ class NceAcademicSession extends Model
     {
         return $this->hasMany(CourseRegisterationCard::class, 'academic_session_id');
     }
+    public function nceApplicationStatus()
+    {
+        return $this->hasMany(NceApplicationStatus::class, 'academic_session_id');
+    }
 }

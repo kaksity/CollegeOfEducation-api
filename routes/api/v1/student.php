@@ -17,6 +17,7 @@ use App\Http\Controllers\V1\Student\Regular\StateController;
 use App\Http\Controllers\V1\Student\Regular\ExtraCurricularActivityDataController;
 use App\Http\Controllers\V1\Student\Regular\HeldReponsibilityController;
 use App\Http\Controllers\V1\Student\Regular\PassportController;
+use App\Http\Controllers\V1\Student\Regular\PDFController;
 use App\Http\Controllers\V1\Student\Regular\ExaminationCategoryController;
 use App\Http\Controllers\V1\Student\Regular\ExaminationCenterDataController;
 use App\Http\Controllers\V1\Student\Regular\ExaminationSubjectController;
@@ -50,8 +51,11 @@ use App\Http\Controllers\V1\Student\Regular\RequiredDocumentDataController;
         Route::apiResource('required-document-data', RequiredDocumentDataController::class);
         Route::apiResource('examination-center-data', ExaminationCenterDataController::class);
         Route::group(['prefix' => 'registered-course-subjects', 'middleware' => ['verify.regular.registeration.payment', 'verify.regular.id.number','verify.regular.is.course.registered']], function() {
-            Route::apiResource('/', RegisterCourseSubjectController::class);
+            Route::get('/', [RegisterCourseSubjectController::class, 'index']);
+            Route::post('/', [RegisterCourseSubjectController::class, 'store']);
+            Route::delete('/{id}', [RegisterCourseSubjectController::class, 'destroy']);
             Route::post('/autofill', [RegisterCourseSubjectController::class, 'autoFillCourses']);
+            Route::get('/generate/pdf', [PDFController::class, 'generateCourseRegisteration']);
         });
         
         Route::get('marital-statuses', [MaritalStatusController::class, 'index']);

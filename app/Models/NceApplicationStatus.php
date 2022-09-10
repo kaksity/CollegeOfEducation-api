@@ -16,4 +16,8 @@ class NceApplicationStatus extends Model
     {
         return $this->belongsTo(User::class,'user_id');
     }
+    public function nceSession()
+    {
+        return $this->belongsTo(NceAcademicSession::class, 'academic_session_id');
+    }
 }
