@@ -30,6 +30,8 @@ use App\Http\Controllers\V1\Applicant\Regular\RequiredDocumentDataController;
         Route::post('login',[AuthController::class,'login']);
         Route::post('register', [AuthController::class,'register']);
         Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
+        Route::post('forgot-password/request', [AuthController::class, 'requestPasswordVerification']);
+        Route::post('forgot-password/verify', [AuthController::class, 'verifyPasswordVerificationCode']);
     });
     
     Route::group(['prefix' => 'regular'], function() {
