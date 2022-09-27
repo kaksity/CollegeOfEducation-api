@@ -6,14 +6,14 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use App\Models\NceApplicationPayment;
+use App\Models\AdmissionPayment;
 use Exception;
 
-class VerifyNceApplicationPayment
+class VerifyAdmissionPayment
 {
-    public function __construct(NceApplicationPayment $NceApplicationPayment)
+    public function __construct(AdmissionPayment $AdmissionPayment)
     {
-        $this->NceApplicationPayment = $NceApplicationPayment;
+        $this->AdmissionPayment = $AdmissionPayment;
     }
     /**
      * Handle an incoming request.
@@ -26,14 +26,14 @@ class VerifyNceApplicationPayment
     {
         try
         {
-            $payment = $this->NceApplicationPayment->where([
+            $payment = $this->AdmissionPayment->where([
                 'user_id' => Auth::id(),
             ])->first();
             
             if($payment == null)
             {
-                $data['message'] = 'Applicant is yet to pay application fee';
-                $data['error_code'] = 'APPLICATION_PAYMENT_ERROR';
+                $data['message'] = 'Applicant is yet to pay admission fee';
+                $data['error_code'] = 'ADMISSION_PAYMENT_ERROR';
                 return errorParser($data, 403);
             }
             else if ($payment->status != 'paid')
@@ -50,8 +50,8 @@ class VerifyNceApplicationPayment
                 $responseData = json_decode($response->body());
                 if($responseData->ResponseCode != '00')
                 {
-                    $data['message'] = 'Applicant is yet to pay application fee';
-                    $data['error_code'] = 'APPLICATION_PAYMENT_ERROR';
+                    $data['message'] = 'Applicant is yet to pay admission fee';
+                    $data['error_code'] = 'ADMISSION_PAYMENT_ERROR';
                     return errorParser($data, 403);
                 }
     

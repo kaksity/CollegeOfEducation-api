@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\V1\Applicant\AuthController;
 use App\Http\Controllers\V1\Applicant\Regular\ApplicantController;
-use App\Http\Controllers\V1\Applicant\Regular\ApplicationPaymentController;
+use App\Http\Controllers\V1\Applicant\Regular\PaymentController;
 use App\Http\Controllers\V1\Applicant\Regular\ApplicationStatusController;
 use App\Http\Controllers\V1\Applicant\Regular\CertificateController;
 use App\Http\Controllers\V1\Applicant\Regular\ContactDataController;
@@ -38,7 +38,8 @@ use App\Http\Controllers\V1\Applicant\Regular\RequiredDocumentDataController;
         Route::get('course-groups', [CourseGroupController::class, 'index']);
     });
     Route::group(['prefix' => 'regular', 'middleware' => ['auth:sanctum']], function() {
-        Route::post('/application-payments/initialize', [ApplicationPaymentController::class, 'initiatePayment']);
+        Route::post('/application-payments/initialize', [PaymentController::class, 'initiateApplicationPayment']);
+        Route::post('/admission-payments/initialize', [PaymentController::class, 'initiateAdmissionPayment']);
     });
 
     Route::group(['prefix'=>'regular','middleware' => ['auth:sanctum', 'verify.regular.application.payment']], function(){
@@ -57,7 +58,7 @@ use App\Http\Controllers\V1\Applicant\Regular\RequiredDocumentDataController;
         Route::apiResource('applicant-profiles', ApplicantController::class);
 
         Route::get('/submit-application-pdf', [PDFController::class, 'submitApplication']);
-        Route::get('/generate-admission-pdf', [PDFController::class, 'generateAdmissionLetter']);
+        Route::get('/generate-admission-pdf', [PDFController::class, 'generateAdmissionLetter'])->middleware('verify.regular.admission.payment');
 
 
         Route::get('marital-statuses', [MaritalStatusController::class, 'index']);

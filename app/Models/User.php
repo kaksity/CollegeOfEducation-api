@@ -111,4 +111,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(UsedCourseRegisterationPin::class, 'card_id');
     }
+    public function admissionPayments()
+    {
+        return $this->hasMany(AdmissionPayment::class, 'user_id');
+    }
 }

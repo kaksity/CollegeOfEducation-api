@@ -27,6 +27,14 @@ class CourseGroup extends Model
     {
         return $this->hasMany(CourseGroup::class, 'course_group_id');
     }
+    public function admissionPayments()
+    {
+        return $this->hasMany(CourseGroup::class, 'course_group_id');
+    }
+    public function admissionSetPayments()
+    {
+        return $this->hasMany(CourseGroup::class, 'course_group_id');
+    }
 
     public function courseRegisterationCards()
     {

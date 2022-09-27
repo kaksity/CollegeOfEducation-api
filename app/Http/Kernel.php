@@ -64,6 +64,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'verify.regular.application.payment' => \App\Http\Middleware\VerifyNceApplicationPayment::class,
+        'verify.regular.admission.payment' => \App\Http\Middleware\VerifyAdmissionPayment::class,
         'verify.regular.registeration.payment' => \App\Http\Middleware\VerifyNceRegisterationPayment::class,
         'verify.regular.registeration.payment' => \App\Http\Middleware\VerifyNceRegisterationPayment::class,
         'verify.regular.is.course.registered' => \App\Http\Middleware\VerifyIsCourseRegistered::class,
