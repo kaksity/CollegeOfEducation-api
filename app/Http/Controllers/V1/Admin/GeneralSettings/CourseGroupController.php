@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1\Admin\GeneralSettings;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\Course\CourseResource;
+use App\Http\Resources\V1\CourseGroup\CourseGroupResource;
 use App\Models\CourseGroup;
 use Exception;
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ class CourseGroupController extends Controller
     public function index()
     {
         $courseGroups = $this->courseGroup->orderBy('name', 'ASC')->get();
-        return CourseResource::collection($courseGroups);
+        return CourseGroupResource::collection($courseGroups);
     }
 
     /**
@@ -41,12 +42,13 @@ class CourseGroupController extends Controller
                 throw new Exception('Course group record does not exit',404);
             }
 
-            $this->courseGroup->create([
+            $courseGroup = $this->courseGroup->create([
                 'code' => $request->code,
                 'name' => $request->name
             ]);
 
             $data['message'] = 'Course group record was created successfully';
+            $data['data'] = new CourseGroupResource($courseGroup);
             return successParser($data);
         }
         catch(Exception $ex)

@@ -49,8 +49,9 @@ class LgaController extends Controller
                 throw new Exception('State record does not exist',404);
             }
 
-            $this->lga->create($request->all());
+            $lga = $this->lga->create($request->all());
             $data['message'] = 'Lga record was created successfully';
+            $data['data'] = new LgaResource($lga);
             return successParser($data, 201);
         }
         catch(Exception $ex)

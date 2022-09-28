@@ -39,8 +39,9 @@ class ExaminationSubjectController extends Controller
     {
         try
         {
-            $this->examinationSubject->create($request->all());
+            $examinationSubject = $this->examinationSubject->create($request->all());
             $data['message'] = 'Examination Subject record was created successfully';
+            $data['data'] = new ExaminationSubjectResource($examinationSubject);
             return successParser($data, 201);
         }
         catch(Exception $ex)

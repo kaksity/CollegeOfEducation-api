@@ -36,8 +36,9 @@ class ExaminationCategoryController extends Controller
     {
         try
         {
-            $this->examinationCategory->create($request->all());
+            $examinationCategory = $this->examinationCategory->create($request->all());
             $data['message'] = 'Examination category record was created successfully';
+            $data['data'] = new ExaminationCategoryResource($examinationCategory);
             return successParser($data, 201);
         }
         catch(Exception $ex)
