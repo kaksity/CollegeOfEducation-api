@@ -48,7 +48,7 @@ class CourseSubjectController extends Controller
                 throw new Exception('Course does not exit', 404);
             }
             
-            $this->courseSubject->create([
+            $courseSubject = $this->courseSubject->create([
                 'course_code' => $request->course_code,
                 'course_title' => $request->course_title,
                 'course_unit' => $request->course_unit,
@@ -57,6 +57,7 @@ class CourseSubjectController extends Controller
             ]);
 
             $data['message'] = 'Course Subject was added successfully';
+            $data['data'] = new CourseSubjectResource($courseSubject);
             return successParser($data, 201);
         }
         catch(Exception $ex)

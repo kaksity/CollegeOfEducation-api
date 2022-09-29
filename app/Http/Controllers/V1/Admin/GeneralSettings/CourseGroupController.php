@@ -39,7 +39,7 @@ class CourseGroupController extends Controller
             $courseGroup = $this->courseGroup->find($request->name);
             if($courseGroup != null)
             {
-                throw new Exception('Course group record does not exit',404);
+                throw new Exception('Course group record already exit',400);
             }
 
             $courseGroup = $this->courseGroup->create([

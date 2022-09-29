@@ -41,11 +41,12 @@ class CourseController extends Controller
     {
         try
         {
-            $this->course->create([
+            $course = $this->course->create([
                 'name' => $request->name,
                 'course_group_id' => $request->course_group_id
             ]);
             $data['message'] = 'Course record was created successfully';
+            $data['data'] = new CourseResource($course);
             return successParser($data,201);
         }
         catch(Exception $ex)
