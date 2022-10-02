@@ -60,7 +60,7 @@ class RequiredDocumentDataController extends Controller
             $this->nceRequiredDocumentData->create([
                 'user_id' => Auth::id(),
                 'required_document_id' => $request->required_document_id,
-                'file_path' => $path
+                'file_path' => $fileNameToStore
             ]);
             $data['message'] = 'Required Document was uploaded successfully';
             return successParser($data, 201);

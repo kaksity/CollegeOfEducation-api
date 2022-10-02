@@ -36,7 +36,7 @@ class PDFController extends Controller
         $educationalBackgroundData = $applicant->nceEducationalBackground()->with(['certificate'])->get();
         $extraCurricularActivityData = $applicant->nceExtraCurricularActivityData;
         $heldResponsibilityData = $applicant->nceHeldResponsibilityData;
-        
+        $applicationStatus = $applicant->nceApplicationStatus()->with(['nceSession'])->first();   
         $courseData =  $applicant->nceCourseData()->with(['NceCourseDataFirstChoice', 'NceCourseDataSecondChoice', 'NceCourseDataThirdChoice'])->first();
         $examinationCenterData = $applicant->nceExaminationCenterData;
         $requiredDocumentData = $applicant->nceRequiredDocumentData()->with(['requiredDocument'])->get();
@@ -52,6 +52,7 @@ class PDFController extends Controller
            'employmentData' => $employmentData,
            'requiredDocumentData' => $requiredDocumentData,
            'extraCurricularActivityData' => $extraCurricularActivityData,
+           'applicationStatus' => $applicationStatus,
            'heldResponsibilityData' => $heldResponsibilityData
         ];
         

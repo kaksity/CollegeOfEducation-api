@@ -96,7 +96,7 @@ class RegistrationPaymentController extends Controller
 
                 if($nceCoursePayment == null)
                 {
-                    throw new Exception('Nce Course Payment has not been set', 404);
+                    throw new Exception('Course Payment has not been set', 404);
                 }
                 
                 $currentSession = $this->nceAcademicSession->getCurrentSession($courseData->course_group_id);
