@@ -181,6 +181,10 @@
                             <b>Nationality</b>
                             <div>{{ $personalData->nationality }}</div>
                         </td>
+                        <td>
+                            <b>Application Tracking Code</b>
+                            <div>{{ $applicationStatus->admission_number }}</div>
+                        </td>
                     </tr>
                 </tbody>
             </table>

@@ -92,8 +92,8 @@ class Kernel extends HttpKernel
         \Illuminate\Contracts\Session\Middleware\AuthenticatesSessions::class,
         \Illuminate\Routing\Middleware\SubstituteBindings::class,
         \Illuminate\Auth\Middleware\Authorize::class,
-        \App\Http\Middleware\VerifyIsCourseRegistered::class,
-        \App\Http\Middleware\VerifyNceIdNumberSet::class,
         \App\Http\Middleware\VerifyNceRegisterationPayment::class,
+        \App\Http\Middleware\VerifyNceIdNumberSet::class,
+        \App\Http\Middleware\VerifyIsCourseRegistered::class,
     ];
 }

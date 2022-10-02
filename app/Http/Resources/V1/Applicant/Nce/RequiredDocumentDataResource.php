@@ -18,7 +18,7 @@ class RequiredDocumentDataResource extends JsonResource
         return [
             'id' => $this->id,
             'required_document' => new RequiredDocumentResource($this->requiredDocument),
-            'file_path' => env('APP_URL')."/".$this->file_path,
+            'file_path' => env('APP_URL')."/storage/reqdocs/".$this->file_path,
         ];
     }
 }
