@@ -47,10 +47,10 @@ class VerifyNceRegisterationPayment
             else if ($payment->status != 'paid')
             {
                 $merchantCode = env('INTERSWITCH_MERCHANT_CODE');
+                $url = env('INTERSWITCH_PAYMENT_URL');
                 $referenceCode = $payment->reference_code;
                 $amount = $payment->amount * 100;
-                $url = "https://qa.interswitchng.com/collections/api/v1/gettransaction.json?merchantcode=$merchantCode&transactionreference=$referenceCode&amount=$amount";
-                // $url = "https://qa.interswitchng.com/collections/api/v1/gettransaction.json?merchantCode=$merchantCode&transactionReference=$referenceCode&amount=$amount";
+                $url = "$url/gettransaction.json?merchantcode=$merchantCode&transactionreference=$referenceCode&amount=$amount";
                 $response = Http::withHeaders([
                     'Content-Type' => 'application/json',
                 ])->get($url);
