@@ -37,7 +37,7 @@ class StateController extends Controller
     {
         try
         {
-            $state = $this->state->create($request->all());
+            $state = $this->state->create($request->safe()->all());
             $data['message'] = 'State record was created successully';
             $data['data'] = new StateResource($state);
             return successParser($data,201);

@@ -16,6 +16,8 @@ return new class extends Migration
         Schema::create('nce_course_payments', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('course_id')->index();
+            $table->boolean('is_indigine')->default(false);
+            $table->string('year_group');
             $table->decimal('amount');
             $table->softDeletes();
             $table->timestamps();

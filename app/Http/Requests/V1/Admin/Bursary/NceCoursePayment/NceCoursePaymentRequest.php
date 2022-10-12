@@ -24,7 +24,9 @@ class NceCoursePaymentRequest extends BaseFormRequest
         {
             $rules += [
                 'course_id' => ['required', 'uuid'],
-                'amount' => ['required', 'numeric']
+                'amount' => ['required', 'numeric'],
+                'is_indigine' => ['required', 'boolean'],
+                'year_group' => ['required', 'string']
             ];
         }
         if($this->getMethod() == 'PUT')

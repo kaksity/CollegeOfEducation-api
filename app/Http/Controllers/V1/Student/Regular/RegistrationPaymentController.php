@@ -90,10 +90,15 @@ class RegistrationPaymentController extends Controller
                 $contactData = Auth::user()->nceContactData()->first();                
                 $courseData = Auth::user()->nceCourseData()->first();
                 
+                if($personalData->state == null)
+                {
+                    throw new Exception('State of Origin must be set', 400);
+                }
                 $nceCoursePayment = $this->nceCoursePayment->where([
-                    'course_id' => $courseData->admitted_course_id
+                    'course_id' => $courseData->admitted_course_id,
+                    'year_group' => $courseData->year_group,
+                    'is_indigine' => $personalData->state->is_default_state
                 ])->first();
-
                 if($nceCoursePayment == null)
                 {
                     throw new Exception('Course Payment has not been set', 404);

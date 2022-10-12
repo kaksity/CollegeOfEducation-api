@@ -24,7 +24,8 @@ class ReturningStudentRequest extends BaseFormRequest
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
                 'course_group_id' => ['required', 'uuid'],
                 'course_id' => ['required', 'uuid'],
-                'id_number' => ['required', 'string']
+                'id_number' => ['required', 'string'],
+                'year_group' => ['required', 'string']
             ];
         }
         return $rules;

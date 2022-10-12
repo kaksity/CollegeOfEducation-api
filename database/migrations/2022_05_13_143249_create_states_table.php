@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('states', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name')->nullable();
+            $table->boolean('is_default_state')->default(false);
             $table->softDeletes();
             $table->timestamps();
         });

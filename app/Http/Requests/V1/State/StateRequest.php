@@ -17,6 +17,7 @@ class StateRequest extends BaseFormRequest
         if($this->getMethod() == 'POST' || $this->getMethod() == 'PUT')
         {
             $rules += [
+                'is_default_state' => ['required', 'boolean'],
                 'name' => ['required']
             ];
         }

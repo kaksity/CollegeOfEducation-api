@@ -48,14 +48,19 @@ class NceCoursePaymentController extends Controller
 
             $nceCoursePayment = $this->nceCoursePayment->where([
                 'course_id' => $request->course_id,
+                'is_indigine' => $request->is_indigine,
+                'year_group' => $request->year_group
             ])->first();
+            
             if($nceCoursePayment != null)
             {
                 throw new Exception('Nce Course Payment record has already been created', 400);
             }
             $this->nceCoursePayment->create([
                 'course_id' => $request->course_id,
-                'amount' => $request->amount
+                'amount' => $request->amount,
+                'year_group' => $request->year_group,
+                'is_indigine' => $request->is_indigine
             ]);
 
             $data['message'] = 'Nce Course Payment record was created successfully';

@@ -44,7 +44,8 @@ class CourseGroupController extends Controller
 
             $courseGroup = $this->courseGroup->create([
                 'code' => $request->code,
-                'name' => $request->name
+                'name' => $request->name,
+                'number_of_years' => $request->number_of_years
             ]);
 
             $data['message'] = 'Course group record was created successfully';

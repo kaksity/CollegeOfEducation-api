@@ -18,6 +18,8 @@ class NceCoursePaymentResource extends JsonResource
         return [
             'id' => $this->id,
             'course' => new CourseResource($this->nceCourse),
+            'is_indigine' => $this->is_indigine,
+            'year_group' => $this->year_group,
             'amount' => $this->amount,
         ];
     }

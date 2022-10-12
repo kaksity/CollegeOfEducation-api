@@ -16,6 +16,8 @@ class CourseGroupResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'number_of_years' => $this->number_of_years,
+            'code' => $this->code,
             'name' => $this->name
         ];
     }

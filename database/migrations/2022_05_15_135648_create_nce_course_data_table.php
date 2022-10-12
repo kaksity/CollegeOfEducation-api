@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('nce_course_data', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
+            $table->string('year_group')->nullable();
             $table->uuid('course_group_id')->index();
             $table->uuid('first_choice_course_id')->index()->nullable();
             $table->uuid('second_choice_course_id')->index()->nullable();

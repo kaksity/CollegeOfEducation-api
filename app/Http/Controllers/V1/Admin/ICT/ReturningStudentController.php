@@ -82,6 +82,7 @@ class ReturningStudentController extends Controller
                 ]);
                 $this->NceCourseData->create([
                     'user_id' => $user->id,
+                    'year_group' => $request->year_group,
                     'course_group_id' => $request->course_group_id,
                     'admitted_course_id' => $request->course_id,
                 ]);
