@@ -75,6 +75,7 @@ class ReturningStudentController extends Controller
                     'user_id' => $user->id,
                     'surname' => $request->surname,
                     'other_names' => $request->other_names,
+                    'state_id' => $request->state_id
                 ]);
                 $this->NceContactData->create([
                     'user_id' => $user->id,
@@ -90,7 +91,8 @@ class ReturningStudentController extends Controller
                 $this->NceApplicationStatus->create([
                     'user_id' => $user->id,
                     'status' => 'admitted',
-                    'academic_session_id' => $currentSession->id 
+                    'academic_session_id' => $currentSession->id,
+                    'is_new_applicant' => false,
                 ]);
                 $this->NcePassport->create([
                     'user_id' => $user->id

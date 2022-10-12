@@ -58,9 +58,9 @@ use App\Http\Controllers\V1\Applicant\Regular\RequiredDocumentDataController;
         Route::apiResource('applicant-profiles', ApplicantController::class);
 
         Route::get('/submit-application-pdf', [PDFController::class, 'submitApplication']);
-        Route::get('/generate-admission-pdf', [PDFController::class, 'generateAdmissionLetter'])->middleware('verify.regular.admission.payment');
-
-
+        Route::get('/generate-admission-pdf', [PDFController::class, 'generateAdmissionLetter'])->middleware('verify.regular.admission.payment');        
+    });
+    Route::group(['prefix'=>'regular'],function() {
         Route::get('marital-statuses', [MaritalStatusController::class, 'index']);
         Route::get('required-documents', [RequiredDocumentController::class, 'index']);
         Route::get('states', [StateController::class, 'index']);
@@ -69,5 +69,4 @@ use App\Http\Controllers\V1\Applicant\Regular\RequiredDocumentDataController;
         Route::get('courses', [CourseController::class, 'index']);
         Route::get('examination-categories', [ExaminationCategoryController::class, 'index']);
         Route::get('examination-subjects', [ExaminationSubjectController::class, 'index']);
-        
     });

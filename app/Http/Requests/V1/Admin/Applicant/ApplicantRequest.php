@@ -27,6 +27,7 @@ class ApplicantRequest extends BaseFormRequest
             $rules += [
                 'admitted_course_id' => ['uuid'],
                 'status' => ['required', 'in:admitted,rejected'],
+                'year_group' => ['required', 'string']
             ];
         }
         return $rules;

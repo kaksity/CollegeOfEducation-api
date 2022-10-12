@@ -21,6 +21,7 @@ use App\Http\Controllers\V1\Admin\Bursary\NceCoursePaymentController;
 use App\Http\Controllers\V1\Admin\Bursary\NceRegisterationPaymentController;
 use App\Http\Controllers\V1\Admin\ICT\UploadStudentController;
 use App\Http\Controllers\V1\Admin\ICT\ReturningStudentController;
+use App\Http\Controllers\V1\Admin\ICT\StudentsController;
 
 Route::group(['prefix' => 'auth'],function(){
     Route::post('login',[AuthController::class,'login']);
@@ -64,6 +65,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verify.is.admin']], function() {
     Route::group(['prefix' => 'ict', 'middleware' => ['verify.is.ict.office']], function() {
         Route::apiResource('upload-students', UploadStudentController::class);
         Route::apiResource('returning-students', ReturningStudentController::class);
+        Route::apiResource('students', StudentsController::class);
     });
 });
 

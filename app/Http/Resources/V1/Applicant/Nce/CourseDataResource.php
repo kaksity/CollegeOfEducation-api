@@ -18,6 +18,7 @@ class CourseDataResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'year_group' => $this->year_group,
             'course_group' => new CourseGroupResource($this->courseGroup),
             'first_choice_course' => $this->NceCourseDataFirstChoice == null ? null : new CourseResource($this->NceCourseDataFirstChoice),
             'second_choice_course' => $this->NceCourseDataSecondChoice == null ? null : new CourseResource($this->NceCourseDataSecondChoice),

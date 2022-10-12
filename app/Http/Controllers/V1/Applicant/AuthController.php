@@ -96,6 +96,7 @@ class AuthController extends Controller
                     'user_id' => $user->id,
                     'surname' => $request->surname,
                     'other_names' => $request->other_names,
+                    'state_id' => $request->state_id
                 ]);
                 $this->NceContactData->create([
                     'user_id' => $user->id,
@@ -109,6 +110,7 @@ class AuthController extends Controller
                 $this->NceApplicationStatus->create([
                     'user_id' => $user->id,
                     'status' => 'applying',
+                    'is_new_applicant' => true,
                     'academic_session_id' => $currentSession->id 
                 ]);
                 $this->NcePassport->create([

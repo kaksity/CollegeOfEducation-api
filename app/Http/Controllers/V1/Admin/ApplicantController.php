@@ -7,17 +7,19 @@ use App\Http\Requests\V1\Admin\Applicant\ApplicantRequest;
 use App\Http\Resources\V1\Admin\ApplicantDetailResource;
 use App\Http\Resources\V1\Admin\ApplicantListResource;
 use Illuminate\Http\Request;
-use App\Models\{User, NcePersonalData, NceApplicationStatus, NceCourseData};
+use App\Models\{NceAcademicSession, User, NcePersonalData, NceApplicationStatus, NceCourseData};
 use Exception;
+use Illuminate\Support\Facades\Auth;
 
 class ApplicantController extends Controller
 {
-    public function __construct(User $user, NcePersonalData $ncePersonalData, NceApplicationStatus $nceApplicationStatus, NceCourseData $nceCourseData)
+    public function __construct(User $user, NcePersonalData $ncePersonalData, NceApplicationStatus $nceApplicationStatus, NceCourseData $nceCourseData, NceAcademicSession $nceAcademicSession)
     {
         $this->user = $user;
         $this->ncePersonalData = $ncePersonalData;
         $this->nceApplicationStatus = $nceApplicationStatus;
         $this->nceCourseData = $nceCourseData;
+        $this->nceAcademicSession = $nceAcademicSession;
     }
     /**
      * Display a listing of the resource.
@@ -29,8 +31,22 @@ class ApplicantController extends Controller
         $perPage = $request->per_page;
         $status = $request->status;
         $courseGroup = $request->course_group_id ?? null;
-        $applicants = $this->nceCourseData->whereHas('user.nceApplicationStatus', fn($model) => $model->where('status', $status))->when($courseGroup, function($model, $courseGroup){
-            $model->where('course_group_id', $courseGroup);
+
+        $currentSession = $this->nceAcademicSession->getCurrentSession($courseGroup);
+        
+        if($currentSession == null)
+        {
+            throw new Exception('Current Academic Session for this course group has not been set', 400);
+        }
+        
+        $applicants = $this->nceCourseData->whereHas('user.nceApplicationStatus', fn($model) => $model->where([
+            'status' => $status,
+            'academic_session_id' => $currentSession->id,
+            'is_new_applicant' => true,
+        ]))->when($courseGroup, function($model, $courseGroup){
+            $model->where([
+                'course_group_id' => $courseGroup,
+            ]);
         })->latest()->paginate($perPage);
         return ApplicantListResource::collection($applicants);
     }
@@ -88,7 +104,10 @@ class ApplicantController extends Controller
                     'admitted_course_id' => $request->admitted_course_id
                 ]);
             }
-            
+            $this->nceCourseData->where('user_id', $id)->update([
+                'year_group' => $request->year_group
+            ]);
+
             $applicant->status = $request->status;
             $applicant->save();
             $data['message'] = 'Applicant Status has been updated successfully';

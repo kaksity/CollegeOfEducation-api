@@ -18,7 +18,8 @@ class RegisterRequest extends BaseFormRequest
             'other_names' => ['required', 'string', 'min:3'],
             'email_address' => ['required', 'email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'course_group_id' => ['required', 'uuid']
+            'course_group_id' => ['required', 'uuid'],
+            'state_id' => ['required', 'uuid']
         ];
     }
 }
