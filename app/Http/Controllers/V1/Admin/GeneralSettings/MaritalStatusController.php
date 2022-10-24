@@ -5,15 +5,13 @@ namespace App\Http\Controllers\V1\Admin\GeneralSettings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\MaritalStatus\MaritalStatusRequest;
 use App\Http\Resources\V1\MaritalStatus\MaritalStatusResource;
-use App\Models\MaritalStatus;
+use App\Services\Interfaces\MaritalStatusInterface;
 use Exception;
 
 class MaritalStatusController extends Controller
 {
-    public function __construct(MaritalStatus $maritalStatus)
-    {
-        $this->maritalStatus = $maritalStatus;
-    }
+    public function __construct(private MaritalStatusInterface $maritalStatusInterface)
+    {}
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +19,7 @@ class MaritalStatusController extends Controller
      */
     public function index()
     {
-        $maritalStatuses = $this->maritalStatus->latest()->get();
+        $maritalStatuses = $this->maritalStatusInterface->getAllMaritalStatus();
         return MaritalStatusResource::collection($maritalStatuses);
     }
 
@@ -36,9 +34,9 @@ class MaritalStatusController extends Controller
     {
         try
         {
-            $this->maritalStatus->create($request->all());
+            $this->maritalStatusInterface->createNewMaritalStatus($request->safe()->all());
             $data['message'] = 'Marital Status record was created successfully';
-            return successParser($data,201);
+            return successParser($data, 201);
         }
         catch(Exception $ex)
         {
@@ -59,15 +57,16 @@ class MaritalStatusController extends Controller
     {
         try
         {
-            $maritalStatus = $this->maritalStatus->find($id);
+            $maritalStatus = $this->maritalStatusInterface->getMaritalStatusById($id);
             
-            if($maritalStatus == null)
+            if ($maritalStatus == null)
             {
                 throw new Exception('Marital Status record does not exist',404);
             }
 
             $maritalStatus->name = $request->name;
-            $maritalStatus->save();
+            
+            $this->maritalStatusInterface->updateMaritalStatus($maritalStatus);
 
             $data['message'] = 'Marital Status record was updated successfully';
             return successParser($data);
@@ -90,14 +89,14 @@ class MaritalStatusController extends Controller
     {
         try
         {
-            $maritalStatus = $this->maritalStatus->find($id);
+            $maritalStatus = $this->maritalStatusInterface->getMaritalStatusById($id);
             
             if($maritalStatus == null)
             {
                 throw new Exception('Marital Status record does not exist',404);
             }
 
-            $maritalStatus->delete();
+            $this->maritalStatusInterface->deleteMaritalStatus($maritalStatus);
 
             $data['message'] = 'Marital Status record was deleted successfully';
             return successParser($data);
