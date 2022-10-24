@@ -5,18 +5,20 @@ namespace App\Http\Controllers\V1\Admin\GeneralSettings;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\Lga\LgaResource;
 use App\Http\Requests\V1\Lga\LgaRequest;
-use App\Models\{Lga, State};
+use App\Services\Interfaces\LgaServiceInterface;
+use App\Services\Interfaces\StateServiceInterface;
 use Exception;
 
 
 
 class LgaController extends Controller
 {
-    public function __construct(Lga $lga, State $state)
-    {
-        $this->lga = $lga;
-        $this->state = $state;
-    } 
+    public function __construct(
+        private LgaServiceInterface $lgaServiceInterface,
+        private StateServiceInterface $stateServiceInterface
+    )
+    {}
+
     /**
      * Display a listing of the resource.
      *
@@ -25,10 +27,7 @@ class LgaController extends Controller
     public function index(LgaRequest $request)
     {
         $stateId = $request->state_id;
-        
-        $lgas = $this->lga->when($stateId, function($model, $stateId) {
-            $model->where('state_id',$stateId);
-        })->orderBy('name','ASC')->get();
+        $lgas = $this->lgaServiceInterface->getAllLgas($stateId);
         return LgaResource::collection($lgas);
     }
 
@@ -42,14 +41,14 @@ class LgaController extends Controller
     {
         try
         {
-            $state = $this->state->find($request->state_id);
+            $state = $this->stateServiceInterface->getStateById($request->state_id);
             
             if($state == null)
             {
                 throw new Exception('State record does not exist',404);
             }
 
-            $lga = $this->lga->create($request->all());
+            $lga = $this->lgaServiceInterface->createNewLga($request->safe()->all());
             $data['message'] = 'Lga record was created successfully';
             $data['data'] = new LgaResource($lga);
             return successParser($data, 201);
@@ -58,7 +57,7 @@ class LgaController extends Controller
         {
             $data['message'] = $ex->getMessage();
             $code = $ex->getCode();
-            return errorParser($data,$code);
+            return errorParser($data, $code);
         }
     }
 
@@ -73,7 +72,7 @@ class LgaController extends Controller
     {
         try
         {
-            $lga = $this->lga->find($id);
+            $lga = $this->lgaServiceInterface->getLgaById($id);
             
             if($lga == null)
             {
@@ -81,10 +80,10 @@ class LgaController extends Controller
             }
 
             $lga->name = $request->name;
-            $lga->save();
+            $this->lgaServiceInterface->updateLga($lga);
 
             $data['message'] = 'Lga record was updated successfully';
-            return successParser($data, 201);
+            return successParser($data);
         }
         catch(Exception $ex)
         {
@@ -104,23 +103,23 @@ class LgaController extends Controller
     {
         try
         {
-            $lga = $this->lga->find($id);
+            $lga = $this->lgaServiceInterface->getLgaById($id);
             
             if($lga == null)
             {
                 throw new Exception('Lga record does not exist',404);
             }
 
-            $lga->delete();
+            $this->lgaServiceInterface->deleteLga($lga);
 
             $data['message'] = 'Lga record was deleted successfully';
-            return successParser($data, 201);
+            return successParser($data);
         }
         catch(Exception $ex)
         {
             $data['message'] = $ex->getMessage();
             $code = $ex->getCode();
-            return errorParser($data,$code);
+            return errorParser($data, $code);
         }
     }
 }

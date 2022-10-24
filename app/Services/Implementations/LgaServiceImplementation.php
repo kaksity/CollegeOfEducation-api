@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Services\Implementations;
+
+use App\Models\Lga;
+use App\Services\Interfaces\LgaServiceInterface;
+
+class LgaServiceImplementation implements LgaServiceInterface
+{
+    public function getAllLgas($stateId)
+    {
+        Lga::when($stateId, function ($model, $stateId) {
+            $model->where('state_id',$stateId);
+        })->orderBy('lga_name', 'ASC')->get();
+    }
+
+    public function createNewLga(array $data): void
+    {
+        Lga::create($data);
+    }
+
+    public function getLgaById($lgaId)
+    {
+        return Lga::where([
+            'id' => $lgaId
+        ])->first();
+    }
+
+    public function updateLga($lga): void
+    {
+        $lga->save();
+    }
+
+    public function deleteLga($lga): void
+    {
+        $lga->delete();
+    }
+}
