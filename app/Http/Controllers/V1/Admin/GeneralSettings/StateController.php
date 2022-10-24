@@ -6,13 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\State\StateRequest;
 use App\Http\Resources\V1\State\StateResource;
 use Exception;
-use Illuminate\Http\Request;
-use App\Models\State;
+use App\Services\Interfaces\StateServiceInterface;
+
 class StateController extends Controller
 {
-    public function __construct(State $state)
+    public function __construct(private StateServiceInterface $stateServiceInterface)
     {
-        $this->state = $state;
     }
     /**
      * Display a listing of the resource.
@@ -21,7 +20,7 @@ class StateController extends Controller
      */
     public function index()
     {
-        $states = $this->state->orderBy('name','ASC')->get();
+        $states = $this->stateServiceInterface->getAllStates();
         return StateResource::collection($states);
     }
 
@@ -37,10 +36,10 @@ class StateController extends Controller
     {
         try
         {
-            $state = $this->state->create($request->safe()->all());
-            $data['message'] = 'State record was created successully';
+            $state = $this->stateServiceInterface->createNewState($request->safe()->all());
+            $data['message'] = 'State record was created successfully';
             $data['data'] = new StateResource($state);
-            return successParser($data,201);
+            return successParser($data, 201);
         }
         catch(Exception $ex)
         {
@@ -58,8 +57,7 @@ class StateController extends Controller
      */
     public function show($id)
     {
-        $state = $this->state->find($id);
-        // dd($state);
+        $state = $this->stateServiceInterface->getStateById($id);
         return new StateResource($state);
     }
 
@@ -74,14 +72,14 @@ class StateController extends Controller
     {
         try
         {
-            $state = $this->state->find($id);
+            $state = $this->stateServiceInterface->getStateById($id);
             if($state == null)
             {
                 throw new Exception("State record does not exist",404);
             }
 
             $state->name = $request->name;
-            $state->save();
+            $this->stateServiceInterface->updateState($state);
             $data['message'] = 'State record was updated successfully';
             return successParser($data);
         }
@@ -103,13 +101,13 @@ class StateController extends Controller
     {
         try
         {
-            $state = $this->state->find($id);
+            $state = $this->stateServiceInterface->getStateById($id);
             if($state == null)
             {
                 throw new Exception("State record does not exist",404);
             }
 
-            $state->delete();
+            $this->stateServiceInterface->deleteState($state);
             $data['message'] = 'State record was deleted successfully';
             return successParser($data);
         }

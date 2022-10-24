@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Services\Implementations\CertificateServiceImplementation;
 use App\Services\Implementations\MaritalStatusImplementation;
+use App\Services\Implementations\StateServiceImplementation;
 use App\Services\Interfaces\CertificateServiceInterface;
 use App\Services\Interfaces\MaritalStatusInterface;
+use App\Services\Interfaces\StateServiceInterface;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 
@@ -21,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
         //
         App::bind(MaritalStatusInterface::class, MaritalStatusImplementation::class);
         App::bind(CertificateServiceInterface::class, CertificateServiceImplementation::class);
+        App::bind(StateServiceInterface::class, StateServiceImplementation::class);
     }
 
     /**
