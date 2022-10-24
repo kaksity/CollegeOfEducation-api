@@ -7,13 +7,13 @@ use App\Http\Requests\V1\Certificate\CertificateRequest;
 use App\Http\Resources\V1\Certificate\CertificateResource;
 use Illuminate\Http\Request;
 use App\Models\Certificate;
+use App\Services\Interfaces\CertificateServiceInterface;
 use Exception;
 
 class CertificateController extends Controller
 {
-    public function __construct(Certificate $certificate)
+    public function __construct(private CertificateServiceInterface $certificateServiceInterface)
     {
-        $this->certificate = $certificate;
     }
     /**
      * Display a listing of the resource.
@@ -22,8 +22,8 @@ class CertificateController extends Controller
      */
     public function index()
     {
-        $certificates = $this->certificate->latest()->get();
-        return CertificateResource::collection($certificates);        
+        $certificates = $this->certificateServiceInterface->getAllCertificates();
+        return CertificateResource::collection($certificates);
     }
 
     /**
@@ -36,10 +36,10 @@ class CertificateController extends Controller
     {
         try
         {
-            $this->certificate->create($request->all());
+            $this->certificateServiceInterface->createNewCertificate($request->safe()->all());
             return successParser([
                 'message' => 'Certificate record was created successfully'
-            ],201);
+            ], 201);
         }
         catch(Exception $ex)
         {
@@ -60,13 +60,13 @@ class CertificateController extends Controller
     {
         try
         {
-            $certificate = $this->certificate->find($id);
+            $certificate = $this->certificateServiceInterface->getCertificateById($id);
         
-            if($certificate == null){
-                throw new Exception('Certificate does not exist',404);
+            if ($certificate == null){
+                throw new Exception('Certificate does not exist', 404);
             }
             $certificate->name = $request->name;
-            $certificate->save();
+            $this->certificateServiceInterface->updateCertificate($certificate);
 
             return successParser([
                 'message' => 'Certificate record was updated successfully'
@@ -76,7 +76,7 @@ class CertificateController extends Controller
         {
             $data['message'] = $ex->getMessage();
             $code = $ex->getCode();
-            return errorParser($data,$code); 
+            return errorParser($data,$code);
         }
 
     }
@@ -91,13 +91,13 @@ class CertificateController extends Controller
     {
         try
         {
-            $certificate = $this->certificate->find($id);
+            $certificate = $this->certificateServiceInterface->getCertificateById($id);
         
-            if($certificate == null){
-                throw new Exception('Certificate does not exist',404);
+            if ($certificate == null) {
+                throw new Exception('Certificate does not exist', 404);
             }
 
-            $certificate->delete();
+            $this->certificateServiceInterface->deleteCertificate($certificate);
 
             return successParser([
                 'message' => 'Certificate record was deleted successfully'
@@ -107,7 +107,7 @@ class CertificateController extends Controller
         {
             $data['message'] = $ex->getMessage();
             $code = $ex->getCode();
-            return errorParser($data,$code); 
+            return errorParser($data,$code);
         }
     }
 }
