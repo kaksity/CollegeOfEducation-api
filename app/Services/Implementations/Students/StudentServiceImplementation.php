@@ -24,14 +24,24 @@ class StudentServiceImplementation implements StudentServiceInterface
     public function getStudentByEmailAddress($emailAddress)
     {
         return User::where([
-            'email_address' => $emailAddress
+            'email_address' => $emailAddress,
+            'role' => 'student'
         ])->first();
     }
 
     public function getStudentByIDNumber($idNumber)
     {
         return User::where([
-            'id_number' => $idNumber
+            'id_number' => $idNumber,
+            'role' => 'student'
+        ])->first();
+    }
+
+    public function getStudentById($studentId)
+    {
+        return User::where([
+            'id' => $studentId,
+            'role' => 'student'
         ])->first();
     }
 
@@ -84,5 +94,44 @@ class StudentServiceImplementation implements StudentServiceInterface
                 DB::rollBack();
                 throw $ex;
             }
+    }
+
+    public function getAllAdmittedStudents($perPage = 100)
+    {
+        return User::where('role', 'student')
+            ->with([
+                'ncePersonalData',
+                'nceCourseData'
+            ])
+            ->whereHas('nceApplicationStatus', fn($model) => $model->where([
+                'status' => 'admitted',
+            ]))->latest()->paginate($perPage);
+    }
+
+    public function searchStudentByEmailAddressOrIdNumber($emailAddressOrIdNumber, $perPage = 100)
+    {
+        return User::where('role', 'student')
+            ->with([
+                'ncePersonalData',
+                'nceCourseData'
+            ])
+            ->where('id_number', 'like', $emailAddressOrIdNumber.'%')
+            ->orWhere('email_address', 'like', $emailAddressOrIdNumber.'%')
+            ->whereHas('nceApplicationStatus', fn($model) => $model->where([
+                'status' => 'admitted',
+            ]))->latest()->paginate($perPage);
+    }
+    
+    public function uploadNewStudent($student)
+    {
+        $student->save();
+    }
+
+    public function getStudentByTrackingNumber($trackingNumber)
+    {
+        return NceApplicationStatus::where([
+            'admission_number' => $trackingNumber,
+            'status' => 'admitted'
+        ])->first();
     }
 }

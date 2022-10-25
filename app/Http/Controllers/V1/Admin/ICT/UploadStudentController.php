@@ -5,23 +5,19 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Admin\ICT\UploadStudentRequest;
 use App\Http\Resources\V1\Admin\ICT\UploadStudentResource;
 use App\Models\User;
+use App\Services\Interfaces\Students\StudentServiceInterface;
 use Exception;
 
 class UploadStudentController extends Controller
 {
-    public function __construct(NceApplicationStatus $nceApplicationStatus, User $user)
-    {
-        $this->nceApplicationStatus = $nceApplicationStatus;
-        $this->user = $user;
-    }
+    public function __construct(private StudentServiceInterface $studentServiceInterface)
+    {}
     public function index(UploadStudentRequest $request)
     {
         try
         {
-            $student = $this->nceApplicationStatus->where([
-                'admission_number' => $request->application_tracking_number,
-                'status' => 'admitted'
-            ])->first();
+            $student = $this->studentServiceInterface
+                            ->getStudentByTrackingNumber($request->application_tracking_number);
             if($student == null)
             {
                 throw new Exception('Student record does not exist', 404);
@@ -39,7 +35,7 @@ class UploadStudentController extends Controller
     {
         try
         {
-            $student = $this->user->find($id);
+            $student = $this->studentServiceInterface->getStudentById($id);
 
             if($student == null)
             {
@@ -51,9 +47,10 @@ class UploadStudentController extends Controller
                 throw new Exception('Student ID Number has already been set', 400);
             }
 
-            $student->update([
-                'id_number' => $request->id_number
-            ]);
+            $student->id_number = $request->id_number;
+            
+            $this->studentServiceInterface->uploadNewStudent($student);
+            
             $data['message'] = 'Student ID Number has been set successfully';
             return successParser($data);
         }
