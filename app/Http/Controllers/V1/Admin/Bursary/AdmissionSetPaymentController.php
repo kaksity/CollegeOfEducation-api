@@ -6,16 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Admin\Bursary\AdmissionSetPayment\AdmissionSetPaymentRequest;
 use App\Http\Resources\V1\Admin\Bursary\AdmissionSetPaymentResource;
 use App\Models\AdmissionSetPayment;
+use App\Services\Interfaces\Bursary\AdmissionPaymentServiceInterface;
 use Illuminate\Http\Request;
 use Exception;
 
 class AdmissionSetPaymentController extends Controller
 {
 
-    public function __construct(AdmissionSetPayment $admissionSetPayment)
-    {
-        $this->admissionSetPayment = $admissionSetPayment;
-    }
+    public function __construct(private AdmissionPaymentServiceInterface $admissionPaymentServiceInterface)
+    {}
     /**
      * Display a listing of the resource.
      *
@@ -23,7 +22,7 @@ class AdmissionSetPaymentController extends Controller
      */
     public function index()
     {
-        $admissionSetPayment = $this->admissionSetPayment->latest()->get();
+        $admissionSetPayment = $this->admissionPaymentServiceInterface->getAllSetAdmissionPayments();
 
         return AdmissionSetPaymentResource::collection($admissionSetPayment);
     }
@@ -38,17 +37,14 @@ class AdmissionSetPaymentController extends Controller
     {
         try
         {
-            $admissionSetPayment = $this->admissionSetPayment->where('course_group_id', $request->course_group_id)->first();
+            $admissionSetPayment = $this->admissionPaymentServiceInterface->getSetAdmissionPaymentByCourseGroup($request->course_group_id);
 
             if($admissionSetPayment != null)
             {
                 throw new Exception('Admission set payment record already exist', 400);
             }
 
-            $this->admissionSetPayment->create([
-                'course_group_id' => $request->course_group_id,
-                'amount' => $request->amount
-            ]);
+            $this->admissionPaymentServiceInterface->createNewSetAdmissionPayments($request->safe()->all());
 
             $data['message'] = 'Admission set payment record was created successfully';
             return successParser($data, 201);
@@ -73,17 +69,17 @@ class AdmissionSetPaymentController extends Controller
     {
         try
         {
-            $admissionSetPayment = $this->admissionSetPayment->find($id);
+            $admissionSetPayment = $this->admissionPaymentServiceInterface->getSetAdmissionPaymentById($id);
 
             if($admissionSetPayment == null)
             {
                 throw new Exception('Admission set payment record does not exist', 404);
             }
 
-            $admissionSetPayment->update([
-                'course_group_id' => $request->course_group_id,
-                'amount' => $request->amount
-            ]);
+            $admissionSetPayment->course_group_id = $request->course_group_id;
+            $admissionSetPayment->amount = $request->amount;
+            
+            $this->admissionPaymentServiceInterface->updateSetAdmissionPayment($admissionSetPayment);
 
             $data['message'] = 'Admission set payment record was updated successfully';
             return successParser($data);
@@ -107,14 +103,14 @@ class AdmissionSetPaymentController extends Controller
     {
         try
         {
-            $admissionSetPayment = $this->admissionSetPayment->find($id);
-
+            $admissionSetPayment = $this->admissionPaymentServiceInterface->getSetAdmissionPaymentById($id);
+            
             if($admissionSetPayment == null)
             {
                 throw new Exception('Admission set payment record does not exist', 404);
             }
 
-            $admissionSetPayment->delete();
+            $this->admissionPaymentServiceInterface->deleteSetAdmissionPayment($admissionSetPayment);
             
             $data['message'] = 'Admission set payment record was deleted successfully';
 

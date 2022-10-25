@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Services\Implementations\Bursary\AdmissionPaymentServiceImplementation;
+use App\Services\Implementations\Bursary\ApplicationPaymentServiceImplementation;
+use App\Services\Implementations\Bursary\CoursePaymentServiceImplementation;
+use App\Services\Implementations\Bursary\CourseRegistrationCardServiceImplementation;
 use App\Services\Implementations\GeneralSettings\AcademicSessionServiceImplementation;
 use App\Services\Implementations\GeneralSettings\CertificateServiceImplementation;
 use App\Services\Implementations\GeneralSettings\CourseServiceImplementation;
@@ -13,6 +17,10 @@ use App\Services\Implementations\GeneralSettings\MaritalStatusImplementation;
 use App\Services\Implementations\GeneralSettings\RequiredDocumentServiceImplementation;
 use App\Services\Implementations\GeneralSettings\StateServiceImplementation;
 use App\Services\Implementations\Students\StudentServiceImplementation;
+use App\Services\Interfaces\Bursary\AdmissionPaymentServiceInterface;
+use App\Services\Interfaces\Bursary\ApplicationPaymentServiceInterface;
+use App\Services\Interfaces\Bursary\CoursePaymentServiceInterface;
+use App\Services\Interfaces\Bursary\CourseRegistrationCardServiceInterface;
 use App\Services\Interfaces\GeneralSettings\AcademicSessionServiceInterface;
 use App\Services\Interfaces\GeneralSettings\CertificateServiceInterface;
 use App\Services\Interfaces\GeneralSettings\CourseServiceInterface;
@@ -24,6 +32,7 @@ use App\Services\Interfaces\GeneralSettings\MaritalStatusInterface;
 use App\Services\Interfaces\GeneralSettings\RequiredDocumentServiceInterface;
 use App\Services\Interfaces\GeneralSettings\StateServiceInterface;
 use App\Services\Interfaces\Students\StudentServiceInterface;
+
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 
@@ -49,6 +58,10 @@ class AppServiceProvider extends ServiceProvider
         App::bind(AcademicSessionServiceInterface::class, AcademicSessionServiceImplementation::class);
 
         App::bind(StudentServiceInterface::class, StudentServiceImplementation::class);
+        App::bind(ApplicationPaymentServiceInterface::class, ApplicationPaymentServiceImplementation::class);
+        App::bind(AdmissionPaymentServiceInterface::class, AdmissionPaymentServiceImplementation::class);
+        App::bind(CoursePaymentServiceInterface::class, CoursePaymentServiceImplementation::class);
+        App::bind(CourseRegistrationCardServiceInterface::class, CourseRegistrationCardServiceImplementation::class);
     }
 
     /**

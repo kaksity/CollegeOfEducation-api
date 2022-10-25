@@ -6,16 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Admin\Bursary\NceCoursePayment\NceCoursePaymentRequest;
 use App\Http\Resources\V1\Admin\Bursary\NceCoursePaymentResource;
 use Exception;
-use Illuminate\Http\Request;
-use App\Models\{ NceCoursePayment, Course };
+use App\Services\Interfaces\Bursary\CoursePaymentServiceInterface;
+use App\Services\Interfaces\GeneralSettings\CourseServiceInterface;
 
-class NceCoursePaymentController extends Controller
+class CoursePaymentController extends Controller
 {
-    public function __construct(NceCoursePayment $nceCoursePayment, Course $course)
-    {
-        $this->nceCoursePayment = $nceCoursePayment;
-        $this->course = $course;
-    }
+    public function __construct(private CoursePaymentServiceInterface $coursePaymentServiceInterface, private CourseServiceInterface $courseServiceInterface)
+    {}
     /**
      * Display a listing of the resource.
      *
@@ -24,8 +21,8 @@ class NceCoursePaymentController extends Controller
     public function index(NceCoursePaymentRequest $request)
     {
         $perPage = $request->per_page ?? 20;
-        $nceCoursePayments = $this->nceCoursePayment->with(['nceCourse'])->latest()->paginate($perPage);
-        return NceCoursePaymentResource::collection($nceCoursePayments);
+        $coursePayments = $this->coursePaymentServiceInterface->getAllSetCoursePayments($perPage);
+        return NceCoursePaymentResource::collection($coursePayments);
     }
 
     /**
@@ -39,31 +36,24 @@ class NceCoursePaymentController extends Controller
         try
         {
             // Check if the course exist
-            $course = $this->course->find($request->course_id);
+            $course = $this->courseServiceInterface->getCourseById($request->course_id);
 
-            if($course == null)
+            if ($course == null)
             {
                 throw new Exception('Course Record does not exist', 404);
             }
 
-            $nceCoursePayment = $this->nceCoursePayment->where([
-                'course_id' => $request->course_id,
-                'is_indigine' => $request->is_indigine,
-                'year_group' => $request->year_group
-            ])->first();
+            $doesCoursePaymentExists = $this->coursePaymentServiceInterface
+                                            ->checkIfCoursePaymentAlreadyExists($request->safe()->all());
             
-            if($nceCoursePayment != null)
+            if ($doesCoursePaymentExists == true)
             {
-                throw new Exception('Nce Course Payment record has already been created', 400);
+                throw new Exception('Course Payment record has already been created', 400);
             }
-            $this->nceCoursePayment->create([
-                'course_id' => $request->course_id,
-                'amount' => $request->amount,
-                'year_group' => $request->year_group,
-                'is_indigine' => $request->is_indigine
-            ]);
 
-            $data['message'] = 'Nce Course Payment record was created successfully';
+            $this->coursePaymentServiceInterface->createNewSetCoursePayments($request->safe()->all());
+
+            $data['message'] = 'Course Payment record was created successfully';
             return successParser($data, 201);
         }
         catch(Exception $ex)
@@ -86,17 +76,17 @@ class NceCoursePaymentController extends Controller
     {
         try
         {
-            $nceCoursePayment = $this->nceCoursePayment->find($id);
+            $coursePayment = $this->coursePaymentServiceInterface->getSetCoursePaymentById($id);
 
-            if($nceCoursePayment == null)
+            if ($coursePayment == null)
             {
-                throw new Exception('Nce Course Payment record does not exist', 404);
+                throw new Exception('Course Payment record does not exist', 404);
             }
 
-            $nceCoursePayment->amount = $request->amount;
-            $nceCoursePayment->save();
+            $coursePayment->amount = $request->amount;
+            $this->coursePaymentServiceInterface->updateSetCoursePayment($coursePayment);
 
-            $data['message'] = 'Nce Course Payment record was updated successfully';
+            $data['message'] = 'Course Payment record was updated successfully';
             return successParser($data);
             
         }
@@ -117,16 +107,16 @@ class NceCoursePaymentController extends Controller
     {
         try
         {
-            $nceCoursePayment = $this->nceCoursePayment->find($id);
+            $coursePayment = $this->coursePaymentServiceInterface->getSetCoursePaymentById($id);
 
-            if($nceCoursePayment == null)
+            if($coursePayment == null)
             {
-                throw new Exception('Nce Course Payment record does not exist', 404);
+                throw new Exception('Course Payment record does not exist', 404);
             }
 
-            $nceCoursePayment->delete();
+            $this->coursePaymentServiceInterface->deleteSetCoursePayment($coursePayment);
 
-            $data['message'] = 'Nce Course Payment record was deleted successfully';
+            $data['message'] = 'Course Payment record was deleted successfully';
             return successParser($data);
             
         }

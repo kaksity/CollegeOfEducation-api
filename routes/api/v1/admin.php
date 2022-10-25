@@ -17,8 +17,8 @@ use App\Http\Controllers\V1\Admin\GeneralSettings\{
     RequiredDocumentController,
     StateController
 };
-use App\Http\Controllers\V1\Admin\Bursary\NceCoursePaymentController;
-use App\Http\Controllers\V1\Admin\Bursary\NceRegisterationPaymentController;
+use App\Http\Controllers\V1\Admin\Bursary\CoursePaymentController;
+use App\Http\Controllers\V1\Admin\Bursary\RegisterationPaymentController;
 use App\Http\Controllers\V1\Admin\ICT\UploadStudentController;
 use App\Http\Controllers\V1\Admin\ICT\ReturningStudentController;
 use App\Http\Controllers\V1\Admin\ICT\StudentsController;
@@ -48,21 +48,21 @@ Route::group(['middleware' => ['auth:sanctum', 'verify.is.admin']], function() {
 
     Route::get('dashboard',[DashboardController::class, 'index']);
 
-    Route::group(['prefix' => 'admission', 'middleware' => 'verify.is.admission.office'], function() {
+    Route::group(['prefix' => 'admission', 'middleware' => 'verify.is.admission.office'], function () {
         Route::group(['prefix' => 'regular'], function() {
             Route::apiResource('applicants', ApplicantController::class);
         });
     });
-    Route::group(['prefix'=> 'bursary', 'middleware' => ['verify.is.bursary.office']], function(){
-        Route::apiResource('course-payments', NceCoursePaymentController::class);
-        Route::apiResource('registeration-payments', NceRegisterationPaymentController::class);
+    Route::group(['prefix'=> 'bursary', 'middleware' => ['verify.is.bursary.office']], function () {
+        Route::apiResource('course-payments', CoursePaymentController::class);
+        Route::apiResource('registeration-payments', RegisterationPaymentController::class);
         Route::apiResource('applicant-set-payments', ApplicantSetPaymentController::class);
         Route::apiResource('admission-set-payments', AdmissionSetPaymentController::class);
         Route::apiResource('applicant-processed-payments', ApplicantProcessedPaymentController::class);
         Route::apiResource('course-registeration-pins', CourseRegisterationPinController::class);
     });
 
-    Route::group(['prefix' => 'ict', 'middleware' => ['verify.is.ict.office']], function() {
+    Route::group(['prefix' => 'ict', 'middleware' => ['verify.is.ict.office']], function () {
         Route::apiResource('upload-students', UploadStudentController::class);
         Route::apiResource('returning-students', ReturningStudentController::class);
         Route::apiResource('students', StudentsController::class);

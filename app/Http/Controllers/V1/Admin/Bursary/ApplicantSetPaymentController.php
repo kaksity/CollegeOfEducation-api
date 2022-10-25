@@ -6,16 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Admin\Bursary\ApplicantSetPayment\ApplicantSetPaymentRequest;
 use App\Http\Resources\V1\Admin\Bursary\ApplicantSetPaymentResource;
 use App\Models\ApplicantSetPayment;
+use App\Services\Interfaces\Bursary\ApplicationPaymentServiceInterface;
 use Exception;
 use Illuminate\Http\Request;
 
 class ApplicantSetPaymentController extends Controller
 {
 
-    public function __construct(ApplicantSetPayment $applicationSetPayment)
-    {
-        $this->applicationSetPayment = $applicationSetPayment;
-    }
+    public function __construct(private ApplicationPaymentServiceInterface $applicationPaymentServiceInterface)
+    {}
     /**
      * Display a listing of the resource.
      *
@@ -23,7 +22,7 @@ class ApplicantSetPaymentController extends Controller
      */
     public function index()
     {
-        $applicationSetPayments = $this->applicationSetPayment->latest()->get();
+        $applicationSetPayments = $this->applicationPaymentServiceInterface->getAllSetApplicationPayments();
 
         return ApplicantSetPaymentResource::collection($applicationSetPayments);
     }
@@ -38,17 +37,15 @@ class ApplicantSetPaymentController extends Controller
     {
         try
         {
-            $applicationSetPayment = $this->applicationSetPayment->find($request->course_group_id);
+            $applicationSetPayment = $this->applicationPaymentServiceInterface
+                                            ->getSetApplicationPaymentByCourseGroup($request->course_group_id);
 
             if($applicationSetPayment != null)
             {
                 throw new Exception('Applicant set payment record already exist', 400);
             }
 
-            $this->applicationSetPayment->create([
-                'course_group_id' => $request->course_group_id,
-                'amount' => $request->amount
-            ]);
+            $this->applicationPaymentServiceInterface->createNewSetApplicationPayments($request->safe()->all());
 
             $data['message'] = 'Applicant set payment record was created successfully';
             return successParser($data, 201);
@@ -73,17 +70,17 @@ class ApplicantSetPaymentController extends Controller
     {
         try
         {
-            $applicationSetPayment = $this->applicationSetPayment->find($id);
+            $applicationSetPayment = $this->applicationPaymentServiceInterface->getSetApplicationPaymentById($id);
 
             if($applicationSetPayment == null)
             {
                 throw new Exception('Applicant set payment record does not exist', 404);
             }
 
-            $applicationSetPayment->update([
-                'course_group_id' => $request->course_group_id,
-                'amount' => $request->amount
-            ]);
+            $applicationSetPayment->course_group_id = $request->course_group_id;
+            $applicationSetPayment->amount = $request->amount;
+
+            $this->applicationPaymentServiceInterface->updateSetApplicationPayment($applicationSetPayment);
 
             $data['message'] = 'Applicant set payment record was updated successfully';
             return successParser($data);
@@ -107,14 +104,14 @@ class ApplicantSetPaymentController extends Controller
     {
         try
         {
-            $applicationSetPayment = $this->applicationSetPayment->find($id);
+            $applicationSetPayment = $this->applicationPaymentServiceInterface->getSetApplicationPaymentById($id);
 
             if($applicationSetPayment == null)
             {
                 throw new Exception('Applicant set payment record does not exist', 404);
             }
 
-            $applicationSetPayment->delete();
+            $this->applicationPaymentServiceInterface->deleteSetApplicationPayment($applicationSetPayment);
             
             $data['message'] = 'Applicant set payment record was deleted successfully';
 

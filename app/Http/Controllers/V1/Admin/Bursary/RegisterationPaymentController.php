@@ -6,12 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\Admin\Bursary\NceRegisterationPaymentResource;
 use Illuminate\Http\Request;
 use App\Models\NceRegistrationPayment;
+use App\Services\Interfaces\Bursary\CoursePaymentServiceInterface;
 
-class NceRegisterationPaymentController extends Controller
+class RegisterationPaymentController extends Controller
 {
-    public function __construct(NceRegistrationPayment $nceRegistrationPayment)
+    public function __construct(private CoursePaymentServiceInterface $coursePaymentServiceInterface)
     {
-        $this->nceRegistrationPayment = $nceRegistrationPayment;
     }
     /**
      * Display a listing of the resource.
@@ -21,7 +21,8 @@ class NceRegisterationPaymentController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->per_page ?? 50;
-        $nceRegistrationPayments = $this->nceRegistrationPayment->with(['nceStudent.nceApplicationStatus', 'nceSession', 'nceCourse', 'nceStudent'])->latest()->paginate($perPage);
+
+        $nceRegistrationPayments = $this->coursePaymentServiceInterface->getAllProcessedRegisterationPayments($perPage);
         return NceRegisterationPaymentResource::collection($nceRegistrationPayments);
     }    
 }
