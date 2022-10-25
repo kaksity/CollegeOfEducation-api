@@ -5,16 +5,14 @@ namespace App\Http\Controllers\V1\Admin\GeneralSettings;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\Course\CourseResource;
 use App\Http\Resources\V1\CourseGroup\CourseGroupResource;
-use App\Models\CourseGroup;
+use App\Services\Interfaces\GeneralSettings\CourseGroupServiceInterface;
 use Exception;
 use Illuminate\Http\Request;
 
 class CourseGroupController extends Controller
 {
-    public function __construct(CourseGroup $courseGroup)
-    {
-        $this->courseGroup = $courseGroup;
-    }
+    public function __construct(private CourseGroupServiceInterface $courseGroupServiceInterface)
+    {}
     /**
      * Display a listing of the resource.
      *
@@ -22,7 +20,7 @@ class CourseGroupController extends Controller
      */
     public function index()
     {
-        $courseGroups = $this->courseGroup->orderBy('name', 'ASC')->get();
+        $courseGroups = $this->courseGroupServiceInterface->getAllCourseGroups();
         return CourseGroupResource::collection($courseGroups);
     }
 
@@ -36,17 +34,13 @@ class CourseGroupController extends Controller
     {
         try
         {
-            $courseGroup = $this->courseGroup->find($request->name);
+            $courseGroup = $this->courseGroupServiceInterface->getCourseGroupByName($request->name);
             if($courseGroup != null)
             {
                 throw new Exception('Course group record already exit',400);
             }
 
-            $courseGroup = $this->courseGroup->create([
-                'code' => $request->code,
-                'name' => $request->name,
-                'number_of_years' => $request->number_of_years
-            ]);
+            $courseGroup = $this->courseGroupServiceInterface->createNewCourseGroup($request->safe()->all());
 
             $data['message'] = 'Course group record was created successfully';
             $data['data'] = new CourseGroupResource($courseGroup);
@@ -70,13 +64,14 @@ class CourseGroupController extends Controller
     {
         try
         {
-            $courseGroup = $this->courseGroup->find($id);
+            $courseGroup = $this->courseGroupServiceInterface->getCourseGroupById($id);
+            
             if($courseGroup == null)
             {
                 throw new Exception('Course group record does not exit',404);
             }
 
-            $courseGroup->delete();
+            $this->courseGroupServiceInterface->deleteCourseGroup($courseGroup);
 
             $data['message'] = 'Course group record was deleted successfully';
             return successParser($data);

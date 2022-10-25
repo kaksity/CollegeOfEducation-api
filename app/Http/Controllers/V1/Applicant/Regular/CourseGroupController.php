@@ -3,17 +3,13 @@
 namespace App\Http\Controllers\V1\Applicant\Regular;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V1\Course\CourseResource;
-use App\Models\CourseGroup;
-use Exception;
-use Illuminate\Http\Request;
+use App\Http\Resources\V1\CourseGroup\CourseGroupResource;
+use App\Services\Interfaces\GeneralSettings\CourseGroupServiceInterface;
 
 class CourseGroupController extends Controller
 {
-    public function __construct(CourseGroup $courseGroup)
-    {
-        $this->courseGroup = $courseGroup;
-    }
+    public function __construct(private CourseGroupServiceInterface $courseGroupServiceInterface)
+    {}
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +17,7 @@ class CourseGroupController extends Controller
      */
     public function index()
     {
-        $courseGroups = $this->courseGroup->orderBy('name', 'ASC')->get();
-        return CourseResource::collection($courseGroups);
+        $courseGroups = $this->courseGroupServiceInterface->getAllCourseGroups();
+        return CourseGroupResource::collection($courseGroups);
     }
 }

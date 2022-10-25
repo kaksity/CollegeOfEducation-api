@@ -7,12 +7,12 @@ use App\Http\Requests\V1\State\StateRequest;
 use App\Http\Resources\V1\State\StateResource;
 use Exception;
 use Illuminate\Http\Request;
-use App\Models\State;
+use App\Services\Interfaces\GeneralSettings\StateServiceInterface;
+
 class StateController extends Controller
 {
-    public function __construct(State $state)
+    public function __construct(private StateServiceInterface $stateServiceInterface)
     {
-        $this->state = $state;
     }
     /**
      * Display a listing of the resource.
@@ -21,8 +21,7 @@ class StateController extends Controller
      */
     public function index()
     {
-        $states = $this->state->orderBy('name','ASC')->get();
+        $states = $this->stateServiceInterface->getAllStates();
         return StateResource::collection($states);
     }
-
 }
