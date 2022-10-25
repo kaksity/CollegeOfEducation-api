@@ -7,7 +7,7 @@ use App\Http\Requests\V1\Certificate\CertificateRequest;
 use App\Http\Resources\V1\Certificate\CertificateResource;
 use Illuminate\Http\Request;
 use App\Models\Certificate;
-use App\Services\Interfaces\CertificateServiceInterface;
+use App\Services\Interfaces\GeneralSettings\CertificateServiceInterface;
 use Exception;
 
 class CertificateController extends Controller

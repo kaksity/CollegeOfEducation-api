@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services\Implementations;
+namespace App\Services\Implementations\GeneralSettings;
 
 use App\Models\Lga;
-use App\Services\Interfaces\LgaServiceInterface;
+use App\Services\Interfaces\GeneralSettings\LgaServiceInterface;
 
 class LgaServiceImplementation implements LgaServiceInterface
 {

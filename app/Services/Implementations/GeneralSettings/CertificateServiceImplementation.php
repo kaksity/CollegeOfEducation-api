@@ -1,9 +1,9 @@
 <?php
-namespace App\Services\Implementations;
+namespace App\Services\Implementations\GeneralSettings;
 
 use App\Models\Certificate;
 use App\Models\MaritalStatus;
-use App\Services\Interfaces\CertificateServiceInterface;
+use App\Services\Interfaces\GeneralSettings\CertificateServiceInterface;
 
 class CertificateServiceImplementation implements CertificateServiceInterface
 {

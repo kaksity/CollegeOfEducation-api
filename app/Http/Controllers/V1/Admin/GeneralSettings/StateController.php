@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\State\StateRequest;
 use App\Http\Resources\V1\State\StateResource;
 use Exception;
-use App\Services\Interfaces\StateServiceInterface;
+use App\Services\Interfaces\GeneralSettings\StateServiceInterface;
 
 class StateController extends Controller
 {

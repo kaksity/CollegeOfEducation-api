@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Interfaces;
+namespace App\Services\Interfaces\GeneralSettings;
 
 interface AcademicSessionServiceInterface
 {
@@ -8,6 +8,7 @@ interface AcademicSessionServiceInterface
     public function getAllAcademicSession();
     public function checkIfAcademicSessionExists(array $data);
     public function getAllAcademicSessionByCourseGroup($courseGroupId);
+    public function getCurrentSessionByCourseGroupId($courseGroupId);
     public function getAcademicSessionById($academicSessionId);
     public function updateAcademicSession($academicSession);
     public function deleteAcademicSession($academicSession);

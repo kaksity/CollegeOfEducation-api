@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\ExaminationSubject\ExaminationSubjectRequest;
 use App\Http\Resources\V1\ExaminationSubject\ExaminationSubjectResource;
 use App\Models\ExaminationSubject;
-use App\Services\Interfaces\ExaminationSubjectServiceInterface;
+use App\Services\Interfaces\GeneralSettings\ExaminationSubjectServiceInterface;
 use Exception;
 use Illuminate\Http\Request;
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services\Implementations;
+namespace App\Services\Implementations\GeneralSettings;
 
 use App\Models\ExaminationSubject;
-use App\Services\Interfaces\ExaminationSubjectServiceInterface;
+use App\Services\Interfaces\GeneralSettings\ExaminationSubjectServiceInterface;
 
 class ExaminationSubjectServiceImplementation implements ExaminationSubjectServiceInterface
 {

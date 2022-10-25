@@ -5,8 +5,8 @@ namespace App\Http\Controllers\V1\Admin\GeneralSettings;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\Lga\LgaResource;
 use App\Http\Requests\V1\Lga\LgaRequest;
-use App\Services\Interfaces\LgaServiceInterface;
-use App\Services\Interfaces\StateServiceInterface;
+use App\Services\Interfaces\GeneralSettings\LgaServiceInterface;
+use App\Services\Interfaces\GeneralSettings\StateServiceInterface;
 use Exception;
 
 

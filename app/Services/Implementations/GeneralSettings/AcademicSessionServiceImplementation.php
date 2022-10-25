@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services\Implementations;
+namespace App\Services\Implementations\GeneralSettings;
 
 use App\Models\NceAcademicSession;
-use App\Services\Interfaces\AcademicSessionServiceInterface;
+use App\Services\Interfaces\GeneralSettings\AcademicSessionServiceInterface;
 
 class AcademicSessionServiceImplementation implements AcademicSessionServiceInterface
 {
@@ -51,4 +51,8 @@ class AcademicSessionServiceImplementation implements AcademicSessionServiceInte
         $academicSession->delete();
     }
 
+    public function getCurrentSessionByCourseGroupId($courseGroupId)
+    {
+        return NceAcademicSession::getCurrentSession($courseGroupId);
+    }
 }

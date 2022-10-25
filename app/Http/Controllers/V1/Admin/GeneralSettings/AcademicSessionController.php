@@ -6,8 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\AcademicSession\NceAcademicSessionRequest;
 use App\Http\Resources\V1\AcademicSession\NceAcademicSessionResource;
 use Illuminate\Http\Request;
-use App\Models\NceAcademicSession;
-use App\Services\Interfaces\AcademicSessionServiceInterface;
+use App\Services\Interfaces\GeneralSettings\AcademicSessionServiceInterface;
 use Exception;
 
 class AcademicSessionController extends Controller

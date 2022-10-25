@@ -7,7 +7,7 @@ use App\Http\Requests\V1\Course\CourseRequest;
 use App\Http\Resources\V1\Course\CourseResource;
 use Illuminate\Http\Request;
 
-use App\Services\Interfaces\CourseServiceInterface;
+use App\Services\Interfaces\GeneralSettings\CourseServiceInterface;
 use Exception;
 
 class CourseController extends Controller

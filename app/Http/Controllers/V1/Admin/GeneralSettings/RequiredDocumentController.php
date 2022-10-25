@@ -5,7 +5,7 @@ namespace App\Http\Controllers\V1\Admin\GeneralSettings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\RequiredDocument\RequiredDocumentRequest;
 use App\Http\Resources\V1\RequiredDocument\RequiredDocumentResource;
-use App\Services\Interfaces\RequiredDocumentServiceInterface;
+use App\Services\Interfaces\GeneralSettings\RequiredDocumentServiceInterface;
 use Exception;
 
 class RequiredDocumentController extends Controller

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services\Implementations;
+namespace App\Services\Implementations\GeneralSettings;
 
 use App\Models\Course;
-use App\Services\Interfaces\CourseServiceInterface;
+use App\Services\Interfaces\GeneralSettings\CourseServiceInterface;
 
 class CourseServiceImplementation implements CourseServiceInterface
 {

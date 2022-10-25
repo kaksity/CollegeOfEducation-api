@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services\Implementations;
+namespace App\Services\Implementations\GeneralSettings;
 
 use App\Models\RequiredDocument;
-use App\Services\Interfaces\RequiredDocumentServiceInterface;
+use App\Services\Interfaces\GeneralSettings\RequiredDocumentServiceInterface;
 
 class RequiredDocumentServiceImplementation implements RequiredDocumentServiceInterface
 {

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\V1\Admin\GeneralSettings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\MaritalStatus\MaritalStatusRequest;
 use App\Http\Resources\V1\MaritalStatus\MaritalStatusResource;
-use App\Services\Interfaces\MaritalStatusInterface;
+use App\Services\Interfaces\GeneralSettings\MaritalStatusInterface;
 use Exception;
 
 class MaritalStatusController extends Controller

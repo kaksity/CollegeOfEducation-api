@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\CourseSubject\CourseSubjectRequest;
 use App\Http\Resources\V1\CourseSubject\CourseSubjectResource;
 use Exception;
-use App\Services\Interfaces\CourseServiceInterface;
-use App\Services\Interfaces\CourseSubjectServiceInterface;
+use App\Services\Interfaces\GeneralSettings\CourseServiceInterface;
+use App\Services\Interfaces\GeneralSettings\CourseSubjectServiceInterface;
 
 class CourseSubjectController extends Controller
 {

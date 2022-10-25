@@ -5,7 +5,7 @@ namespace App\Http\Controllers\V1\Admin\GeneralSettings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\ExaminationCategory\ExaminationCategoryRequest;
 use App\Http\Resources\V1\ExaminationCategory\ExaminationCategoryResource;
-use App\Services\Interfaces\ExaminationCategoryServiceInterface;
+use App\Services\Interfaces\GeneralSettings\ExaminationCategoryServiceInterface;
 use Exception;
 
 class ExaminationCategoryController extends Controller

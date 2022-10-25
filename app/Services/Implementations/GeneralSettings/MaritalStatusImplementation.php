@@ -1,8 +1,8 @@
 <?php
-namespace App\Services\Implementations;
+namespace App\Services\Implementations\GeneralSettings;
 
 use App\Models\MaritalStatus;
-use App\Services\Interfaces\MaritalStatusInterface;
+use App\Services\Interfaces\GeneralSettings\MaritalStatusInterface;
 
 class MaritalStatusImplementation implements MaritalStatusInterface
 {

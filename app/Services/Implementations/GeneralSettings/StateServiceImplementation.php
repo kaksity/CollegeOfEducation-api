@@ -1,8 +1,8 @@
 <?php
-namespace App\Services\Implementations;
+namespace App\Services\Implementations\GeneralSettings;
 
 use App\Models\State;
-use App\Services\Interfaces\StateServiceInterface;
+use App\Services\Interfaces\GeneralSettings\StateServiceInterface;
 
 class StateServiceImplementation implements StateServiceInterface
 {
