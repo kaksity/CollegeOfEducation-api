@@ -6,15 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\ExaminationSubject\ExaminationSubjectRequest;
 use App\Http\Resources\V1\ExaminationSubject\ExaminationSubjectResource;
 use App\Models\ExaminationSubject;
+use App\Services\Interfaces\ExaminationSubjectServiceInterface;
 use Exception;
 use Illuminate\Http\Request;
 
 class ExaminationSubjectController extends Controller
 {
-    public function __construct(ExaminationSubject $examinationSubject)
-    {
-        $this->examinationSubject = $examinationSubject;
-    }
+    public function __construct(private ExaminationSubjectServiceInterface $examinationSubjectServiceInterface)
+    {}
+
     /**
      * Display a listing of the resource.
      *
@@ -23,9 +23,9 @@ class ExaminationSubjectController extends Controller
     public function index(ExaminationSubjectRequest $request)
     {
         $examinationCategoryId = $request->examination_category_id;
-        $examinationSubjects = $this->examinationSubject->when($examinationCategoryId, function($model, $examinationCategoryId) {
-            $model->where('examination_category_id', $examinationCategoryId);
-        })->orderBy('subject','ASC')->paginate($request->per_page);
+        $perPage = $request->per_page ?? 100;
+        $examinationSubjects = $this->examinationSubjectServiceInterface
+                                    ->getAllExaminationSubjects($examinationCategoryId, $perPage);
         return ExaminationSubjectResource::collection($examinationSubjects);
     }
 
@@ -39,7 +39,8 @@ class ExaminationSubjectController extends Controller
     {
         try
         {
-            $examinationSubject = $this->examinationSubject->create($request->all());
+            $examinationSubject = $this->examinationSubjectServiceInterface
+                                        ->createNewExaminationSubject($request->safe()->all());
             $data['message'] = 'Examination Subject record was created successfully';
             $data['data'] = new ExaminationSubjectResource($examinationSubject);
             return successParser($data, 201);
@@ -64,7 +65,7 @@ class ExaminationSubjectController extends Controller
     {
         try
         {
-            $examinationSubject = $this->examinationSubject->find($id);
+            $examinationSubject = $this->examinationSubjectServiceInterface->getExaminationSubjectById($id);
             if($examinationSubject == null)
             {
                 throw new Exception('Examination subject record does not exist', 404);
@@ -72,7 +73,7 @@ class ExaminationSubjectController extends Controller
          
             $examinationSubject->examination_category_id = $request->examination_category_id;
             $examinationSubject->subject = $request->subject;
-            $examinationSubject->save();
+            $this->examinationSubjectServiceInterface->updateExaminationSubject($examinationSubject);
 
             $data['message'] = 'Examination Subject record was updated successfully';
             return successParser($data, 200);
@@ -95,13 +96,13 @@ class ExaminationSubjectController extends Controller
     {
         try
         {
-            $examinationSubject = $this->examinationSubject->find($id);
+            $examinationSubject = $this->examinationSubjectServiceInterface->getExaminationSubjectById($id);
             if($examinationSubject == null)
             {
                 throw new Exception('Examination subject record does not exist', 404);
             }
             
-            $examinationSubject->delete();
+            $this->examinationSubjectServiceInterface->deleteExaminationSubject($examinationSubject);
 
             $data['message'] = 'Examination Subject record was deleted successfully';
             return successParser($data, 200);

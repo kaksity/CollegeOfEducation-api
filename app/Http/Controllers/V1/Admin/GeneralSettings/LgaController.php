@@ -26,7 +26,7 @@ class LgaController extends Controller
      */
     public function index(LgaRequest $request)
     {
-        $stateId = $request->state_id;
+        $stateId = $request->state_id ?? null;
         $lgas = $this->lgaServiceInterface->getAllLgas($stateId);
         return LgaResource::collection($lgas);
     }
@@ -46,7 +46,7 @@ class LgaController extends Controller
             if($state == null)
             {
                 throw new Exception('State record does not exist',404);
-            }
+            } 
 
             $lga = $this->lgaServiceInterface->createNewLga($request->safe()->all());
             $data['message'] = 'Lga record was created successfully';
@@ -76,7 +76,7 @@ class LgaController extends Controller
             
             if($lga == null)
             {
-                throw new Exception('Lga record does not exist',404);
+                throw new Exception('Lga record does not exist', 404);
             }
 
             $lga->name = $request->name;

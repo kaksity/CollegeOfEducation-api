@@ -5,16 +5,13 @@ namespace App\Http\Controllers\V1\Admin\GeneralSettings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\ExaminationCategory\ExaminationCategoryRequest;
 use App\Http\Resources\V1\ExaminationCategory\ExaminationCategoryResource;
-use App\Models\ExaminationCategory;
+use App\Services\Interfaces\ExaminationCategoryServiceInterface;
 use Exception;
-use Illuminate\Http\Request;
 
 class ExaminationCategoryController extends Controller
 {
-    public function __construct(ExaminationCategory $examinationCategory)
-    {
-        $this->examinationCategory = $examinationCategory;
-    }
+    public function __construct(private ExaminationCategoryServiceInterface $examinationCategoryServiceInterface)
+    {}
     /**
      * Display a listing of the resource.
      *
@@ -22,7 +19,8 @@ class ExaminationCategoryController extends Controller
      */
     public function index(ExaminationCategoryRequest $request)
     {
-        $examinationCategories = $this->examinationCategory->latest()->paginate($request->per_page);
+        $perPage = $request->per_page ?? 100;
+        $examinationCategories = $this->examinationCategoryServiceInterface->getAllExaminationCategories($perPage);
         return ExaminationCategoryResource::collection($examinationCategories);
     }
 
@@ -36,7 +34,8 @@ class ExaminationCategoryController extends Controller
     {
         try
         {
-            $examinationCategory = $this->examinationCategory->create($request->all());
+            $examinationCategory = $this->examinationCategoryServiceInterface
+                                        ->createNewExaminationCategory($request->safe()->all());
             $data['message'] = 'Examination category record was created successfully';
             $data['data'] = new ExaminationCategoryResource($examinationCategory);
             return successParser($data, 201);
@@ -60,14 +59,16 @@ class ExaminationCategoryController extends Controller
     {
         try
         {
-            $examinationCategory = $this->examinationCategory->find($id);
+            $examinationCategory = $this->examinationCategoryServiceInterface->getExaminationCategoryById($id);
 
             if($examinationCategory == null)
             {
                 throw new Exception('Examination category record does not exist', 404);
             }
             $examinationCategory->category = $request->category;
-            $examinationCategory->save();
+
+            $this->examinationCategoryServiceInterface->updateExaminationCategory($examinationCategory);
+
             $data['message'] = 'Examination category record was updated successfully';
             return successParser($data);
         }
@@ -89,13 +90,13 @@ class ExaminationCategoryController extends Controller
     {
         try
         {
-            $examinationCategory = $this->examinationCategory->find($id);
+            $examinationCategory = $this->examinationCategoryServiceInterface->getExaminationCategoryById($id);
 
             if($examinationCategory == null)
             {
                 throw new Exception('Examination category record does not exist', 404);
             }
-            $examinationCategory->delete();
+            $this->examinationCategoryServiceInterface->deleteExaminationCategory($examinationCategory);
             $data['message'] = 'Examination category record was deleted successfully';
             return successParser($data);
         }

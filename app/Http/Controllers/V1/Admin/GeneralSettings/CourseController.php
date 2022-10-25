@@ -7,14 +7,13 @@ use App\Http\Requests\V1\Course\CourseRequest;
 use App\Http\Resources\V1\Course\CourseResource;
 use Illuminate\Http\Request;
 
-use App\Models\{Course};
+use App\Services\Interfaces\CourseServiceInterface;
 use Exception;
 
 class CourseController extends Controller
 {
-    public function __construct(Course $course)
+    public function __construct(private CourseServiceInterface $courseServiceInterface)
     {
-        $this->course = $course;
     }
     /**
      * Display a listing of the resource.
@@ -23,10 +22,8 @@ class CourseController extends Controller
      */
     public function index(Request $request)
     {
-        $courseGroup = $request->course_group_id ?? null;
-        $courses = $this->course->when($courseGroup, function($model, $courseGroup) {
-            $model->where('course_group_id', $courseGroup);
-        })->latest()->get();
+        $courseGroupId = $request->course_group_id ?? null;
+        $courses = $this->courseServiceInterface->getAllCourses($courseGroupId);
         return CourseResource::collection($courses);
     }
 
@@ -41,19 +38,17 @@ class CourseController extends Controller
     {
         try
         {
-            $course = $this->course->create([
-                'name' => $request->name,
-                'course_group_id' => $request->course_group_id
-            ]);
+            $course = $this->courseServiceInterface->createNewCourse($request->safe()->all());
+
             $data['message'] = 'Course record was created successfully';
             $data['data'] = new CourseResource($course);
-            return successParser($data,201);
+            return successParser($data, 201);
         }
         catch(Exception $ex)
         {
             $data['message'] = $ex->getMessage();
             $code = $ex->getCode();
-            return errorParser($data,$code);
+            return errorParser($data, $code);
         }
     }
 
@@ -68,15 +63,16 @@ class CourseController extends Controller
     {
         try
         {
-            $course = $this->course->find($id);
+            $course = $this->courseServiceInterface->getCourseById($id);
             
-            if($course == null)
+            if ($course == null)
             {
                 throw new Exception('Course record does not exist',404);
             }
 
             $course->name = $request->name;
-            $course->save();
+
+            $this->courseServiceInterface->updateCourse($course);
 
             $data['message'] = 'Course record was updated successfully';
             return successParser($data);
@@ -85,7 +81,7 @@ class CourseController extends Controller
         {
             $data['message'] = $ex->getMessage();
             $code = $ex->getCode();
-            return errorParser($data,$code);
+            return errorParser($data, $code);
         }
     }
 
@@ -99,14 +95,14 @@ class CourseController extends Controller
     {
         try
         {
-            $course = $this->course->find($id);
+            $course = $this->courseServiceInterface->getCourseById($id);
             
             if($course == null)
             {
                 throw new Exception('Course record does not exist',404);
             }
 
-            $course->delete();
+            $this->courseServiceInterface->deleteCourse($course);
 
             $data['message'] = 'Course record was deleted successfully';
             return successParser($data);

@@ -6,15 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\CourseSubject\CourseSubjectRequest;
 use App\Http\Resources\V1\CourseSubject\CourseSubjectResource;
 use Exception;
-use Illuminate\Http\Request;
-use App\Models\{CourseSubject, Course};
+use App\Services\Interfaces\CourseServiceInterface;
+use App\Services\Interfaces\CourseSubjectServiceInterface;
 
 class CourseSubjectController extends Controller
 {
-    public function __construct(CourseSubject $courseSubject, Course $course)
+    public function __construct(
+        private CourseSubjectServiceInterface $courseSubjectServiceInterface,
+        private CourseServiceInterface $courseServiceInterface
+    )
     {
-        $this->courseSubject = $courseSubject;
-        $this->course = $course;
     }
     /**
      * Display a listing of the resource.
@@ -23,11 +24,9 @@ class CourseSubjectController extends Controller
      */
     public function index(CourseSubjectRequest $request)
     {
-        $course = $request->course_id;
+        $courseId = $request->course_id;
         $perPage = $request->per_page ?? 100;
-        $courseSubjects = $this->courseSubject->when($course, function($model, $course) {
-            $model->where('course_id', $course);
-        })->latest()->paginate($perPage);
+        $courseSubjects = $this->courseSubjectServiceInterface->getAllCourseSubjects($courseId, $perPage);
         return CourseSubjectResource::collection($courseSubjects);
     }
 
@@ -41,21 +40,14 @@ class CourseSubjectController extends Controller
     {
         try
         {
-            $course = $this->course->find($request->course_id);
+            $course = $this->courseServiceInterface->getCourseById($request->course_id);
 
-            if($course == null)
+            if ($course == null)
             {
                 throw new Exception('Course does not exit', 404);
             }
             
-            $courseSubject = $this->courseSubject->create([
-                'course_code' => $request->course_code,
-                'course_title' => $request->course_title,
-                'course_unit' => $request->course_unit,
-                'semester' => $request->semester,
-                'course_id' => $request->course_id
-            ]);
-
+            $courseSubject = $this->courseSubjectServiceInterface->createNewCourseSubject($request->safe()->all());
             $data['message'] = 'Course Subject was added successfully';
             $data['data'] = new CourseSubjectResource($courseSubject);
             return successParser($data, 201);
@@ -78,13 +70,13 @@ class CourseSubjectController extends Controller
     {
         try
         {
-            $courseSubject = $this->courseSubject->find($id);
+            $courseSubject = $this->courseSubjectServiceInterface->getCourseSubjectById($id);
 
             if($courseSubject == null)
             {
                 throw new Exception('Course Subject does not exit', 404);
             }
-            $courseSubject->delete();
+            $this->courseSubjectServiceInterface->deleteCourseSubject($courseSubject);
 
             $data['message'] = 'Course Subject was deleted successfully';
             return successParser($data);

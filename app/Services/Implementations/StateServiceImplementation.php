@@ -20,7 +20,7 @@ class StateServiceImplementation implements StateServiceInterface
 
     public function createNewState(array $data)
     {
-        State::create($data);
+        return State::create($data);
     }
 
     public function updateState($state)

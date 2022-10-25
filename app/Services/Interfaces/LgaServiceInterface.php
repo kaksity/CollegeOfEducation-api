@@ -6,7 +6,7 @@ interface LgaServiceInterface
 {
     public function getAllLgas($stateId);
 
-    public function createNewLga(array $data): void;
+    public function createNewLga(array $data);
 
     public function getLgaById($lgaId);
 

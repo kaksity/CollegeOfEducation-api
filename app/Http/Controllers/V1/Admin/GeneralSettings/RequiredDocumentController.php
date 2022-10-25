@@ -5,14 +5,13 @@ namespace App\Http\Controllers\V1\Admin\GeneralSettings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\RequiredDocument\RequiredDocumentRequest;
 use App\Http\Resources\V1\RequiredDocument\RequiredDocumentResource;
-use App\Models\RequiredDocument;
+use App\Services\Interfaces\RequiredDocumentServiceInterface;
 use Exception;
 
 class RequiredDocumentController extends Controller
 {
-    public function __construct(RequiredDocument $requiredDocument)
+    public function __construct(private RequiredDocumentServiceInterface $requiredDocumentServiceInterface)
     {
-        $this->requiredDocument = $requiredDocument;
     }
     /**
      * Display a listing of the resource.
@@ -21,8 +20,8 @@ class RequiredDocumentController extends Controller
      */
     public function index()
     {
-        $requiredDocuments = $this->requiredDocument->latest()->get();
-        return RequiredDocumentResource::collection($requiredDocuments);        
+        $requiredDocuments = $this->requiredDocumentServiceInterface->getAllRequiredDocuments();
+        return RequiredDocumentResource::collection($requiredDocuments);
     }
 
     /**
@@ -35,16 +34,16 @@ class RequiredDocumentController extends Controller
     {
         try
         {
-            $this->requiredDocument->create($request->all());
+            $this->requiredDocumentServiceInterface->createNewRequiredDocument($request->safe()->all());
             return successParser([
                 'message' => 'Required Document record was created successfully'
-            ],201);
+            ], 201);
         }
         catch(Exception $ex)
         {
             $data['message'] = $ex->getMessage();
             $code = $ex->getCode();
-            return errorParser($data,$code);
+            return errorParser($data, $code);
         }
     }
 
@@ -59,13 +58,16 @@ class RequiredDocumentController extends Controller
     {
         try
         {
-            $requiredDocument = $this->requiredDocument->find($id);
+            $requiredDocument = $this->requiredDocumentServiceInterface->getRequiredDocumentById($id);
         
-            if($requiredDocument == null){
+            if ($requiredDocument == null)
+            {
                 throw new Exception('Required Document does not exist',404);
             }
+
             $requiredDocument->name = $request->name;
-            $requiredDocument->save();
+            
+            $this->requiredDocumentServiceInterface->updateRequiredDocument($requiredDocument);
 
             return successParser([
                 'message' => 'Required Document record was updated successfully'
@@ -75,7 +77,7 @@ class RequiredDocumentController extends Controller
         {
             $data['message'] = $ex->getMessage();
             $code = $ex->getCode();
-            return errorParser($data,$code); 
+            return errorParser($data, $code);
         }
 
     }
@@ -90,13 +92,14 @@ class RequiredDocumentController extends Controller
     {
         try
         {
-            $requiredDocument = $this->requiredDocument->find($id);
+            $requiredDocument = $this->requiredDocumentServiceInterface->getRequiredDocumentById($id);
         
-            if($requiredDocument == null){
+            if ($requiredDocument == null)
+            {
                 throw new Exception('Required Document does not exist',404);
             }
 
-            $requiredDocument->delete();
+            $this->requiredDocumentServiceInterface->deleteRequiredDocument($requiredDocument);
 
             return successParser([
                 'message' => 'Required Document record was deleted successfully'
@@ -106,7 +109,7 @@ class RequiredDocumentController extends Controller
         {
             $data['message'] = $ex->getMessage();
             $code = $ex->getCode();
-            return errorParser($data,$code); 
+            return errorParser($data, $code);
         }
     }
 }

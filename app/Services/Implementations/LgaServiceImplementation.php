@@ -9,14 +9,14 @@ class LgaServiceImplementation implements LgaServiceInterface
 {
     public function getAllLgas($stateId)
     {
-        Lga::when($stateId, function ($model, $stateId) {
-            $model->where('state_id',$stateId);
-        })->orderBy('lga_name', 'ASC')->get();
+        return Lga::when($stateId, function ($model, $stateId) {
+            $model->where('state_id', $stateId);
+        })->orderBy('name', 'ASC')->get();
     }
 
-    public function createNewLga(array $data): void
+    public function createNewLga(array $data)
     {
-        Lga::create($data);
+        return Lga::create($data);
     }
 
     public function getLgaById($lgaId)

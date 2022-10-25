@@ -7,14 +7,13 @@ use App\Http\Requests\V1\AcademicSession\NceAcademicSessionRequest;
 use App\Http\Resources\V1\AcademicSession\NceAcademicSessionResource;
 use Illuminate\Http\Request;
 use App\Models\NceAcademicSession;
+use App\Services\Interfaces\AcademicSessionServiceInterface;
 use Exception;
 
 class AcademicSessionController extends Controller
 {
-    public function __construct(NceAcademicSession $nceAcademicSession)
-    {
-        $this->nceAcademicSession = $nceAcademicSession;
-    }
+    public function __construct(private AcademicSessionServiceInterface $academicSessionServiceInterface)
+    {}
     /**
      * Display a listing of the resource.
      *
@@ -22,11 +21,19 @@ class AcademicSessionController extends Controller
      */
     public function index(NceAcademicSessionRequest $request)
     {
-        $courseGroup = $request->course_group_id ?? null;
-        $nceAcademicSessions = $this->nceAcademicSession->when($courseGroup, function($model, $courseGroup) {
-            $model->where('course_group_id', $courseGroup);
-        })->latest()->get();
-        return NceAcademicSessionResource::collection($nceAcademicSessions);
+        $courseGroupId = $request->course_group_id ?? null;
+        $academicSessions = [];
+
+        if ($courseGroupId == null)
+        {
+            $academicSessions = $this->academicSessionServiceInterface->getAllAcademicSession();
+        }
+        else
+        {
+            $academicSessions = $this->academicSessionServiceInterface
+                                    ->getAllAcademicSessionByCourseGroup($courseGroupId);
+        }
+        return NceAcademicSessionResource::collection($academicSessions);
     }
 
     /**
@@ -39,21 +46,15 @@ class AcademicSessionController extends Controller
     {
         try
         {
-            $nceAcademicSession = $this->nceAcademicSession->where([
-                'course_group_id' => $request->course_group_id,
-                'start_year' => $request->start_year,
-                'end_year' => $request->end_year
-            ])->first();
-            if($nceAcademicSession != null)
+            $doesAcademicSessionExists = $this->academicSessionServiceInterface
+                                                ->checkIfAcademicSessionExists($request->safe()->all());
+            
+            if($doesAcademicSessionExists == true)
             {
                 throw new Exception('Academic Session has been already been set', 400);
             }
-
-            $this->nceAcademicSession->create([
-                'course_group_id' => $request->course_group_id,
-                'start_year' => $request->start_year,
-                'end_year' => $request->end_year
-            ]);
+            
+            $this->academicSessionServiceInterface->createNewAcademicSession($request->safe()->all());
             $data['message'] = 'Academic Session was created successfully';
 
             return successParser($data, 201);
@@ -76,14 +77,14 @@ class AcademicSessionController extends Controller
     {
         try
         {
-            $nceAcademicSession = $this->nceAcademicSession->find($id);
+            $nceAcademicSession = $this->academicSessionServiceInterface->getAcademicSessionById($id);
 
             if($nceAcademicSession == null)
             {
                 throw new Exception('Academic Session does not exist', 404);
             }
 
-            $nceAcademicSession->delete();
+            $this->academicSessionServiceInterface->deleteAcademicSession($nceAcademicSession);
             $data['message'] = 'Academic Session was deleted successfully';
 
             return successParser($data, 200);
