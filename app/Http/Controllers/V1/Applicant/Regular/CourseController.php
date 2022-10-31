@@ -8,14 +8,14 @@ use App\Http\Resources\V1\Course\CourseResource;
 use Illuminate\Http\Request;
 
 use App\Models\{Course};
+use App\Services\Interfaces\GeneralSettings\CourseServiceInterface;
 use Exception;
 
 class CourseController extends Controller
 {
-    public function __construct(Course $course)
-    {
-        $this->course = $course;
-    }
+    public function __construct(private CourseServiceInterface $courseServiceInterface)
+    {}
+
     /**
      * Display a listing of the resource.
      *
@@ -23,10 +23,9 @@ class CourseController extends Controller
      */
     public function index(Request $request)
     {
-        $courseGroup = $request->course_group ?? null;
-        $courses = $this->course->when($courseGroup, function($model, $courseGroup) {
-            $model->where('course_group_id', $courseGroup);
-        })->latest()->get();
+        $courseGroupId = $request->course_group ?? null;
+        
+        $courses = $this->courseServiceInterface->getAllCourses($courseGroupId);
         return CourseResource::collection($courses);
     }
 }

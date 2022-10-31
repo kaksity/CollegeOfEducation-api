@@ -8,14 +8,13 @@ use App\Http\Resources\V1\Applicant\Nce\RequiredDocumentDataResource;
 use App\Http\Resources\V1\RequiredDocument\RequiredDocumentResource;
 use Exception;
 use App\Models\NceRequiredDocumentData;
+use App\Services\Interfaces\Students\RequiredDocumentDataServiceInterface;
 use Illuminate\Support\Facades\Auth;
 
 class RequiredDocumentDataController extends Controller
 {
-    public function __construct(NceRequiredDocumentData $nceRequiredDocumentData )
-    {
-        $this->nceRequiredDocumentData = $nceRequiredDocumentData;
-    }
+    public function __construct(private RequiredDocumentDataServiceInterface $requiredDocumentDataServiceInterface)
+    {}
     /**
      * Display a listing of the resource.
      *
@@ -23,11 +22,9 @@ class RequiredDocumentDataController extends Controller
      */
     public function index()
     {
-       $nceRequiredDocumentData = $this->nceRequiredDocumentData->with(['requiredDocument'])->where([
-        'user_id' => Auth::id(),
-       ])->get();
-
-       return RequiredDocumentDataResource::collection($nceRequiredDocumentData);
+        $requiredDocumentData = $this->requiredDocumentDataServiceInterface
+                                    ->getRequiredDocumentDataByUserId(Auth::id());
+       return RequiredDocumentDataResource::collection($requiredDocumentData);
     }
 
     /**
@@ -41,27 +38,25 @@ class RequiredDocumentDataController extends Controller
         try
         {
             // Check if this particular user has already upload this document
-            $uploadedNceRequiredDocument = $this->nceRequiredDocumentData->where([
-                'user_id' => Auth::id(),
-                'required_document_id' => $request->required_document_id
-            ])->first();
-
-            if($uploadedNceRequiredDocument != null)
+            $hasRequiredDocumentBeenUploaded = $this->requiredDocumentDataServiceInterface
+            ->checkIfRequiredDocumentHasBeenUploaded($request->required_document_id, Auth::id());
+            
+            if($hasRequiredDocumentBeenUploaded == true)
             {
                 throw new Exception('This Required Document has already been uploaded', 400);
+
             }
 
-            //uniqid()                  
-            $extention = $request->file->getClientOriginalExtension();      
-            $fileNameToStore = time().uniqid().'.'.$extention;
-            
-            $path = $request->file->storeAs('public/reqdocs', $fileNameToStore);
+            $extension = $request->file->getClientOriginalExtension();
+            $fileNameToStore = time().uniqid().'.'.$extension;
+            $request->file->storeAs('public/reqdocs', $fileNameToStore);
 
-            $this->nceRequiredDocumentData->create([
+            $this->requiredDocumentDataServiceInterface->createNewRequiredDocumentData([
                 'user_id' => Auth::id(),
                 'required_document_id' => $request->required_document_id,
                 'file_path' => $fileNameToStore
             ]);
+
             $data['message'] = 'Required Document was uploaded successfully';
             return successParser($data, 201);
         }
@@ -77,18 +72,19 @@ class RequiredDocumentDataController extends Controller
         try
         {
             // Check if this particular user has already upload this document
-            $uploadedNceRequiredDocument = $this->nceRequiredDocumentData->find($id);
+            $requiredDocumentData = $this->requiredDocumentDataServiceInterface->getRequiredDocumentDataById($id);
 
-            if($uploadedNceRequiredDocument == null)
+            if ($requiredDocumentData == null)
             {
                 throw new Exception('Required Document does not exist', 404);
             }
 
-            $uploadedNceRequiredDocument->delete();
+            $this->requiredDocumentDataServiceInterface->deleteRequiredDocumentData($requiredDocumentData);
+
             $data['message'] = 'Required Document was deleted successfully';
             return successParser($data);
         }
-        catch(Exception $ex)
+        catch (Exception $ex)
         {
             $data['message'] = $ex->getMessage();
             $code = $ex->getCode();
