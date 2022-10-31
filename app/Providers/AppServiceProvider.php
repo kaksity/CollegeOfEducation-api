@@ -18,6 +18,8 @@ use App\Services\Implementations\GeneralSettings\LgaServiceImplementation;
 use App\Services\Implementations\GeneralSettings\MaritalStatusImplementation;
 use App\Services\Implementations\GeneralSettings\RequiredDocumentServiceImplementation;
 use App\Services\Implementations\GeneralSettings\StateServiceImplementation;
+use App\Services\Implementations\Students\ContactDataServiceImplementation;
+use App\Services\Implementations\Students\PersonalDataServiceImplementation;
 use App\Services\Implementations\Students\StudentServiceImplementation;
 use App\Services\Interfaces\Bursary\AdmissionPaymentServiceInterface;
 use App\Services\Interfaces\Bursary\ApplicationPaymentServiceInterface;
@@ -35,6 +37,8 @@ use App\Services\Interfaces\GeneralSettings\LgaServiceInterface;
 use App\Services\Interfaces\GeneralSettings\MaritalStatusInterface;
 use App\Services\Interfaces\GeneralSettings\RequiredDocumentServiceInterface;
 use App\Services\Interfaces\GeneralSettings\StateServiceInterface;
+use App\Services\Interfaces\Students\ContactDataServiceInterface;
+use App\Services\Interfaces\Students\PersonalDataServiceInterface;
 use App\Services\Interfaces\Students\StudentServiceInterface;
 
 use Illuminate\Support\Facades\App;
@@ -68,6 +72,9 @@ class AppServiceProvider extends ServiceProvider
         App::bind(AdmissionPaymentServiceInterface::class, AdmissionPaymentServiceImplementation::class);
         App::bind(CoursePaymentServiceInterface::class, CoursePaymentServiceImplementation::class);
         App::bind(CourseRegistrationCardServiceInterface::class, CourseRegistrationCardServiceImplementation::class);
+
+        App::bind(PersonalDataServiceInterface::class, PersonalDataServiceImplementation::class);
+        App::bind(ContactDataServiceInterface::class, ContactDataServiceImplementation::class);
     }
 
     /**

@@ -9,14 +9,20 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\{State, Lga, MaritalStatus};
+use App\Services\Interfaces\GeneralSettings\LgaServiceInterface;
+use App\Services\Interfaces\GeneralSettings\MaritalStatusInterface;
+use App\Services\Interfaces\GeneralSettings\StateServiceInterface;
+use App\Services\Interfaces\Students\PersonalDataServiceInterface;
+
 class PersonalDataController extends Controller
 {
-    public function __construct(State $state, Lga $lga, MaritalStatus $maritalStatus)
-    {
-        $this->state = $state;
-        $this->lga = $lga;
-        $this->maritalStatus = $maritalStatus;
-    }
+    public function __construct(
+        private StateServiceInterface $stateServiceInterface,
+        private LgaServiceInterface $lgaServiceInterface,
+        private MaritalStatusInterface $maritalStatusInterface,
+        private PersonalDataServiceInterface $personalDataServiceInterface
+    )
+    {}
     /**
      * Display a listing of the resource.
      *
@@ -24,8 +30,7 @@ class PersonalDataController extends Controller
      */
     public function index()
     {
-        $personalData = Auth::user()->ncePersonalData()->with(['maritalStatus','lga','state'])->first();
-        // dd($personalData);
+        $personalData = $this->personalDataServiceInterface->getPersonalDataByUserId(Auth::user()->id);
         return new PersonalDataResource($personalData);
     }
 
@@ -33,27 +38,28 @@ class PersonalDataController extends Controller
     {
         try
         {
-            if($this->state->find($request->state_id) == null)
+            if ($this->stateServiceInterface->getStateById($request->state_id) == null)
             {
                 throw new Exception('State record does not exist', 400);
             }
-            if($this->lga->find($request->lga_id) == null)
+            if ($this->lgaServiceInterface->getLgaById($request->lga_id) == null)
             {
                 throw new Exception('Lga record does not exist',400);
             }
-            if($this->maritalStatus->find($request->marital_status_id) == null)
+            if ($this->maritalStatusInterface->getMaritalStatusById($request->marital_status_id) == null)
             {
                 throw new Exception('Marital Status record does not exist');
             }
 
-            $personalData = Auth::user()->ncePersonalData()->first();
 
+
+            $personalData = $this->personalDataServiceInterface->getPersonalDataByUserId(Auth::user()->id);
+            
             if($personalData->id != $id)
             {
                 throw new Exception('You can only update your data', 400);
             }
-
-
+            
             $personalData->surname = $request->surname;
             $personalData->other_names = $request->other_names;
             $personalData->date_of_birth = $request->date_of_birth;
@@ -64,7 +70,9 @@ class PersonalDataController extends Controller
             $personalData->state_id = $request->state_id;
             $personalData->lga_id = $request->lga_id;
             $personalData->nationality = $request->nationality;
-            $personalData->save();
+            
+            $this->personalDataServiceInterface->updatePersonalData($personalData);
+            
             $data['message'] = 'Applicant personal data was updated successfully';
             return successParser($data);
         }
