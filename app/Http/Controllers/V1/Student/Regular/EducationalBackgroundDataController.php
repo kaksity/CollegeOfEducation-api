@@ -9,12 +9,16 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\{Certificate};
+use App\Services\Interfaces\GeneralSettings\CertificateServiceInterface;
+use App\Services\Interfaces\Students\EducationalBackgroundDataServiceInterface;
+
 class EducationalBackgroundDataController extends Controller
 {
-    public function __construct(Certificate $certificate)
-    {
-        $this->certificate = $certificate;
-    }
+    public function __construct(
+        private EducationalBackgroundDataServiceInterface $educationalBackgroundDataServiceInterface,
+        private CertificateServiceInterface $certificateServiceInterface
+    )
+    {}
     /**
      * Display a listing of the resource.
      *
@@ -22,8 +26,9 @@ class EducationalBackgroundDataController extends Controller
      */
     public function index(EducationalBackgroundDataRequest $request)
     {
-        $StudentEducationalBackground = Auth::user()->nceEducationalBackground()->latest()->paginate($request->per_page);
-        return EducationalBackgroundDataResource::collection($StudentEducationalBackground);
+        $studentEducationalBackground = $this->educationalBackgroundDataServiceInterface
+        ->getEducationalBackgroundByUserId(Auth::id(), $request->per_page);
+        return EducationalBackgroundDataResource::collection($studentEducationalBackground);
     }
 
     /**
@@ -36,13 +41,17 @@ class EducationalBackgroundDataController extends Controller
     {
         try
         {
-            $certificate = $this->certificate->find($request->certificate_id);
+            $certificate = $this->certificateServiceInterface->getCertificateById($request->certificate_id);
             if($certificate == null)
             {
                 throw new Exception('Certificate record does not exist', 404);
             }
-            $StudentEducationalBackground = Auth::user()->nceEducationalBackground();
-            $StudentEducationalBackground->create($request->all());
+            
+            $this->educationalBackgroundDataServiceInterface->createNewEducationalBackgroundData(
+                array_merge($request->safe()->all(), [
+                'user_id' => Auth::id()
+            ]));
+
             $data['message'] = 'Student educational background data was created successfully';
             return successParser($data, 201);
         }
@@ -64,14 +73,16 @@ class EducationalBackgroundDataController extends Controller
     {
         try
         {
-            $StudentEducationalBackground = Auth::user()->nceEducationalBackground()->find($id);
+            $studentEducationalBackground = $this->educationalBackgroundDataServiceInterface
+                                                    ->getEducationalBackgroundById($id);
 
-            if($StudentEducationalBackground == null)
+            if($studentEducationalBackground == null)
             {
                 throw new Exception("Student educational background data does exist",404);
             }
 
-            $StudentEducationalBackground->delete();
+            $this->educationalBackgroundDataServiceInterface
+                ->deleteEducationalBackgroundData($studentEducationalBackground);
 
             $data['message']= 'Student educational background data was deleted successfully';
             return successParser($data);

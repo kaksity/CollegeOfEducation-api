@@ -6,14 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\MaritalStatus\MaritalStatusRequest;
 use App\Http\Resources\V1\MaritalStatus\MaritalStatusResource;
 use App\Models\MaritalStatus;
+use App\Services\Interfaces\GeneralSettings\MaritalStatusInterface;
 use Exception;
 
 class MaritalStatusController extends Controller
 {
-    public function __construct(MaritalStatus $maritalStatus)
-    {
-        $this->maritalStatus = $maritalStatus;
-    }
+    public function __construct(private MaritalStatusInterface $martialStatusInterface)
+    {}
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +20,8 @@ class MaritalStatusController extends Controller
      */
     public function index()
     {
-        $maritalStatuses = $this->maritalStatus->latest()->get();
+        $maritalStatuses = $this->martialStatusInterface->getAllMaritalStatus();
         return MaritalStatusResource::collection($maritalStatuses);
     }
 }
+

@@ -3,18 +3,13 @@
 namespace App\Http\Controllers\V1\Applicant\Regular;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Certificate\CertificateRequest;
 use App\Http\Resources\V1\Certificate\CertificateResource;
-use Illuminate\Http\Request;
-use App\Models\Certificate;
-use Exception;
+use App\Services\Interfaces\GeneralSettings\CertificateServiceInterface;
 
 class CertificateController extends Controller
 {
-    public function __construct(Certificate $certificate)
-    {
-        $this->certificate = $certificate;
-    }
+    public function __construct(private CertificateServiceInterface $certificateServiceInterface)
+    {}
     /**
      * Display a listing of the resource.
      *
@@ -22,7 +17,7 @@ class CertificateController extends Controller
      */
     public function index()
     {
-        $certificates = $this->certificate->latest()->get();
-        return CertificateResource::collection($certificates);        
+        $certificates = $this->certificateServiceInterface->getAllCertificates();
+        return CertificateResource::collection($certificates);
     }
 }

@@ -1,19 +1,16 @@
 <?php
 
 namespace App\Http\Controllers\V1\Applicant\Regular;
-use App\Services\Interfaces\Students\HeldResponsibilityDataServiceInterface;
+
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Applicant\HeldResponsibilityData\HeldResponsibilityDataRequest;
-use App\Http\Resources\V1\Applicant\Nce\HeldResponsibilityDataResource;
+use App\Http\Requests\V1\Student\HeldResponsibilityData\HeldResponsibilityDataRequest;
+use App\Http\Resources\V1\Student\Nce\HeldResponsibilityDataResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class HeldReponsibilityController extends Controller
 {
-    public function __construct(private HeldResponsibilityDataServiceInterface $heldResponsibilityDataServiceInterface)
-    {}
-
     /**
      * Display a listing of the resource.
      *
@@ -23,9 +20,7 @@ class HeldReponsibilityController extends Controller
     {
         $perPage = $request->per_page ?? 10;
         
-        $heldResponsibilities = $this->heldResponsibilityDataServiceInterface
-                                        ->getHeldResponsibilityByUserId(Auth::id(), $perPage);
-        
+        $heldResponsibilities = Auth::user()->nceHeldResponsibilityData()->latest()->paginate($perPage);
         return HeldResponsibilityDataResource::collection($heldResponsibilities);
     }
 
@@ -39,13 +34,8 @@ class HeldReponsibilityController extends Controller
     {
         try
         {
-            
-            $this->heldResponsibilityDataServiceInterface->createNewHeldResponsibility(
-                array_merge($request->safe()->all(), [
-                'user_id' => Auth::id()
-            ]));
-
-            $data['message'] = 'Applicant held responsibility data was added successfully';
+            Auth::user()->nceHeldResponsibilityData()->create($request->all());
+            $data['message'] = 'Student held responsiblity data was added successfully';
             return successParser($data,201);
         }
         catch(Exception $ex)
@@ -66,17 +56,17 @@ class HeldReponsibilityController extends Controller
     {
         try
         {
-            $heldResponsibility = $this->heldResponsibilityDataServiceInterface->getHeldResponsibilityById($id);
+            $heldResponsibility = Auth::user()->nceHeldResponsibilityData()->find($id);
             
             if($heldResponsibility == null)
             {
-                throw new Exception('Applicant held Responsibility does not exist',404);
+                throw new Exception('Student held Responsibility does not exist',404);
             }
 
-            $this->heldResponsibilityDataServiceInterface->deleteHeldResponsibility($heldResponsibility);
+            $heldResponsibility->delete();
 
-            $data['message'] = 'Applicant held responsibility data was deleted successfully';
-            return successParser($data);
+            $data['message'] = 'Student held responsiblity data was deleted successfully';
+            return successParser($data,201);
         }
         catch(Exception $ex)
         {
