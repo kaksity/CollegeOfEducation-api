@@ -20,6 +20,8 @@ use App\Services\Implementations\GeneralSettings\RequiredDocumentServiceImplemen
 use App\Services\Implementations\GeneralSettings\StateServiceImplementation;
 use App\Services\Implementations\Students\ContactDataServiceImplementation;
 use App\Services\Implementations\Students\CourseDataServiceImplementation;
+use App\Services\Implementations\Students\ExtraCurricularDataServiceImplementation;
+use App\Services\Implementations\Students\HeldResponsibilityDataServiceImplementation;
 use App\Services\Implementations\Students\PersonalDataServiceImplementation;
 use App\Services\Implementations\Students\RequiredDocumentDataServiceImplementation;
 use App\Services\Implementations\Students\StudentServiceImplementation;
@@ -41,6 +43,8 @@ use App\Services\Interfaces\GeneralSettings\RequiredDocumentServiceInterface;
 use App\Services\Interfaces\GeneralSettings\StateServiceInterface;
 use App\Services\Interfaces\Students\ContactDataServiceInterface;
 use App\Services\Interfaces\Students\CourseDataServiceInterface;
+use App\Services\Interfaces\Students\ExtraCurricularDataServiceInterface;
+use App\Services\Interfaces\Students\HeldResponsibilityDataServiceInterface;
 use App\Services\Interfaces\Students\PersonalDataServiceInterface;
 use App\Services\Interfaces\Students\RequiredDocumentDataServiceInterface;
 use App\Services\Interfaces\Students\StudentServiceInterface;
@@ -82,6 +86,8 @@ class AppServiceProvider extends ServiceProvider
         App::bind(CourseDataServiceInterface::class, CourseDataServiceImplementation::class);
 
         App::bind(RequiredDocumentDataServiceInterface::class, RequiredDocumentDataServiceImplementation::class);
+        App::bind(HeldResponsibilityDataServiceInterface::class, HeldResponsibilityDataServiceImplementation::class);
+        App::bind(ExtraCurricularDataServiceInterface::class, ExtraCurricularDataServiceImplementation::class);
     }
 
     /**

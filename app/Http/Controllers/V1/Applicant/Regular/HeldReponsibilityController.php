@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\V1\Applicant\Regular;
-
+use App\Services\Interfaces\Students\HeldResponsibilityDataServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Applicant\HeldResponsibilityData\HeldResponsibilityDataRequest;
 use App\Http\Resources\V1\Applicant\Nce\HeldResponsibilityDataResource;
@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Auth;
 
 class HeldReponsibilityController extends Controller
 {
+    public function __construct(private HeldResponsibilityDataServiceInterface $heldResponsibilityDataServiceInterface)
+    {}
+
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +23,9 @@ class HeldReponsibilityController extends Controller
     {
         $perPage = $request->per_page ?? 10;
         
-        $heldResponsibilities = Auth::user()->nceHeldResponsibilityData()->latest()->paginate($perPage);
+        $heldResponsibilities = $this->heldResponsibilityDataServiceInterface
+                                        ->getHeldResponsibilityByUserId(Auth::id(), $perPage);
+        
         return HeldResponsibilityDataResource::collection($heldResponsibilities);
     }
 
@@ -34,8 +39,13 @@ class HeldReponsibilityController extends Controller
     {
         try
         {
-            Auth::user()->nceHeldResponsibilityData()->create($request->all());
-            $data['message'] = 'Applicant held responsiblity data was added successfully';
+            
+            $this->heldResponsibilityDataServiceInterface->createNewHeldResponsibility(
+                array_merge($request->safe()->all(), [
+                'user_id' => Auth::id()
+            ]));
+
+            $data['message'] = 'Applicant held responsibility data was added successfully';
             return successParser($data,201);
         }
         catch(Exception $ex)
@@ -56,17 +66,17 @@ class HeldReponsibilityController extends Controller
     {
         try
         {
-            $heldResponsibility = Auth::user()->nceHeldResponsibilityData()->find($id);
+            $heldResponsibility = $this->heldResponsibilityDataServiceInterface->getHeldResponsibilityById($id);
             
             if($heldResponsibility == null)
             {
                 throw new Exception('Applicant held Responsibility does not exist',404);
             }
 
-            $heldResponsibility->delete();
+            $this->heldResponsibilityDataServiceInterface->deleteHeldResponsibility($heldResponsibility);
 
-            $data['message'] = 'Applicant held responsiblity data was deleted successfully';
-            return successParser($data,201);
+            $data['message'] = 'Applicant held responsibility data was deleted successfully';
+            return successParser($data);
         }
         catch(Exception $ex)
         {
