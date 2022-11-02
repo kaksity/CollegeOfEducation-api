@@ -8,9 +8,12 @@ use App\Http\Resources\V1\Applicant\Nce\EmploymentDataResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Interfaces\Students\EmploymentDataServiceInterface;
 
 class EmploymentDataController extends Controller
 {
+    public function __construct(private EmploymentDataServiceInterface $employmentDataServiceInterface)
+    {}
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +21,8 @@ class EmploymentDataController extends Controller
      */
     public function index(EmploymentDataRequest $request)
     {
-        $employmentData = Auth::user()->nceEmploymentData()->latest()->paginate($request->per_page);
+        $employmentData = $this->employmentDataServiceInterface
+                                ->getEmploymentDataByUserId(Auth::id(), $request->per_page);
         return EmploymentDataResource::collection($employmentData);
     }
 
@@ -32,7 +36,11 @@ class EmploymentDataController extends Controller
     {
         try
         {
-            Auth::user()->nceEmploymentData()->create($request->all());
+            $this->employmentDataServiceInterface->createNewEmploymentData(array_merge(
+                $request->safe()->all(), [
+                    'user_id' => Auth::id()
+                ]
+                ));
             $data['message'] = 'Applicant employment data was created successfully';
             return successParser($data,201);
         }
@@ -54,19 +62,19 @@ class EmploymentDataController extends Controller
     {
         try
         {
-            $employmentData = Auth::user()->nceEmploymentData()->find($id);
+            $employmentData = $this->employmentDataServiceInterface->getEmploymentDataById($id);
             
             if($employmentData == null)
             {
                 throw new Exception('Applicant employment data does not exist', 404);
             }
 
-            $employmentData->delete();
+            $this->employmentDataServiceInterface->deleteEmploymentData($employmentData);
 
             $data['message'] = 'Applicant employment data was deleted successfully';
             return successParser($data);
         }
-        catch(Exception $ex)
+        catch (Exception $ex)
         {
             $data['message'] = $ex->getMessage();
             $code = $ex->getCode();
