@@ -22,7 +22,7 @@ class RegisterationPaymentController extends Controller
     {
         $perPage = $request->per_page ?? 50;
 
-        $nceRegistrationPayments = $this->coursePaymentServiceInterface->getAllProcessedRegisterationPayments($perPage);
-        return NceRegisterationPaymentResource::collection($nceRegistrationPayments);
+        $registrationPayments = $this->coursePaymentServiceInterface->getAllProcessedRegistrationPayments($perPage);
+        return NceRegisterationPaymentResource::collection($registrationPayments);
     }    
 }

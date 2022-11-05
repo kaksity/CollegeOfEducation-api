@@ -13,5 +13,5 @@ interface CoursePaymentServiceInterface
     public function updateSetCoursePayment($setCoursePayment);
     public function deleteSetCoursePayment($setCoursePayment);
 
-    public function getAllProcessedRegisterationPayments($perPage);
+    public function getAllProcessedRegistrationPayments($perPage);
 }
