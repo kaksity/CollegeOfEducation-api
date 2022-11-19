@@ -18,7 +18,7 @@
             <ul>
               <li><a href="/department/gst">Dept. of General studies</a></li>
               <li><a href="/department/hre">Dept. of Home and Rural Economics</a></li>
-              <li><a href="/department/entrepreneurship-center">Enterprenuership st+udies Center</a></li>
+              <li><a href="/department/entrepreneurship-center">Enterprenuership studies Center</a></li>
               <li><a href="/department/farm">Farm Department</a></li>
               <li><a href="/department/ict">ICT Center</a></li>
               <li><a href="/department/ft">Dept. of Forestry Technology</a></li>
