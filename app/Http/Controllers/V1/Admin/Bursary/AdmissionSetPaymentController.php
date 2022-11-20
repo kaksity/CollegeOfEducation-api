@@ -33,7 +33,7 @@ class AdmissionSetPaymentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AdmissionSetPaymentRequest $request)
     {
         try
         {
@@ -44,7 +44,7 @@ class AdmissionSetPaymentController extends Controller
                 throw new Exception('Admission set payment record already exist', 400);
             }
 
-            $this->admissionPaymentServiceInterface->createNewSetAdmissionPayments($request->safe()->all());
+            $this->admissionPaymentServiceInterface->createNewSetAdmissionPayments($request->safe());
 
             $data['message'] = 'Admission set payment record was created successfully';
             return successParser($data, 201);
