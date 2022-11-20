@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1\Admin\Bursary;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Admin\Bursary\AdmissionSetPayment\AdmissionSetPaymentRequest;
+use App\Http\Requests\V1\Admin\Bursary\ApplicationSetPayment\ApplicationSetPaymentRequest;
 use App\Http\Resources\V1\Admin\Bursary\AdmissionSetPaymentResource;
 use App\Models\AdmissionSetPayment;
 use App\Services\Interfaces\Bursary\AdmissionPaymentServiceInterface;
@@ -44,7 +45,7 @@ class AdmissionSetPaymentController extends Controller
                 throw new Exception('Admission set payment record already exist', 400);
             }
 
-            $this->admissionPaymentServiceInterface->createNewSetAdmissionPayments($request->safe());
+            $this->admissionPaymentServiceInterface->createNewSetAdmissionPayments($request->safe()->all());
 
             $data['message'] = 'Admission set payment record was created successfully';
             return successParser($data, 201);
@@ -65,7 +66,7 @@ class AdmissionSetPaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(AdmissionSetPaymentRequest $request, $id)
+    public function update(Request $request, $id)
     {
         try
         {
