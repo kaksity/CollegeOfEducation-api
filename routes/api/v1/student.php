@@ -24,10 +24,12 @@ use App\Http\Controllers\V1\Student\Regular\ExaminationSubjectController;
 use App\Http\Controllers\V1\Student\Regular\RegisterCourseSubjectController;
 use App\Http\Controllers\V1\Student\Regular\RegistrationPaymentController;
 use App\Http\Controllers\V1\Student\Regular\RequiredDocumentDataController;
+use Illuminate\Support\Facades\Route;
 
     Route::group(['prefix' => 'regular/auth'],function(){
         Route::post('login',[AuthController::class,'login']);
         Route::post('register', [AuthController::class,'register']);
+        Route::middleware('auth:sanctum')->post('change-password', [AuthController::class, 'changePassword']);
         Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
         Route::post('forgot-password/request', [AuthController::class, 'requestPasswordVerification']);
         Route::post('forgot-password/verify', [AuthController::class, 'verifyPasswordVerificationCode']);

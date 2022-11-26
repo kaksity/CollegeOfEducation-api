@@ -22,10 +22,12 @@ use App\Http\Controllers\V1\Admin\Bursary\RegisterationPaymentController;
 use App\Http\Controllers\V1\Admin\ICT\UploadStudentController;
 use App\Http\Controllers\V1\Admin\ICT\ReturningStudentController;
 use App\Http\Controllers\V1\Admin\ICT\StudentsController;
+use Illuminate\Routing\Route;
 
 Route::group(['prefix' => 'auth'],function(){
     Route::post('login',[AuthController::class,'login']);
     Route::post('register', [AuthController::class,'register']);
+    Route::middleware('auth:sanctum')->post('change-password', [AuthController::class, 'changePassword']);
     Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
     Route::post('forgot-password/request', [AuthController::class, 'requestPasswordVerification']);
     Route::post('forgot-password/verify', [AuthController::class, 'verifyPasswordVerificationCode']);

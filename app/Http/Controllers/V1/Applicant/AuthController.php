@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\Applicant;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Applicant\Authentication\ChangePasswordRequest;
 use App\Http\Requests\V1\Applicant\Authentication\LoginRequest;
 use App\Http\Requests\V1\Applicant\Authentication\RegisterRequest;
 use Carbon\Carbon;
@@ -76,7 +77,33 @@ class AuthController extends Controller
             return errorParser($data, $code);
         }
     }
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        try
+        {
+            $user = Auth::user();
 
+            if(Hash::check($request->old_password, $user->password) == false)
+            {
+                throw new Exception('Old Password is not correct', 400);
+            }
+
+            $hashedPassword = Hash::make($request->new_password);
+            
+            $user->update([
+                'password' => $hashedPassword
+            ]);
+            $data['message'] = 'Password was changed successfully';
+            
+            return successParser($data, 201);
+        }
+        catch(Exception $ex)
+        {
+            $data['message'] = $ex->getMessage();
+            $code = $ex->getCode();
+            return errorParser($data, $code);
+        }
+    }
     public function logout()
     {
         $this->authenticationServiceInterface->logout();
