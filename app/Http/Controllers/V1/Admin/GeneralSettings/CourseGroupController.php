@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\Admin\GeneralSettings;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\CourseGroup\CourseGroupRequest;
 use App\Http\Resources\V1\Course\CourseResource;
 use App\Http\Resources\V1\CourseGroup\CourseGroupResource;
 use App\Services\Interfaces\GeneralSettings\CourseGroupServiceInterface;
@@ -30,7 +31,7 @@ class CourseGroupController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CourseGroupRequest $request)
     {
         try
         {

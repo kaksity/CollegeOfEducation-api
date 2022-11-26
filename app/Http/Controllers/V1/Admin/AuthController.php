@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Admin\Auth\ChangePasswordRequest;
 use App\Http\Requests\V1\Admin\Auth\LoginRequest;
 use App\Http\Requests\V1\Admin\Auth\RegisterRequest;
 use App\Http\Requests\V1\Admin\Auth\RequestForgotPasswordRequest;
@@ -71,10 +72,10 @@ class AuthController extends Controller
 
             $data['access_token'] = $accessToken;
             $data['user'] = new AdminResource(Auth::user());
-            $data['message'] = 'Login was succesful.';
+            $data['message'] = 'Login was successfully.';
             return successParser($data);
-        }   
-        catch(Exception $ex)
+        }
+        catch (Exception $ex)
         {
             $data['message'] = $ex->getMessage();
             $code = $ex->getCode();
@@ -87,8 +88,8 @@ class AuthController extends Controller
         {
             $user = $this->user->where([
                 'email_address' => $request->email_address
-            ])->first();       
-            if($user != null)
+            ])->first();
+            if ($user != null)
             {
                 throw new Exception('Email Address has already been used', 400);
             }
@@ -98,7 +99,7 @@ class AuthController extends Controller
                 'role' => $request->role,
                 'password' => Hash::make($request->password)
             ]);
-            $admin = $this->admin->create([
+            $this->admin->create([
                 'user_id' => $user->id,
                 'email_address' => $request->email_address,
                 'first_name' => $request->first_name,
@@ -108,14 +109,41 @@ class AuthController extends Controller
             DB::commit();
             return successParser([
                 'message' => 'Admin account was created successfully'
-            ],201);
+            ], 201);
         }
-        catch(Exception $ex)
+        catch (Exception $ex)
         {
             DB::rollBack();
             $data['message'] = $ex->getMessage();
             $code = $ex->getCode();
             return errorParser($data,$code);
+        }
+    }
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        try
+        {
+            $user = Auth::user();
+
+            if(Hash::check($request->old_password, $user->password) == false)
+            {
+                throw new Exception('Old Password is not correct', 400);
+            }
+
+            $hashedPassword = Hash::make($request->new_password);
+            
+            $user->update([
+                'password' => $hashedPassword
+            ]);
+            $data['message'] = 'Password was changed successfully';
+            
+            return successParser($data, 201);
+        }
+        catch (Exception $ex)
+        {
+            $data['message'] = $ex->getMessage();
+            $code = $ex->getCode();
+            return errorParser($data, $code);
         }
     }
     public function logout()
@@ -135,7 +163,7 @@ class AuthController extends Controller
                 'email_address' => $request->email_address
             ])->first();
 
-            if($user)
+            if ($user)
             {
                 $verificationToken = generateRandomNumber();
                 
@@ -173,7 +201,7 @@ class AuthController extends Controller
                 'token' => $request->verification_code,
             ])->first();
 
-            if($verificationCode == null)
+            if ($verificationCode == null)
             {
                 throw new Exception('Verification code does not exist', 404);
             }
@@ -188,7 +216,7 @@ class AuthController extends Controller
             $data['message'] = 'Password reset instruction has been sent to this mail';
             return successParser($data);
         }
-        catch(Exception $ex)
+        catch (Exception $ex)
         {
             $data['message'] = $ex->getMessage();
             $code = $ex->getCode();

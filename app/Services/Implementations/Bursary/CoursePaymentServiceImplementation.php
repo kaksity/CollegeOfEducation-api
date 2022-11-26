@@ -3,6 +3,7 @@
 namespace App\Services\Implementations\Bursary;
 
 use App\Models\NceCoursePayment;
+use App\Models\NceRegistrationPayment;
 use App\Services\Interfaces\Bursary\CoursePaymentServiceInterface;
 
 class CoursePaymentServiceImplementation implements CoursePaymentServiceInterface
@@ -59,9 +60,9 @@ class CoursePaymentServiceImplementation implements CoursePaymentServiceInterfac
         $setCoursePayment->delete();
     }
 
-    public function getAllProcessedRegisterationPayments($perPage)
+    public function getAllProcessedRegistrationPayments($perPage)
     {
-        return NceCoursePayment::with([
+        return NceRegistrationPayment::with([
             'nceStudent.nceApplicationStatus',
             'nceSession',
             'nceCourse',
