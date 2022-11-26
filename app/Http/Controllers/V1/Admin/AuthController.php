@@ -72,10 +72,10 @@ class AuthController extends Controller
 
             $data['access_token'] = $accessToken;
             $data['user'] = new AdminResource(Auth::user());
-            $data['message'] = 'Login was succesful.';
+            $data['message'] = 'Login was successfully.';
             return successParser($data);
-        }   
-        catch(Exception $ex)
+        }
+        catch (Exception $ex)
         {
             $data['message'] = $ex->getMessage();
             $code = $ex->getCode();
@@ -88,8 +88,8 @@ class AuthController extends Controller
         {
             $user = $this->user->where([
                 'email_address' => $request->email_address
-            ])->first();       
-            if($user != null)
+            ])->first();
+            if ($user != null)
             {
                 throw new Exception('Email Address has already been used', 400);
             }
@@ -99,7 +99,7 @@ class AuthController extends Controller
                 'role' => $request->role,
                 'password' => Hash::make($request->password)
             ]);
-            $admin = $this->admin->create([
+            $this->admin->create([
                 'user_id' => $user->id,
                 'email_address' => $request->email_address,
                 'first_name' => $request->first_name,
@@ -109,9 +109,9 @@ class AuthController extends Controller
             DB::commit();
             return successParser([
                 'message' => 'Admin account was created successfully'
-            ],201);
+            ], 201);
         }
-        catch(Exception $ex)
+        catch (Exception $ex)
         {
             DB::rollBack();
             $data['message'] = $ex->getMessage();
@@ -139,7 +139,7 @@ class AuthController extends Controller
             
             return successParser($data, 201);
         }
-        catch(Exception $ex)
+        catch (Exception $ex)
         {
             $data['message'] = $ex->getMessage();
             $code = $ex->getCode();
@@ -163,7 +163,7 @@ class AuthController extends Controller
                 'email_address' => $request->email_address
             ])->first();
 
-            if($user)
+            if ($user)
             {
                 $verificationToken = generateRandomNumber();
                 
@@ -201,7 +201,7 @@ class AuthController extends Controller
                 'token' => $request->verification_code,
             ])->first();
 
-            if($verificationCode == null)
+            if ($verificationCode == null)
             {
                 throw new Exception('Verification code does not exist', 404);
             }
@@ -216,7 +216,7 @@ class AuthController extends Controller
             $data['message'] = 'Password reset instruction has been sent to this mail';
             return successParser($data);
         }
-        catch(Exception $ex)
+        catch (Exception $ex)
         {
             $data['message'] = $ex->getMessage();
             $code = $ex->getCode();
