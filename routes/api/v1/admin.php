@@ -22,7 +22,6 @@ use App\Http\Controllers\V1\Admin\Bursary\RegisterationPaymentController;
 use App\Http\Controllers\V1\Admin\ICT\UploadStudentController;
 use App\Http\Controllers\V1\Admin\ICT\ReturningStudentController;
 use App\Http\Controllers\V1\Admin\ICT\StudentsController;
-use Illuminate\Routing\Route;
 
 Route::group(['prefix' => 'auth'],function(){
     Route::post('login',[AuthController::class,'login']);

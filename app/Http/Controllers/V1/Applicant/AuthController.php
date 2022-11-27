@@ -23,28 +23,17 @@ class AuthController extends Controller
         private AuthenticationServiceInterface $authenticationServiceInterface
     )
     {}
-
-    // public function __construct(User $user, NcePersonalData $NcePersonalData, NcePassport $NcePassport,NceApplicationStatus $NceApplicationStatus,NceContactData $NceContactData, NceCourseData $NceCourseData, NceExaminationCenterData $NceExaminationCenterData, NceAcademicSession $nceAcademicSession)
-    // {
-    //     $this->user = $user;
-    //     $this->NcePersonalData = $NcePersonalData;
-    //     $this->NceContactData = $NceContactData;
-    //     $this->NceCourseData = $NceCourseData;
-    //     $this->NceApplicationStatus = $NceApplicationStatus;
-    //     $this->NcePassport = $NcePassport;
-    //     $this->NceExaminationCenterData = $NceExaminationCenterData;
-    //     $this->nceAcademicSession = $nceAcademicSession;
-    // }
+    
     public function login(LoginRequest $request)
     {
         try
         {
             
             $data['access_token'] = $this->authenticationServiceInterface->login($request->safe()->all());
-            $data['message'] = 'Login was succesful.';
+            $data['message'] = 'Login was successfully.';
             return successParser($data);
-        }   
-        catch(Exception $ex)
+        }
+        catch (Exception $ex)
         {
             $data['message'] = $ex->getMessage();
             $code = $ex->getCode();

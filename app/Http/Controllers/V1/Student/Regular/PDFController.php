@@ -49,9 +49,10 @@ class PDFController extends Controller
 
         $data = [
             'personalData' => $personalData,
-           'contactData' => $contactData,
-           'firstSemesterCourses' => $firstSemesterCourses,
+            'contactData' => $contactData,
+            'firstSemesterCourses' => $firstSemesterCourses,
             'secondSemesterCourses' => $secondSemesterCourses,
+            'student' => Auth::user()
         ];
 
         $pdf = PDF::setPaper('a4', 'portrait')->loadView('course-registeration', $data);

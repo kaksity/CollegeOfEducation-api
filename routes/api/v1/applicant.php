@@ -25,50 +25,49 @@ use App\Http\Controllers\V1\Applicant\Regular\ExaminationSubjectController;
 use App\Http\Controllers\V1\Applicant\Regular\PDFController;
 use App\Http\Controllers\V1\Applicant\Regular\RequiredDocumentController;
 use App\Http\Controllers\V1\Applicant\Regular\RequiredDocumentDataController;
-use Illuminate\Support\Facades\Route;
 
-    Route::group(['prefix' => 'regular/auth'],function(){
-        Route::post('login',[AuthController::class,'login']);
-        Route::post('register', [AuthController::class,'register']);
-        Route::middleware('auth:sanctum')->post('change-password', [AuthController::class, 'changePassword']);
-        Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
-        Route::post('forgot-password/request', [AuthController::class, 'requestPasswordVerification']);
-        Route::post('forgot-password/verify', [AuthController::class, 'verifyPasswordVerificationCode']);
-    });
-    
-    Route::group(['prefix' => 'regular'], function() {
-        Route::get('course-groups', [CourseGroupController::class, 'index']);
-    });
-    Route::group(['prefix' => 'regular', 'middleware' => ['auth:sanctum']], function() {
-        Route::post('/application-payments/initialize', [PaymentController::class, 'initiateApplicationPayment']);
-        Route::post('/admission-payments/initialize', [PaymentController::class, 'initiateAdmissionPayment']);
-    });
+Route::group(['prefix' => 'regular/auth'],function(){
+    Route::post('login',[AuthController::class,'login']);
+    Route::post('register', [AuthController::class,'register']);
+    Route::middleware('auth:sanctum')->post('change-password', [AuthController::class, 'changePassword']);
+    Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
+    Route::post('forgot-password/request', [AuthController::class, 'requestPasswordVerification']);
+    Route::post('forgot-password/verify', [AuthController::class, 'verifyPasswordVerificationCode']);
+});
 
-    Route::group(['prefix'=>'regular','middleware' => ['auth:sanctum', 'verify.regular.application.payment']], function(){
-        Route::apiResource('personal-data',PersonalDataController::class);
-        Route::apiResource('contact-data', ContactDataController::class);
-        Route::apiResource('educational-background-data', EducationalBackgroundDataController::class);
-        Route::apiResource('employment-data', EmploymentDataController::class);
-        Route::apiResource('course-data',CourseDataController::class);
-        Route::apiResource('extra-curricular-activity-data', ExtraCurricularActivityDataController::class);
-        Route::apiResource('held-responsibility-data', HeldReponsibilityController::class);
-        Route::apiResource('passport-data', PassportController::class);
-        Route::apiResource('required-document-data', RequiredDocumentDataController::class);
-        Route::apiResource('examination-data', ExaminationDataController::class);
-        Route::apiResource('examination-center-data', ExaminationCenterDataController::class);
-        Route::apiResource('application-statuses', ApplicationStatusController::class);
-        Route::apiResource('applicant-profiles', ApplicantController::class);
+Route::group(['prefix' => 'regular'], function() {
+    Route::get('course-groups', [CourseGroupController::class, 'index']);
+});
+Route::group(['prefix' => 'regular', 'middleware' => ['auth:sanctum']], function() {
+    Route::post('/application-payments/initialize', [PaymentController::class, 'initiateApplicationPayment']);
+    Route::post('/admission-payments/initialize', [PaymentController::class, 'initiateAdmissionPayment']);
+});
 
-        Route::get('/submit-application-pdf', [PDFController::class, 'submitApplication']);
-        Route::get('/generate-admission-pdf', [PDFController::class, 'generateAdmissionLetter'])->middleware('verify.regular.admission.payment');        
-    });
-    Route::group(['prefix'=>'regular'],function() {
-        Route::get('marital-statuses', [MaritalStatusController::class, 'index']);
-        Route::get('required-documents', [RequiredDocumentController::class, 'index']);
-        Route::get('states', [StateController::class, 'index']);
-        Route::get('lgas', [LgaController::class, 'index']);
-        Route::get('certificates', [CertificateController::class, 'index']);
-        Route::get('courses', [CourseController::class, 'index']);
-        Route::get('examination-categories', [ExaminationCategoryController::class, 'index']);
-        Route::get('examination-subjects', [ExaminationSubjectController::class, 'index']);
-    });
+Route::group(['prefix'=>'regular','middleware' => ['auth:sanctum', 'verify.regular.application.payment']], function(){
+    Route::apiResource('personal-data',PersonalDataController::class);
+    Route::apiResource('contact-data', ContactDataController::class);
+    Route::apiResource('educational-background-data', EducationalBackgroundDataController::class);
+    Route::apiResource('employment-data', EmploymentDataController::class);
+    Route::apiResource('course-data',CourseDataController::class);
+    Route::apiResource('extra-curricular-activity-data', ExtraCurricularActivityDataController::class);
+    Route::apiResource('held-responsibility-data', HeldReponsibilityController::class);
+    Route::apiResource('passport-data', PassportController::class);
+    Route::apiResource('required-document-data', RequiredDocumentDataController::class);
+    Route::apiResource('examination-data', ExaminationDataController::class);
+    Route::apiResource('examination-center-data', ExaminationCenterDataController::class);
+    Route::apiResource('application-statuses', ApplicationStatusController::class);
+    Route::apiResource('applicant-profiles', ApplicantController::class);
+
+    Route::get('/submit-application-pdf', [PDFController::class, 'submitApplication']);
+    Route::get('/generate-admission-pdf', [PDFController::class, 'generateAdmissionLetter'])->middleware('verify.regular.admission.payment');        
+});
+Route::group(['prefix'=>'regular'],function() {
+    Route::get('marital-statuses', [MaritalStatusController::class, 'index']);
+    Route::get('required-documents', [RequiredDocumentController::class, 'index']);
+    Route::get('states', [StateController::class, 'index']);
+    Route::get('lgas', [LgaController::class, 'index']);
+    Route::get('certificates', [CertificateController::class, 'index']);
+    Route::get('courses', [CourseController::class, 'index']);
+    Route::get('examination-categories', [ExaminationCategoryController::class, 'index']);
+    Route::get('examination-subjects', [ExaminationSubjectController::class, 'index']);
+});

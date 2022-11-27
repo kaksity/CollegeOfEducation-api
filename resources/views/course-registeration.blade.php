@@ -1,17 +1,3 @@
-<?php
-    // $avatarUrl = env('APP_URL').'/storage/passports/'.$passport->file_path;
-    // $arrContextOptions=array(
-    //             "ssl"=>array(
-    //                 "verify_peer"=>false,
-    //                 "verify_peer_name"=>false,
-    //             ),
-    //         );
-    // $type = pathinfo($avatarUrl, PATHINFO_EXTENSION);
-    // $avatarData = file_get_contents($avatarUrl, false, stream_context_create($arrContextOptions));
-    // $avatarBase64Data = base64_encode($avatarData);
-    // $imageData = 'data:image/' . $type . ';base64,' . $avatarBase64Data;
-    // echo $imageData;
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -128,91 +114,100 @@
         <h4>Personal Data</h4>
     </div>
     <div>
-        <div class="row mt-2 table-responsive">
+        <div class="row table-responsive">
             <table class="table">
                 <tbody class="">
                     <tr>
-                        <td>
+                        <td width="5%">
+                            <img class="passport" src="{{storage_path('app/public/passports/'.$passport->file_path)}}" alt="">
                         </td>
-                        <td>
-                            <b>Surname</b>
-                            <div>{{ $personalData->surname }}</div>
-                        </td>
-                        <td>
-                            <b>Other Names</b>
-                            <div>{{ $personalData->other_names }}</div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Place of Birth</b>
-                            <div>{{ $personalData->place_of_birth }}</div>
-                        </td>
-                        <td>
-                            <b>Date of Birth</b>
-                            <div>{{ $personalData->place_of_birth }}</div>
-                        </td>
-                        <td>
-                            <b>Sex</b>
-                            <div>{{ $personalData->home_town }}</div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Marital Status</b>
-                            <div>{{ $personalData->maritalStatus->name ?? 'N/A' }}</div>
-                        </td>
-                        <td>
-                            <b>State of Origin</b>
-                            <div>{{ $personalData->state->name ?? 'N/A' }}</div>
-                        </td>
-                        <td>
-                            <b>Local Government Area</b>
-                            <div>{{ $personalData->lga->name ?? 'N/A' }}</div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Home Town</b>
-                            <div>{{ $personalData->home_town }}</div>
-                        </td>
-                        <td>
-                            <b>Nationality</b>
-                            <div>{{ $personalData->nationality }}</div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Name of Guardian</b>
-                            <div>{{ $contactData->name_of_guardian }}</div>
-                        </td>
-                        <td>
-                            <b>Address of Guardian</b>
-                            <div>{{ $contactData->address_of_guardian }}</div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Name of Employer</b>
-                            <div>{{ $contactData->name_of_employer }}</div>
-                        </td>
-                        <td>
-                            <b>Address of Employer</b>
-                            <div>{{ $contactData->address_of_employer }}</div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Contact Address</b>
-                            <div>{{ $contactData->contact_address }}</div>
-                        </td>
-                        <td>
-                            <b>Email Address</b>
-                            <div>{{ $contactData->email_address }}</div>
-                        </td>
-                        <td>
-                            <b>Phone Number</b>
-                            <div>{{ $contactData->phone_number }}</div>
+                        <td width="95%">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <b>Surname</b>
+                                            <div>{{ $personalData->surname }}</div>
+                                        </td>
+                                        <td>
+                                            <b>Other Names</b>
+                                            <div>{{ $personalData->other_names }}</div>
+                                        </td>
+                                        <td>
+                                            <b>Student Registration Number</b>
+                                            <div>{{ $student->id_number }}</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>Place of Birth</b>
+                                            <div>{{ $personalData->place_of_birth }}</div>
+                                        </td>
+                                        <td>
+                                            <b>Date of Birth</b>
+                                            <div>{{ $personalData->date_of_birth }}</div>
+                                        </td>
+                                        <td>
+                                            <b>Sex</b>
+                                            <div>{{ $personalData->sex }}</div>
+                                        </td>
+                                        <td>
+                                            <b>Marital Status</b>
+                                            <div>{{ $personalData->maritalStatus->name ?? 'N/A' }}</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>State of Origin</b>
+                                            <div>{{ $personalData->state->name ?? 'N/A' }}</div>
+                                        </td>
+                                        <td>
+                                            <b>Local Government Area</b>
+                                            <div>{{ $personalData->lga->name ?? 'N/A' }}</div>
+                                        </td>
+                                        <td>
+                                            <b>Home Town</b>
+                                            <div>{{ $personalData->home_town }}</div>
+                                        </td>
+                                        <td>
+                                            <b>Nationality</b>
+                                            <div>{{ $personalData->nationality }}</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>Name of Guardian</b>
+                                            <div>{{ $contactData->name_of_guardian }}</div>
+                                        </td>
+                                        <td>
+                                            <b>Address of Guardian</b>
+                                            <div>{{ $contactData->address_of_guardian }}</div>
+                                        </td>
+                                        <td>
+                                            <b>Name of Employer</b>
+                                            <div>{{ $contactData->name_of_employer }}</div>
+                                        </td>
+                                        <td>
+                                            <b>Address of Employer</b>
+                                            <div>{{ $contactData->address_of_employer }}</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>Contact Address</b>
+                                            <div>{{ $contactData->contact_address }}</div>
+                                        </td>
+                                        <td>
+                                            <b>Email Address</b>
+                                            <div>{{ $contactData->email_address }}</div>
+                                        </td>
+                                        <td>
+                                            <b>Phone Number</b>
+                                            <div>{{ $contactData->phone_number }}</div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </td>
                     </tr>
                 </tbody>

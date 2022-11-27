@@ -24,49 +24,48 @@ use App\Http\Controllers\V1\Student\Regular\ExaminationSubjectController;
 use App\Http\Controllers\V1\Student\Regular\RegisterCourseSubjectController;
 use App\Http\Controllers\V1\Student\Regular\RegistrationPaymentController;
 use App\Http\Controllers\V1\Student\Regular\RequiredDocumentDataController;
-use Illuminate\Support\Facades\Route;
 
-    Route::group(['prefix' => 'regular/auth'],function(){
-        Route::post('login',[AuthController::class,'login']);
-        Route::post('register', [AuthController::class,'register']);
-        Route::middleware('auth:sanctum')->post('change-password', [AuthController::class, 'changePassword']);
-        Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
-        Route::post('forgot-password/request', [AuthController::class, 'requestPasswordVerification']);
-        Route::post('forgot-password/verify', [AuthController::class, 'verifyPasswordVerificationCode']);
+Route::group(['prefix' => 'regular/auth'],function(){
+    Route::post('login',[AuthController::class,'login']);
+    Route::post('register', [AuthController::class,'register']);
+    Route::middleware('auth:sanctum')->post('change-password', [AuthController::class, 'changePassword']);
+    Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
+    Route::post('forgot-password/request', [AuthController::class, 'requestPasswordVerification']);
+    Route::post('forgot-password/verify', [AuthController::class, 'verifyPasswordVerificationCode']);
+});
+Route::group(['prefix' => 'regular', 'middleware' => ['auth:sanctum']], function() {
+    Route::post('/registeration-payments/initialize', [RegistrationPaymentController::class, 'initiatePayment']);
+    Route::post('/registeration-payments/card-pin', [RegistrationPaymentController::class, 'useCourseRegisterationPin']);
+});
+Route::group(['prefix'=>'regular','middleware' => ['auth:sanctum']], function(){
+    Route::apiResource('personal-data',PersonalDataController::class);
+    Route::apiResource('contact-data', ContactDataController::class);
+    Route::apiResource('educational-background-data', EducationalBackgroundDataController::class);
+    Route::apiResource('employment-data', EmploymentDataController::class);
+    Route::apiResource('course-data',CourseDataController::class);
+    Route::apiResource('extra-curricular-activity-data', ExtraCurricularActivityDataController::class);
+    Route::apiResource('held-responsibility-data', HeldReponsibilityController::class);
+    Route::apiResource('passport-data', PassportController::class);
+    Route::apiResource('examination-data', ExaminationDataController::class);
+    Route::apiResource('application-statuses', ApplicationStatusController::class);
+    
+    Route::apiResource('required-document-data', RequiredDocumentDataController::class);
+    Route::apiResource('examination-center-data', ExaminationCenterDataController::class);
+    Route::group(['prefix' => 'registered-course-subjects', 'middleware' => ['verify.regular.registeration.payment', 'verify.regular.id.number','verify.regular.is.course.registered']], function() {
+        Route::get('/', [RegisterCourseSubjectController::class, 'index']);
+        Route::post('/', [RegisterCourseSubjectController::class, 'store']);
+        Route::delete('/{id}', [RegisterCourseSubjectController::class, 'destroy']);
+        Route::post('/autofill', [RegisterCourseSubjectController::class, 'autoFillCourses']);
+        Route::get('/generate/pdf', [PDFController::class, 'generateCourseRegisteration']);
     });
-    Route::group(['prefix' => 'regular', 'middleware' => ['auth:sanctum']], function() {
-        Route::post('/registeration-payments/initialize', [RegistrationPaymentController::class, 'initiatePayment']);
-        Route::post('/registeration-payments/card-pin', [RegistrationPaymentController::class, 'useCourseRegisterationPin']);
-    });
-    Route::group(['prefix'=>'regular','middleware' => ['auth:sanctum']], function(){
-        Route::apiResource('personal-data',PersonalDataController::class);
-        Route::apiResource('contact-data', ContactDataController::class);
-        Route::apiResource('educational-background-data', EducationalBackgroundDataController::class);
-        Route::apiResource('employment-data', EmploymentDataController::class);
-        Route::apiResource('course-data',CourseDataController::class);
-        Route::apiResource('extra-curricular-activity-data', ExtraCurricularActivityDataController::class);
-        Route::apiResource('held-responsibility-data', HeldReponsibilityController::class);
-        Route::apiResource('passport-data', PassportController::class);
-        Route::apiResource('examination-data', ExaminationDataController::class);
-        Route::apiResource('application-statuses', ApplicationStatusController::class);
-        
-        Route::apiResource('required-document-data', RequiredDocumentDataController::class);
-        Route::apiResource('examination-center-data', ExaminationCenterDataController::class);
-        Route::group(['prefix' => 'registered-course-subjects', 'middleware' => ['verify.regular.registeration.payment', 'verify.regular.id.number','verify.regular.is.course.registered']], function() {
-            Route::get('/', [RegisterCourseSubjectController::class, 'index']);
-            Route::post('/', [RegisterCourseSubjectController::class, 'store']);
-            Route::delete('/{id}', [RegisterCourseSubjectController::class, 'destroy']);
-            Route::post('/autofill', [RegisterCourseSubjectController::class, 'autoFillCourses']);
-            Route::get('/generate/pdf', [PDFController::class, 'generateCourseRegisteration']);
-        });
-        
-        Route::get('marital-statuses', [MaritalStatusController::class, 'index']);
-        Route::get('states', [StateController::class, 'index']);
-        Route::get('lgas', [LgaController::class, 'index']);
-        Route::get('certificates', [CertificateController::class, 'index']);
-        Route::get('courses', [CourseController::class, 'index']);
-        Route::get('examination-categories', [ExaminationCategoryController::class, 'index']);
-        Route::get('examination-subjects', [ExaminationSubjectController::class, 'index']);
+    
+    Route::get('marital-statuses', [MaritalStatusController::class, 'index']);
+    Route::get('states', [StateController::class, 'index']);
+    Route::get('lgas', [LgaController::class, 'index']);
+    Route::get('certificates', [CertificateController::class, 'index']);
+    Route::get('courses', [CourseController::class, 'index']);
+    Route::get('examination-categories', [ExaminationCategoryController::class, 'index']);
+    Route::get('examination-subjects', [ExaminationSubjectController::class, 'index']);
 
-        Route::get('course-subjects', [CourseSubjectController::class, 'index']);
-    });
+    Route::get('course-subjects', [CourseSubjectController::class, 'index']);
+});

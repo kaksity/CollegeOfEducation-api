@@ -16,7 +16,7 @@ class PassportResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'path' => $this->file_path == null ? null : env('APP_URL').'/storage/passports/'.$this->file_path,
+            'path' => $this->file_path == null ?  env('APP_URL').'/image/user-placeholder.png' : env('APP_URL').'/storage/passports/'.$this->file_path,
         ];
         
     }
