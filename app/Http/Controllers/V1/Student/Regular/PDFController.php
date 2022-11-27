@@ -7,6 +7,7 @@ use App\Http\Requests\V1\MaritalStatus\MaritalStatusRequest;
 use App\Http\Resources\V1\Applicant\Nce\ApplicantDetailResource;
 use App\Http\Resources\V1\MaritalStatus\MaritalStatusResource;
 use App\Models\MaritalStatus;
+use App\Models\NceAcademicSession;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -15,23 +16,27 @@ use PDF;
 
 class PDFController extends Controller
 {
-    public function __construct(NceRegisteredCourseSubject $nceRegisteredCourseSubject)
+    public function __construct(NceRegisteredCourseSubject $nceRegisteredCourseSubject, NceAcademicSession $academicSession)
     {
-        $this->nceRegisteredCourseSubject = $nceRegisteredCourseSubject;    
+        $this->nceRegisteredCourseSubject = $nceRegisteredCourseSubject;
+        $this->academicSession = $academicSession;
     }
     
     public function generateCourseRegisteration()
     {
-        $applicant = Auth::user();
-        $personalData = $applicant->ncePersonalData;
-        $contactData = $applicant->nceContactData;
-        // $firstSemesterCourses = $this->nceRegisteredCourseSubject->with(['courseSubject' => function($model) {
-        //         $model->where('semester', 'first')->orderBy('course_code', 'ASC');
-        //     }])->where('user_id', $applicant->id)->get();
-        // $secondSemeterCourses = $this->nceRegisteredCourseSubject->with(['courseSubject' => function($model) {
-        //     $model->where('semester', 'second')->orderBy('course_code', 'ASC');
-        // }])->where('user_id', $applicant->id)->get();
-        $registerSemesterCourses = $this->nceRegisteredCourseSubject->with(['courseSubject'])->where('user_id', $applicant->id)->get();
+        $student = Auth::user();
+        $personalData = $student->ncePersonalData;
+        $contactData = $student->nceContactData;
+        $passport = $student->ncePassport;
+        $courseData = Auth::user()->nceCourseData()->first();
+
+        $currentSession = $this->academicSession->getCurrentSession($courseData->course_group_id);
+
+        $registerSemesterCourses = $this->nceRegisteredCourseSubject->with(['courseSubject'])->where([
+            'user_id' => $student->id,
+            'session_id' => $currentSession->id
+        ])->get();
+
         $registerSemesterCourses = $registerSemesterCourses->pluck('courseSubject');
         
         $firstSemesterCourses = [];
@@ -46,13 +51,20 @@ class PDFController extends Controller
                 array_push($secondSemesterCourses,$registeredCourse);
             }
         }
+        $courseGroup = $courseData->courseGroup;
+        $admittedCourse = $courseData->NceCourseDataAdmittedCourse;
 
         $data = [
             'personalData' => $personalData,
             'contactData' => $contactData,
+            'passport' => $passport,
             'firstSemesterCourses' => $firstSemesterCourses,
             'secondSemesterCourses' => $secondSemesterCourses,
-            'student' => Auth::user()
+            'student' => Auth::user(),
+            'currentSession' => $currentSession,
+            'admittedCourse' => $admittedCourse,
+            'courseGroup' => $courseGroup,
+            'courseData' => $courseData
         ];
 
         $pdf = PDF::setPaper('a4', 'portrait')->loadView('course-registeration', $data);

@@ -7,17 +7,18 @@ use App\Http\Requests\V1\Student\RegisterSubjectCourse\RegisterSubjectCourseRequ
 use App\Http\Resources\V1\Student\Nce\RegisteredCourseSubjectResource;
 use Exception;
 use Illuminate\Http\Request;
-use App\Models\{NceRegisteredCourseSubject, CourseSubject, NceCourseData};
+use App\Models\{NceRegisteredCourseSubject, CourseSubject, NceAcademicSession, NceCourseData};
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class RegisterCourseSubjectController extends Controller
 {
-    public function __construct(NceRegisteredCourseSubject $NceRegisteredCourseSubject, CourseSubject $courseSubject, NceCourseData $NceCourseData)
+    public function __construct(NceRegisteredCourseSubject $NceRegisteredCourseSubject, CourseSubject $courseSubject, NceCourseData $NceCourseData, NceAcademicSession $nceAcademicSession)
     {
-        $this->NceRegisteredCourseSubject = $NceRegisteredCourseSubject;
+        $this->RegisteredCourseSubject = $NceRegisteredCourseSubject;
         $this->courseSubject = $courseSubject;
-        $this->NceCourseData = $NceCourseData;
+        $this->CourseData = $NceCourseData;
+        $this->academicSession = $nceAcademicSession;
     }
     /**
      * Display a listing of the resource.
@@ -26,8 +27,15 @@ class RegisterCourseSubjectController extends Controller
      */
     public function index()
     {
+        $courseData = Auth::user()->nceCourseData()->first();
+
+        $currentSession = $this->academicSession->getCurrentSession($courseData->course_group_id);
         
-        $registeredCourseSubjects = $this->NceRegisteredCourseSubject->where('user_id', Auth::user()->id)->latest()->get();
+        $registeredCourseSubjects = $this->RegisteredCourseSubject->where([
+            'user_id' => Auth::user()->id,
+            'session_id' => $currentSession->id,
+        ])->latest()->get();
+
         return RegisteredCourseSubjectResource::collection($registeredCourseSubjects);
     }
 
@@ -41,6 +49,8 @@ class RegisterCourseSubjectController extends Controller
     {
         try
         {
+            $courseData = Auth::user()->nceCourseData()->first();
+
             $courseSubject = $this->courseSubject->find($request->course_subject_id);
             
             if($courseSubject == null)
@@ -48,9 +58,12 @@ class RegisterCourseSubjectController extends Controller
                 throw new Exception('Course Subject does not exist', 404);
             }
 
-            $this->NceRegisteredCourseSubject->create([
+            $currentSession = $this->academicSession->getCurrentSession($courseData->course_group_id);
+
+            $this->RegisteredCourseSubject->create([
                 'user_id' => Auth::user()->id,
-                'course_subject_id' => $request->course_subject_id
+                'course_subject_id' => $request->course_subject_id,
+                'session_id' => $currentSession->id
             ]);
 
             $data['message'] = 'Course Subject was registered successfully';
@@ -75,7 +88,7 @@ class RegisterCourseSubjectController extends Controller
     {
         try
         {
-            $registeredCourseSubject = $this->NceRegisteredCourseSubject->find($id);
+            $registeredCourseSubject = $this->RegisteredCourseSubject->find($id);
             
             if($registeredCourseSubject == null)
             {
@@ -102,14 +115,17 @@ class RegisterCourseSubjectController extends Controller
         {
             
             
-            $NceCourseData = $this->NceCourseData->where('user_id', Auth::user()->id)->first();
-            $courseSubjects = $this->courseSubject->where('course_id', $NceCourseData->admitted_course_id)->orderBy('semester', 'ASC')->get();
+            $courseData = $this->CourseData->where('user_id', Auth::user()->id)->first();
+            $courseSubjects = $this->courseSubject->where('course_id', $courseData->admitted_course_id)->orderBy('semester', 'ASC')->get();
+            $currentSession = $this->academicSession->getCurrentSession($courseData->course_group_id);
+
             DB::beginTransaction();
             foreach ($courseSubjects as $courseSubject) {
-                $this->NceRegisteredCourseSubject->create([
+                $this->RegisteredCourseSubject->create([
                     'user_id' => Auth::user()->id,
                     'course_subject_id' => $courseSubject->id,
-                ]);                    
+                    'session_id' => $currentSession->id
+                ]);
             }
             DB::commit();
             $data['message'] = 'Course Subject was registered successfully';

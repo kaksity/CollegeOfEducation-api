@@ -167,7 +167,7 @@
                                             <div>{{ $personalData->date_of_birth }}</div>
                                         </td>
                                         <td>
-                                            <b>Sex</b>
+                                            <b>Gender</b>
                                             <div>{{ $personalData->sex }}</div>
                                         </td>
                                         <td>

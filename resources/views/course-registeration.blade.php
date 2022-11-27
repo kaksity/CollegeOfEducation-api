@@ -6,8 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href={{ asset('css/pdf.css') }} />
-    <title>Submit Application</title>
+    <title>Course Registration</title>
     <style>
+        *{
+            font-size: 10px;
+            font-family: sans-serif;
+        }
         .row {
             flex-shrink: 0;
             width: 100%;
@@ -47,14 +51,14 @@
 
         .table {
             width: 100%;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             border-collapse: collapse;
         }
 
         th,
         td,
         tr {
-            padding: 1rem;
+            /* padding: 0.5rem; */
         }
 
         .table-bordered {
@@ -67,48 +71,65 @@
         .heading {
             text-align: center;
         }
-        .heading-school-title {
-            font-size: 100px;
-        }
         .no-margin-and-padding {
             margin: 0px;
             padding: 0px;
+        }
+        .passport {
+            height: 7rem;
+            width: 7rem;
+            object-fit: cover;
+        }
+        .logo {
+            height: 5rem;
+            width: 5rem;
+            object-fit: cover;
         }
     </style>
 </head>
 
 <body>
     <div>
-        <div class="row mt-2 table-responsive">
+        <div class="row">
             <table class="table">
-                <tbody class="">
-                    <tr>
-                        <td width="5%">
-                            <img src="{{ public_path('image/logo.png') }}" alt="">
-                        </td>
-                        <td width="95%">
-                            <div class="heading">
-                                <div style="heading-school-title">
-                                    <b>MOHAMMET LAWAN COLLEGE OF AGRICULTURE</b>
-                                </div>
-                                P.M.B 14277, MAIDUGURI <br>
-                                BORNO STATE, NIGERIA <br>
-                                OFFICE OF THE REGISTRAR <br>
-                                (ACADEMIC DIVISION)
-                                <div>
-                                    Telephone: 070-39443472 
-                                    Email Address: admissionoffice@molca.edu.ng
-                                </div>
-                                <div class="no-margin-and-padding">
-                                    <b>REGISTRATION FORM</b>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
+                <tbody>
+                        <tr>
+                            <td class="no-margin-and-padding heading">
+                                <img class="logo" src="{{ public_path('image/logo.png') }}" alt="">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="no-margin-and-padding heading">
+                                                    <h1>MOHAMMET LAWAN COLLEGE OF AGRICULTURE</h1>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="no-margin-and-padding heading">
+                                                    <b>Student's Registration</b>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="no-margin-and-padding heading">
+                                                    <b>{{"{$currentSession->start_year}/{$currentSession->end_year}"}} Academic Session</b>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
                 </tbody>
             </table>
         </div>
-        <hr>
     </div>
     <div class="row mt-2">
         <h4>Personal Data</h4>
@@ -122,88 +143,106 @@
                             <img class="passport" src="{{storage_path('app/public/passports/'.$passport->file_path)}}" alt="">
                         </td>
                         <td width="95%">
-                            <table>
+                            <table class="table">
                                 <tbody>
                                     <tr>
-                                        <td>
-                                            <b>Surname</b>
-                                            <div>{{ $personalData->surname }}</div>
+                                        <td colspan="3">
+                                            <b>Full Name</b>: {{ $personalData->surname }} {{ $personalData->other_names }}
                                         </td>
-                                        <td>
-                                            <b>Other Names</b>
-                                            <div>{{ $personalData->other_names }}</div>
-                                        </td>
-                                        <td>
-                                            <b>Student Registration Number</b>
-                                            <div>{{ $student->id_number }}</div>
+                                        <td colspan="2">
+                                            <b>Date of Birth</b>: {{ $personalData->date_of_birth }}
+                                            <div></div>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            <b>Place of Birth</b>
-                                            <div>{{ $personalData->place_of_birth }}</div>
+                                        <td colspan="3">
+                                            <b>Gender</b>: {{ $personalData->sex }}
                                         </td>
-                                        <td>
-                                            <b>Date of Birth</b>
-                                            <div>{{ $personalData->date_of_birth }}</div>
+                                        <td colspan="2">
+                                            <b>Marital Status</b>: {{ $personalData->maritalStatus->name ?? 'N/A' }}
                                         </td>
-                                        <td>
-                                            <b>Sex</b>
-                                            <div>{{ $personalData->sex }}</div>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row mt-2">
+            <h4>Contact Details</h4>
+        </div>
+        <div class="row table-responsive">
+            <table class="table">
+                <tbody class="">
+                    <tr>
+                        <td width="100%">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td colspan="3">
+                                            <b>Home Town</b>: {{ $personalData->home_town }}
                                         </td>
-                                        <td>
-                                            <b>Marital Status</b>
-                                            <div>{{ $personalData->maritalStatus->name ?? 'N/A' }}</div>
+                                        <td colspan="2">
+                                            <b>LGA</b>: {{ $personalData->home_town }}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            <b>State of Origin</b>
-                                            <div>{{ $personalData->state->name ?? 'N/A' }}</div>
+                                        <td colspan="3">
+                                            <b>State of Origin</b>: {{ $personalData->state->name ?? 'N/A' }}
                                         </td>
-                                        <td>
-                                            <b>Local Government Area</b>
-                                            <div>{{ $personalData->lga->name ?? 'N/A' }}</div>
-                                        </td>
-                                        <td>
-                                            <b>Home Town</b>
-                                            <div>{{ $personalData->home_town }}</div>
-                                        </td>
-                                        <td>
-                                            <b>Nationality</b>
-                                            <div>{{ $personalData->nationality }}</div>
+                                        <td colspan="2">
+                                            <b>Nationality</b>: {{ $personalData->nationality }}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            <b>Name of Guardian</b>
-                                            <div>{{ $contactData->name_of_guardian }}</div>
+                                        <td colspan="3">
+                                            <b>Phone Number</b>: {{ $contactData->phone_number }}
                                         </td>
-                                        <td>
-                                            <b>Address of Guardian</b>
-                                            <div>{{ $contactData->address_of_guardian }}</div>
-                                        </td>
-                                        <td>
-                                            <b>Name of Employer</b>
-                                            <div>{{ $contactData->name_of_employer }}</div>
-                                        </td>
-                                        <td>
-                                            <b>Address of Employer</b>
-                                            <div>{{ $contactData->address_of_employer }}</div>
+                                        <td colspan="2">
+                                            <b>Email Address</b>: {{ $contactData->email_address }}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            <b>Contact Address</b>
-                                            <div>{{ $contactData->contact_address }}</div>
+                                        <td colspan="4">
+                                            <b>Contact Address</b>: {{ $contactData->contact_address }}
                                         </td>
-                                        <td>
-                                            <b>Email Address</b>
-                                            <div>{{ $contactData->email_address }}</div>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row mt-2">
+            <h4>Course Registration</h4>
+        </div>
+        <div class="row table-responsive">
+            <table class="table">
+                <tbody class="">
+                    <tr>
+                        <td width="100%">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td colspan="6">
+                                            <b>ID Number</b>: {{ $student->id_number }}
                                         </td>
-                                        <td>
-                                            <b>Phone Number</b>
-                                            <div>{{ $contactData->phone_number }}</div>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6">
+                                            <b>Level</b>: {{ $courseData->year_group }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6">
+                                            <b>Department</b>: {{ $admittedCourse->name }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6">
+                                            <b>Programme</b>: {{ $courseGroup->name }} ({{ $courseGroup->name }})
                                         </td>
                                     </tr>
                                 </tbody>
