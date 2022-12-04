@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\V1\Admin\ICT;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Admin\ICT\ReturningStudentRequest;
+use App\Mail\NewStudentRegistered;
 use App\Services\Interfaces\GeneralSettings\AcademicSessionServiceInterface;
 use App\Services\Interfaces\Students\StudentServiceInterface;
 use Exception;
+use Illuminate\Support\Facades\Mail;
 
 class ReturningStudentController extends Controller
 {
@@ -42,6 +44,12 @@ class ReturningStudentController extends Controller
             }
 
             $this->studentServiceInterface->createReturningStudent($request->safe()->all());
+
+            $user = $this->studentServiceInterface->getStudentByEmailAddress($request->email_address);
+            
+            Mail::to($user->email_address)->later(now()->addSeconds(5), new NewStudentRegistered([
+                'personalInformation' => $user->ncePersonalData
+            ]));
             $data['message'] = 'Returning Students was created successfully';
             return successParser($data, 201);
         }

@@ -8,12 +8,14 @@ use App\Http\Requests\V1\Student\Authentication\RequestForgotPasswordRequest;
 use App\Http\Requests\V1\Student\Authentication\LoginRequest as AuthenticationLoginRequest;
 use App\Http\Requests\V1\Student\Authentication\RegisterRequest;
 use App\Http\Requests\V1\Student\Authentication\VerificationForgotPassword;
+use App\Mail\ForgotPassword;
 use App\Models\{NceContactData, User, NcePersonalData, NceCourseData, NceApplicationStatus, NcePassport};
 use Exception;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -179,6 +181,10 @@ class AuthController extends Controller
                 ]);
 
                 //Send a Mail
+                Mail::to($user->email_address)->later(now()->addSeconds(5), new ForgotPassword([
+                    'token' => $verificationToken,
+                    'personalInformation' => $user->ncePersonalData
+                ]));
             }
 
             $data['message'] = 'Password reset instruction has been sent to this mail';
@@ -214,7 +220,7 @@ class AuthController extends Controller
                 'password' => $hashPassword
             ]);
             
-            $data['message'] = 'Password reset instruction has been sent to this mail';
+            $data['message'] = 'Password was reset successfully';
             return successParser($data);
         }
         catch(Exception $ex)

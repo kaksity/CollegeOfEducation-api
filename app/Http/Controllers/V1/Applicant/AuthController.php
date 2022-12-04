@@ -13,8 +13,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\V1\Applicant\Authentication\RequestForgotPasswordRequest;
 use App\Http\Requests\V1\Applicant\Authentication\VerificationForgotPassword;
+use App\Mail\ForgotPassword;
+use App\Mail\NewApplicantRegistered;
 use App\Services\Interfaces\General\AuthenticationServiceInterface;
 use App\Services\Interfaces\Students\StudentServiceInterface;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -54,7 +57,9 @@ class AuthController extends Controller
             }
 
             $this->studentServiceInterface->createNewStudent($request->safe()->all());
-
+            Mail::to($user->email_address)->later(now()->addSeconds(5), new NewApplicantRegistered([
+                'personalInformation' => $user->ncePersonalData
+            ]));
             $data['message'] = 'Applicant account was created successfully';
             return successParser($data, 201);
         }
@@ -123,6 +128,10 @@ class AuthController extends Controller
                 ]);
 
                 //Send a Mail
+                Mail::to($user->email_address)->later(now()->addSeconds(5), new ForgotPassword([
+                    'token' => $verificationToken,
+                    'personalInformation' => $user->ncePersonalData
+                ]));
             }
 
             $data['message'] = 'Password reset instruction has been sent to this mail';
@@ -158,7 +167,7 @@ class AuthController extends Controller
                 'password' => $hashPassword
             ]);
             
-            $data['message'] = 'Password reset instruction has been sent to this mail';
+            $data['message'] = 'Password was reset successfully';
             return successParser($data);
         }
         catch(Exception $ex)

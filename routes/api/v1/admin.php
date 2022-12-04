@@ -18,6 +18,7 @@ use App\Http\Controllers\V1\Admin\GeneralSettings\{
     StateController
 };
 use App\Http\Controllers\V1\Admin\Bursary\CoursePaymentController;
+use App\Http\Controllers\V1\Admin\Bursary\PDFController;
 use App\Http\Controllers\V1\Admin\Bursary\RegisterationPaymentController;
 use App\Http\Controllers\V1\Admin\ICT\UploadStudentController;
 use App\Http\Controllers\V1\Admin\ICT\ReturningStudentController;
@@ -61,6 +62,11 @@ Route::group(['middleware' => ['auth:sanctum', 'verify.is.admin']], function() {
         Route::apiResource('admission-set-payments', AdmissionSetPaymentController::class);
         Route::apiResource('applicant-processed-payments', ApplicantProcessedPaymentController::class);
         Route::apiResource('course-registeration-pins', CourseRegisterationPinController::class);
+
+        Route::group(['prefix' => 'reports'], function() {
+            Route::get('course-registration-pins', [PDFController::class, 'generateCourseRegistrationPinPDF']);
+        });
+
     });
 
     Route::group(['prefix' => 'ict', 'middleware' => ['verify.is.ict.office']], function () {
