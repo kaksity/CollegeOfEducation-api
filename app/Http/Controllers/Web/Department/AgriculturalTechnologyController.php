@@ -9,6 +9,6 @@ class AgriculturalTechnologyController extends Controller
 {
     public function index()
     {
-        return view('departments.agricultural-technology');
+        return view('web.departments.agricultural-technology');
     }
 }

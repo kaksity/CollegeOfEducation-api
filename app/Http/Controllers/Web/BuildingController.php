@@ -9,6 +9,6 @@ class BuildingController extends Controller
 {
     public function index()
     {
-        return view('building');
+        return view('web.building');
     }
 }

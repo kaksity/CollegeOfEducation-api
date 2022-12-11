@@ -1037,7 +1037,20 @@ section {
 .course-details .course-info a {
   color: #657a6d;
 }
+table,td,tr,th{
+  border: 1px solid rgb(6, 109, 161);
+  text-align: center;
 
+  border-style: groove;
+
+
+}
+th,td{
+  color: #18d26e;
+  border-radius: 5px;
+  width: 20%;
+  
+}
 /*--------------------------------------------------------------
 # Cource Details Tabs
 --------------------------------------------------------------*/

@@ -9,6 +9,6 @@ class ForestryTechnologyController extends Controller
 {
     public function index()
     {
-        return view('departments.forestry-technology');
+        return view('web.departments.forestry-technology');
     }
 }

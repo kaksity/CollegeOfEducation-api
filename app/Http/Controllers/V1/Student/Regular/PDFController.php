@@ -67,7 +67,7 @@ class PDFController extends Controller
             'courseData' => $courseData
         ];
 
-        $pdf = PDF::setPaper('a4', 'portrait')->loadView('course-registeration', $data);
+        $pdf = PDF::setPaper('a4', 'portrait')->loadView('pdfs.student.course-registration', $data);
 
         $fileName = time().uniqid().'.pdf';
 

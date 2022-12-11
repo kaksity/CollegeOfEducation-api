@@ -9,6 +9,6 @@ class BasicScienceController extends Controller
 {
     public function index()
     {
-        return view('departments.basic-science');
+        return view('web.departments.basic-science');
     }
 }

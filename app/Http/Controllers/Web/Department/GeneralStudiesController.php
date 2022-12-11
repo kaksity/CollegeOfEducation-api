@@ -9,6 +9,6 @@ class GeneralStudiesController extends Controller
 {
     function index()
     {
-        return view('departments.general-studies');
+        return view('web.departments.general-studies');
     }
 }

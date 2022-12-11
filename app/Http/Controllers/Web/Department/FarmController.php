@@ -9,6 +9,6 @@ class FarmController extends Controller
 {
     public function index()
     {
-        return view('departments.farm');
+        return view('web.departments.farm');
     }
 }

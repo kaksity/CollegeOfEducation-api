@@ -9,6 +9,6 @@ class ConsultController extends Controller
 {
     function index()
     {
-        return view('departments.consult');
+        return view('web.departments.consult');
     }
 }

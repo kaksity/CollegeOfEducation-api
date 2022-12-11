@@ -15,6 +15,7 @@ use App\Http\Controllers\Web\Department\HomeRuralEconomicsController;
 use App\Http\Controllers\Web\Department\IctController;
 
 use App\Http\Controllers\Web\HomeController;
+use App\Http\Controllers\Web\PolicyController;
 use App\Http\Controllers\Web\StaffController;
 use Illuminate\Support\Facades\Route;
 
@@ -43,6 +44,7 @@ Route::get('/department/consult', [ConsultController::class, 'index']);
 Route::get('/department/gst', [GeneralStudiesController::class, 'index']);
 Route::get('/department/hre', [HomeRuralEconomicsController::class, 'index']);
 Route::get('/department/ict', [IctController::class, 'index']);
-
+Route::get('/policy/student-affairs-office', [PolicyController::class, 'studentAffairs']);
+Route::get('/policy/admission-policy-and-fees', [PolicyController::class, 'admissionPolicy']);
 Route::get('/staff', [StaffController::class, 'index']);
 Route::get('/building', [BuildingController::class, 'index']);

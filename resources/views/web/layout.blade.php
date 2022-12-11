@@ -18,19 +18,20 @@
         href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
         rel="stylesheet">
 
-    @include('partials._styles')
+    @include('web.partials._styles')
 </head>
 
 <body>
-    @include('partials._header')
+    @include('web.partials._header')
+    @yield('page-hero')
     <main id="main">
         @yield('page-content')
     </main>
-    @include('partials._footer')
+    @include('web.partials._footer')
     <div id="preloader"></div>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
-    @include('partials._scripts')
+    @include('web.partials._scripts')
 
 </body>
 

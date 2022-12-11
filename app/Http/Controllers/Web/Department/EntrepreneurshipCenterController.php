@@ -9,6 +9,6 @@ class EntrepreneurshipCenterController extends Controller
 {
     public function index()
     {
-        return view('departments.entrepreneurship-center');
+        return view('web.departments.entrepreneurship-center');
     }
 }

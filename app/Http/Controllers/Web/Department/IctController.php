@@ -9,6 +9,6 @@ class IctController extends Controller
 {
     public function index()
     {
-        return view('departments.ict');
+        return view('web.departments.ict');
     }
 }

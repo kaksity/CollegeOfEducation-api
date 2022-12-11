@@ -9,6 +9,6 @@ class AnimalHealthProductionController extends Controller
 {
     public function index()
     {
-        return view('departments.animal-health-production');
+        return view('web.departments.animal-health-production');
     }
 }

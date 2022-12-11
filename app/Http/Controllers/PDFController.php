@@ -20,7 +20,7 @@ class PDFController extends Controller
 
           
 
-        return view('hnd-admission-letter');
+        return view('web.hnd-admission-letter');
 
     }
 }

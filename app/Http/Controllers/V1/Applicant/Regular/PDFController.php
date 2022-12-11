@@ -56,7 +56,7 @@ class PDFController extends Controller
            'heldResponsibilityData' => $heldResponsibilityData
         ];
         
-        $pdf = PDF::setPaper('a4', 'landscape')->loadView('submit-application', $data);
+        $pdf = PDF::setPaper('a4', 'landscape')->loadView('pdfs.applicant.submit-application', $data);
 
         $fileName = time().uniqid().'.pdf';
 
@@ -84,7 +84,7 @@ class PDFController extends Controller
             'dateOfAdmission' => $dateOfAdmission,
         ];
 
-        $pdf = PDF::setPaper('a4', 'portrait')->loadView('admission-letter', $data);
+        $pdf = PDF::setPaper('a4', 'portrait')->loadView('pdfs.applicant.admission-letter', $data);
 
         $fileName = time().uniqid().'.pdf';
 
