@@ -47,105 +47,93 @@ class StudentServiceImplementation implements StudentServiceInterface
 
     public function createReturningStudent(array $data)
     {
-        DB::beginTransaction();
-            try
-            {
-                $user = User::create([
-                    'email_address' => $data['email_address'],
-                    'id_number' => $data['id_number'],
-                    'password' => Hash::make($data['password']),
-                ]);
-                NcePersonalData::create([
-                    'user_id' => $user->id,
-                    'surname' => $data['surname'],
-                    'other_names' => $data['other_names'],
-                    'state_id' => $data['state_id']
-                ]);
-                NceContactData::create([
-                    'user_id' => $user->id,
-                    'email_address' => $data['email_address']
-                ]);
-                NceCourseData::create([
-                    'user_id' => $user->id,
-                    'year_group' => $data['year_group'],
-                    'course_group_id' => $data['course_group_id'],
-                    'admitted_course_id' => $data['course_id'],
-                ]);
+        return DB::transaction(function () use ($data) {
+            $user = User::create([
+                'email_address' => $data['email_address'],
+                'id_number' => $data['id_number'],
+                'password' => Hash::make($data['password']),
+            ]);
+            NcePersonalData::create([
+                'user_id' => $user->id,
+                'surname' => $data['surname'],
+                'other_names' => $data['other_names'],
+                'state_id' => $data['state_id']
+            ]);
+            NceContactData::create([
+                'user_id' => $user->id,
+                'email_address' => $data['email_address']
+            ]);
+            NceCourseData::create([
+                'user_id' => $user->id,
+                'year_group' => $data['year_group'],
+                'course_group_id' => $data['course_group_id'],
+                'admitted_course_id' => $data['course_id'],
+            ]);
 
-                $currentSession = $this->academicSessionServiceInterface
-                                        ->getCurrentSessionByCourseGroupId($data['course_group_id']);
+            $currentSession = $this->academicSessionServiceInterface
+                                    ->getCurrentSessionByCourseGroupId($data['course_group_id']);
 
-                NceApplicationStatus::create([
-                    'user_id' => $user->id,
-                    'status' => 'admitted',
-                    'academic_session_id' => $currentSession->id,
-                    'is_new_applicant' => false,
-                ]);
-                NcePassport::create([
-                    'user_id' => $user->id
-                ]);
-                NceExaminationCenterData::create([
-                    'user_id' => $user->id
-                ]);
-                DB::commit();
-            }
-            catch(Exception $ex)
-            {
-                DB::rollBack();
-                throw $ex;
-            }
+            NceApplicationStatus::create([
+                'user_id' => $user->id,
+                'status' => 'admitted',
+                'academic_session_id' => $currentSession->id,
+                'is_new_applicant' => false,
+            ]);
+            NcePassport::create([
+                'user_id' => $user->id
+            ]);
+            NceExaminationCenterData::create([
+                'user_id' => $user->id
+            ]);
+
+            return $user;
+        });
     }
     public function createNewStudent(array $data)
     {
-        DB::beginTransaction();
-            try
-            {
-                $currentSession = $this->academicSessionServiceInterface
-                    ->getCurrentSessionByCourseGroupId($data['course_group_id']);
+        return DB::transaction(function () use ($data) {
+            $currentSession = $this->academicSessionServiceInterface
+                ->getCurrentSessionByCourseGroupId($data['course_group_id']);
 
-                if($currentSession == null)
-                {
-                    throw new Exception('Current Session has not been set by the admin', 400);
-                }
-
-                $user = User::create([
-                    'email_address' => $data['email_address'],
-                    'password' => Hash::make($data['password']),
-                ]);
-                NcePersonalData::create([
-                    'user_id' => $user->id,
-                    'surname' => $data['surname'],
-                    'other_names' => $data['other_names'],
-                    'state_id' => $data['state_id'],
-                ]);
-                NceContactData::create([
-                    'user_id' => $user->id,
-                    'email_address' => $data['email_address']
-                ]);
-                NceCourseData::create([
-                    'user_id' => $user->id,
-                    'course_group_id' => $data['course_group_id']
-                ]);
-                
-                NceApplicationStatus::create([
-                    'user_id' => $user->id,
-                    'status' => 'applying',
-                    'is_new_applicant' => true,
-                    'academic_session_id' => $currentSession->id
-                ]);
-                NcePassport::create([
-                    'user_id' => $user->id
-                ]);
-                NceExaminationCenterData::create([
-                    'user_id' => $user->id
-                ]);
-                DB::commit();
-            }
-            catch (Exception $ex)
+            if($currentSession == null)
             {
-                DB::rollBack();
-                throw $ex;
+                throw new Exception('Current Session has not been set by the admin', 400);
             }
+
+            $user = User::create([
+                'email_address' => $data['email_address'],
+                'password' => Hash::make($data['password']),
+            ]);
+            NcePersonalData::create([
+                'user_id' => $user->id,
+                'surname' => $data['surname'],
+                'other_names' => $data['other_names'],
+                'state_id' => $data['state_id'],
+            ]);
+            NceContactData::create([
+                'user_id' => $user->id,
+                'email_address' => $data['email_address']
+            ]);
+            NceCourseData::create([
+                'user_id' => $user->id,
+                'course_group_id' => $data['course_group_id']
+            ]);
+            
+            NceApplicationStatus::create([
+                'user_id' => $user->id,
+                'status' => 'applying',
+                'is_new_applicant' => true,
+                'academic_session_id' => $currentSession->id
+            ]);
+            NcePassport::create([
+                'user_id' => $user->id
+            ]);
+            NceExaminationCenterData::create([
+                'user_id' => $user->id
+            ]);
+
+            return $user;
+        });
     }
     public function getAllAdmittedStudents($perPage = 100)
     {

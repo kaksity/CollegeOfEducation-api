@@ -20,15 +20,15 @@ use Illuminate\Support\Facades\Mail;
 class AuthController extends Controller
 {
     
-    public function __construct(User $user, NcePersonalData $NcePersonalData, NcePassport $NcePassport,NceApplicationStatus $NceApplicationStatus,NceContactData $NceContactData, NceCourseData $NceCourseData)
-    {
-        $this->user = $user;
-        $this->NcePersonalData = $NcePersonalData;
-        $this->NceContactData = $NceContactData;
-        $this->NceCourseData = $NceCourseData;
-        $this->NceApplicationStatus = $NceApplicationStatus;
-        $this->NcePassport = $NcePassport;
-    }
+    public function __construct(
+        private User $user,
+        private NcePersonalData $ncePersonalData,
+        private NcePassport $ncePassport,
+        private NceApplicationStatus $nceApplicationStatus,
+        private NceContactData $nceContactData,
+        private NceCourseData $nceCourseData)
+    {}
+
     public function login(AuthenticationLoginRequest $request)
     {
         try
@@ -63,7 +63,7 @@ class AuthController extends Controller
             $data['access_token'] = $accessToken;
             $data['message'] = 'Login was succesful.';
             return successParser($data);
-        }   
+        }
         catch(Exception $ex)
         {
             $data['message'] = $ex->getMessage();
@@ -114,27 +114,27 @@ class AuthController extends Controller
             try
             {
                 $user = $this->user->create([
-                    'stringemail_address' => $request->email_address,
+                    'email_address' => $request->email_address,
                     'password' => Hash::make($request->password)
                 ]);
-                $this->NcePersonalData->create([
+                $this->ncePersonalData->create([
                     'user_id' => $user->id,
                     'surname' => $request->surname,
                     'other_names' => $request->other_names,
                 ]);
-                $this->NceContactData->create([
+                $this->nceContactData->create([
                     'user_id' => $user->id,
                     'email_address' => $request->email_address
                 ]);
-                $this->NceCourseData->create([
+                $this->nceCourseData->create([
                     'user_id' => $user->id,
                 ]);
 
-                $this->NceApplicationStatus->create([
+                $this->nceApplicationStatus->create([
                     'user_id' => $user->id,
                     'status' => 'applying'
                 ]);
-                $this->NcePassport->create([
+                $this->ncePassport->create([
                     'user_id' => $user->id
                 ]);
                 DB::commit();
