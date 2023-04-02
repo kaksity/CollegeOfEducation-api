@@ -18,6 +18,8 @@ use App\Services\Implementations\GeneralSettings\LgaServiceImplementation;
 use App\Services\Implementations\GeneralSettings\MaritalStatusImplementation;
 use App\Services\Implementations\GeneralSettings\RequiredDocumentServiceImplementation;
 use App\Services\Implementations\GeneralSettings\StateServiceImplementation;
+use App\Services\Implementations\Payments\InterswitchServiceImplementation;
+use App\Services\Implementations\Payments\RemitaServiceImplementation;
 use App\Services\Implementations\Students\ContactDataServiceImplementation;
 use App\Services\Implementations\Students\CourseDataServiceImplementation;
 use App\Services\Implementations\Students\EducationalBackgroundDataServiceImplementation;
@@ -43,6 +45,8 @@ use App\Services\Interfaces\GeneralSettings\LgaServiceInterface;
 use App\Services\Interfaces\GeneralSettings\MaritalStatusInterface;
 use App\Services\Interfaces\GeneralSettings\RequiredDocumentServiceInterface;
 use App\Services\Interfaces\GeneralSettings\StateServiceInterface;
+use App\Services\Interfaces\Payments\InterswitchServiceInterface;
+use App\Services\Interfaces\Payments\RemitaServiceInterface;
 use App\Services\Interfaces\Students\ContactDataServiceInterface;
 use App\Services\Interfaces\Students\CourseDataServiceInterface;
 use App\Services\Interfaces\Students\EducationalBackgroundDataServiceInterface;
@@ -92,7 +96,18 @@ class AppServiceProvider extends ServiceProvider
         App::bind(HeldResponsibilityDataServiceInterface::class, HeldResponsibilityDataServiceImplementation::class);
         App::bind(ExtraCurricularDataServiceInterface::class, ExtraCurricularDataServiceImplementation::class);
         App::bind(EmploymentDataServiceInterface::class, EmploymentDataServiceImplementation::class);
-        App::bind(EducationalBackgroundDataServiceInterface::class, EducationalBackgroundDataServiceImplementation::class);
+        App::bind(
+            EducationalBackgroundDataServiceInterface::class,
+            EducationalBackgroundDataServiceImplementation::class
+        );
+        App::bind(
+            RemitaServiceInterface::class,
+            RemitaServiceImplementation::class,
+        );
+        App::bind(
+            InterswitchServiceInterface::class,
+            InterswitchServiceImplementation::class
+        );
     }
 
     /**

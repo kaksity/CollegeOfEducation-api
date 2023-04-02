@@ -7,14 +7,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Models\NceApplicationPayment;
+use App\Services\Interfaces\Payments\InterswitchServiceInterface;
+use App\Services\Interfaces\Payments\RemitaServiceInterface;
 use Exception;
 
 class VerifyNceApplicationPayment
 {
-    public function __construct(NceApplicationPayment $NceApplicationPayment)
-    {
-        $this->NceApplicationPayment = $NceApplicationPayment;
-    }
+    public function __construct(
+        private NceApplicationPayment $applicationPayment,
+        private RemitaServiceInterface $remitaServiceInterface,
+        private InterswitchServiceInterface $interswitchServiceInterface
+    )
+    {}
     /**
      * Handle an incoming request.
      *
@@ -26,40 +30,48 @@ class VerifyNceApplicationPayment
     {
         try
         {
-            $payment = $this->NceApplicationPayment->where([
+            $payment = $this->applicationPayment->where([
                 'user_id' => Auth::id(),
             ])->first();
             
-            if($payment == null)
-            {
+            if ($payment == null) {
                 $data['message'] = 'Applicant is yet to pay application fee';
                 $data['error_code'] = 'APPLICATION_PAYMENT_ERROR';
                 return errorParser($data, 403);
-            }
-            else if ($payment->status != 'paid')
-            {
-                $merchantCode = env('INTERSWITCH_MERCHANT_CODE');
-                $referenceCode = $payment->reference_code;
-                $url = env('INTERSWITCH_PAYMENT_URL');
+            } elseif ($payment->status != 'paid') {
+                if ($payment->payment_gateway == 'interswitch') {
 
-                $amount = $payment->amount * 100;
-                
-                $url = "$url/gettransaction.json?merchantcode=$merchantCode&transactionreference=$referenceCode&amount=$amount";
-                $response = Http::withHeaders([
-                    'Content-Type' => 'application/json',
-                ])->get($url);
-                
-                $responseData = json_decode($response->body());
-                if($responseData->ResponseCode != '00')
-                {
-                    $data['message'] = 'Applicant is yet to pay application fee';
-                    $data['error_code'] = 'APPLICATION_PAYMENT_ERROR';
-                    return errorParser($data, 403);
+                    $response = $this->interswitchServiceInterface->verifyTransaction([
+                        'reference_code' => $payment->reference_code,
+                        'amount' => $payment->amount,
+                    ]);
+
+                    if ($response['transaction_code'] != '00') {
+                        $data['message'] = 'Applicant is yet to pay application fee';
+                        $data['error_code'] = 'APPLICATION_PAYMENT_ERROR';
+                        return errorParser($data, 403);
+                    }
+
+                    $payment->update([
+                        'status' => 'paid'
+                    ]);
+                } elseif ($payment->payment_gateway == 'remita') {
+
+                    $response = $this->remitaServiceInterface->verifyPayment([
+                        'rrr' => $payment->rrr,
+                    ]);
+
+                    if($response['transaction_code'] != '00')
+                    {
+                        $data['message'] = 'Applicant is yet to pay application fee';
+                        $data['error_code'] = 'APPLICATION_PAYMENT_ERROR';
+                        return errorParser($data, 403);
+                    }
+
+                    $payment->update([
+                        'status' => 'paid'
+                    ]);
                 }
-    
-                $payment->update([
-                    'status' => 'paid'
-                ]);
             }
             
             return $next($request);
