@@ -17,7 +17,7 @@ class NceRegisterationPaymentRequest extends BaseFormRequest
         if($this->getMethod() == 'POST')
         {
             $rules += [
-                'payment_gateway' => ['required', 'in:interswitch']
+                'payment_gateway' => ['required', 'in:interswitch,remita']
             ];
         }
         return $rules;

@@ -43,7 +43,7 @@ class CourseRegisterationPinController extends Controller
                 ->createNewCourseRegistrationCards($request->safe()->all());
 
             // $this->courseRegisterationCard->create($request->safe()->all());
-            $data['message'] = 'Course registeration card has been generated successfully';
+            $data['message'] = 'Course registration card has been generated successfully';
             return successParser($data, 201);
         }
         catch(Exception $ex)

@@ -55,8 +55,8 @@ class AuthController extends Controller
             {
                 throw new Exception('Email Address has already been taken', 400);
             }
-
             $this->studentServiceInterface->createNewStudent($request->safe()->all());
+            
             Mail::to($user->email_address)->later(now()->addSeconds(5), new NewApplicantRegistered([
                 'personalInformation' => $user->ncePersonalData
             ]));

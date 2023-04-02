@@ -21,7 +21,7 @@ class NceRegisterationPaymentResource extends JsonResource
             'id' => $this->id,
             'amount' => $this->amount,
             'status' => $this->status,
-            'reference_code' => $this->reference_code,
+            'reference_code' => $this->payment_gateway == 'interswitch' ? "Interswitch - {$this->reference_code}" : "Remita - {$this->rrr}",
             'session' => new NceAcademicSessionResource($this->nceSession),
             'course' => new CourseResource($this->nceCourse),
             'student' => new StudentResource($this->nceStudent),

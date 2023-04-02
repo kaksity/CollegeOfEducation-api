@@ -19,7 +19,8 @@ class ApplicationSetPaymentRequest extends BaseFormRequest
         {
             $rules += [
                 'course_group_id' => ['required', 'uuid'],
-                'amount' => ['required', 'numeric', 'min:0']
+                'amount' => ['required', 'numeric', 'min:0'],
+                'remita_service_type' => ['required', 'string'],
             ];
         }
         return $rules;

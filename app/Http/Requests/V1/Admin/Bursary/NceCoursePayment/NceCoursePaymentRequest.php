@@ -26,7 +26,8 @@ class NceCoursePaymentRequest extends BaseFormRequest
                 'course_id' => ['required', 'uuid'],
                 'amount' => ['required', 'numeric'],
                 'is_indigine' => ['required', 'boolean'],
-                'year_group' => ['required', 'string']
+                'year_group' => ['required', 'string'],
+                'remita_service_type' => ['required', 'string']
             ];
         }
         if($this->getMethod() == 'PUT')

@@ -24,5 +24,5 @@ class RegisterationPaymentController extends Controller
 
         $registrationPayments = $this->coursePaymentServiceInterface->getAllProcessedRegistrationPayments($perPage);
         return NceRegisterationPaymentResource::collection($registrationPayments);
-    }    
+    }
 }
