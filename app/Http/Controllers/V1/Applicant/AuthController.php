@@ -55,9 +55,10 @@ class AuthController extends Controller
             {
                 throw new Exception('Email Address has already been taken', 400);
             }
-            $this->studentServiceInterface->createNewStudent($request->safe()->all());
-            
-            Mail::to($user->email_address)->later(now()->addSeconds(5), new NewApplicantRegistered([
+            $user = $this->studentServiceInterface->createNewStudent($request->safe()->all());
+            Mail::to($user->email_address)->later(
+                now()->addSeconds(5),
+                new NewApplicantRegistered([
                 'personalInformation' => $user->ncePersonalData
             ]));
             $data['message'] = 'Applicant account was created successfully';
@@ -109,9 +110,7 @@ class AuthController extends Controller
     {
         try
         {
-            $user = $this->user->where([
-                'email_address' => $request->email_address
-            ])->first();
+            $user = $this->studentServiceInterface->getStudentByEmailAddress($request->email_address);
 
             if($user)
             {

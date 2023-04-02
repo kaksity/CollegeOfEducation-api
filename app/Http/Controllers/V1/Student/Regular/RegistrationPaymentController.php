@@ -185,7 +185,7 @@ class RegistrationPaymentController extends Controller
                         'service_type_id' => $nceCoursePayment->remita_service_type,
                         'email_address' =>  $contactData->email_address,
                         'phone_number' => $contactData->phone_number,
-                        'description' => 'Payment for Registeration Fees'
+                        'description' => 'Payment for Registration Fees'
                     ]);
                     
                     $remitaPayment = $this->nceRegistrationPayment->create([

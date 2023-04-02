@@ -107,6 +107,7 @@ class PaymentController extends Controller
                         'service_type_id' => $applicationSetPayment->remita_service_type,
                         'email_address' =>  $contactData->email_address,
                         'phone_number' => $contactData->phone_number,
+                        'description' => 'Payment for Application Fees'
                     ]);
                     
                     $remitaPayment = $this->applicationPayment->create([
@@ -124,6 +125,7 @@ class PaymentController extends Controller
                         'service_type_id' => $applicationSetPayment->remita_service_type,
                         'email_address' =>  $contactData->email_address,
                         'phone_number' => $contactData->phone_number,
+                        'description' => 'Payment for Application Fees'
                     ]);
 
                     $remitaPayment->update([
