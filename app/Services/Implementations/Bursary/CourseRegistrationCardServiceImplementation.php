@@ -22,8 +22,8 @@ class CourseRegistrationCardServiceImplementation implements CourseRegistrationC
             for($i=0; $i < $data['number_of_cards']; $i++)
             {
                 
-                $serialNumber = generateRandomNumber().generateRandomNumber().generateRandomNumber().generateRandomNumber();
-                $pin = generateRandomNumber().generateRandomString().generateRandomNumber().generateRandomString();
+                $serialNumber = generateRandomNumber(6).generateRandomNumber(6);
+                $pin = generateRandomNumber(6).generateRandomString(6);
 
                 CourseRegisterationCard::create([
                     'academic_session_id' => $data['academic_session_id'],
