@@ -9,7 +9,7 @@
     <title>Course Registration</title>
     <style>
         *{
-            font-size: 10px;
+            font-size: 12px;
             font-family: sans-serif;
         }
         .row {
