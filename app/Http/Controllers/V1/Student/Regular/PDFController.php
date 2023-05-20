@@ -72,7 +72,6 @@ class PDFController extends Controller
         $fileName = time().uniqid().'.pdf';
 
         $fileNameToStore = 'public/pdfs/'.$fileName;
-
         Storage::put($fileNameToStore, $pdf->output());
         
         return [
