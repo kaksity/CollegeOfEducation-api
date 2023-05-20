@@ -140,7 +140,7 @@
                 <tbody class="">
                     <tr>
                         <td width="5%">
-                            <img class="passport" src="{{storage_path('app/public/passports/'.$passport->file_path)}}" alt="">
+                            <img class="passport" src="{{$passport->file_path == null? public_path('image/user-placeholder.png') : storage_path('app/public/passports/'.$passport->file_path)}}" alt="">
                         </td>
                         <td width="95%">
                             <table class="table">
@@ -317,10 +317,10 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td style="padding: 20px 0;">
                                 <div>Signature......................................................................</div>
                             </td>
-                            <td>
+                            <td style="padding: 20px 0;">
                                 <div>Date................................................................</div>
                             </td>
                         </tr>
@@ -330,10 +330,10 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td style="padding: 20px 0;">
                                 <div>Signature......................................................................</div>
                             </td>
-                            <td>
+                            <td style="padding: 20px 0;">
                                 <div>Date................................................................</div>
                             </td>
                         </tr>
@@ -343,10 +343,10 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td style="padding: 20px 0;">
                                 <div>Signature......................................................................</div>
                             </td>
-                            <td>
+                            <td style="padding: 20px 0;">
                                 <div>Date................................................................</div>
                             </td>
                         </tr>
@@ -356,10 +356,10 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td style="padding: 20px 0;">
                                 <div>Signature......................................................................</div>
                             </td>
-                            <td>
+                            <td style="padding: 20px 0;">
                                 <div>Date................................................................</div>
                             </td>
                         </tr>
@@ -369,10 +369,10 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td style="padding: 20px 0;">
                                 <div>Signature......................................................................</div>
                             </td>
-                            <td>
+                            <td style="padding: 20px 0;">
                                 <div>Date................................................................</div>
                             </td>
                         </tr>
@@ -382,13 +382,13 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td style="padding: 20px 0;">
                                 <div>Course................................................................</div>
                             </td>
-                            <td>
+                            <td style="padding: 20px 0;">
                                 <div>Signature......................................................................</div>
                             </td>
-                            <td>
+                            <td style="padding: 20px 0;">
                                 <div>Date................................................................</div>
                             </td>
                         </tr>
@@ -398,10 +398,10 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td style="padding: 20px 0;">
                                 <div>Signature................................................................</div>
                             </td>
-                            <td>
+                            <td style="padding: 20px 0;">
                                 <div>Date................................................................</div>
                             </td>
                         </tr>
