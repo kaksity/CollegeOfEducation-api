@@ -36,7 +36,7 @@ class RegistrationPaymentController extends Controller
         {
             $courseData = Auth::user()->nceCourseData;
             $currentSession = $this->nceAcademicSession->getCurrentSession($courseData->course_group_id);
-    
+   
             $card = $this->courseRegisterationCard->where([
                 'academic_session_id' => $currentSession->id,
                 'course_group_id' => $courseData->course_group_id,
