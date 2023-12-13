@@ -26,7 +26,8 @@ class ExaminationCenterDataRequest extends BaseFormRequest
                 'center_number' => ['required', 'string'],
                 'examination_number' => ['required', 'string'],
                 'date_of_examination' => ['required', 'date_format:Y-m-d'],
-                'overall_result' => ['string'],
+                'overall_result' => ['nullable', 'string'],
+                'jamb_number' => ['nullable', 'string'],
             ];
         }
         return $rules;

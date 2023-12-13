@@ -109,7 +109,6 @@ class PaymentController extends Controller
                         'phone_number' => $contactData->phone_number,
                         'description' => 'Payment for Application Fees'
                     ]);
-                    
                     $remitaPayment = $this->applicationPayment->create([
                         'user_id' => Auth::id(),
                         'order_id' => $response['order_id'],

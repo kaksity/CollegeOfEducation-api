@@ -20,6 +20,7 @@ class ExaminationCenterDataResource extends JsonResource
             'date_of_examination' => $this->date_of_examination,
             'examination_number' => $this->examination_number,
             'overall_result' => $this->overall_result,
+            'jamb_number' => $this->jamb_number,
         ];
     }
 }
